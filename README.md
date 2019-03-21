@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TulipCharts/tulipindicators.svg?branch=master)](https://travis-ci.org/TulipCharts/tulipindicators)
+Forked from [https://github.com/TulipCharts/tulipindicators](https://github.com/TulipCharts/tulipindicators)
 
 # Tulip Indicators
 
