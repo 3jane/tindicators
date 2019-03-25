@@ -93,6 +93,7 @@ lappend indicators [list overlay "Kaufman Adaptive Moving Average" kama 1 1 1 {r
 lappend indicators [list overlay "Parabolic SAR" psar 2 2 1 {high low} {{acceleration factor step} {acceleration factor maximum}} {psar}]
 lappend indicators [list overlay "Price Channel" pc 2 1 2 {high low} {period} {pc_low pc_high} {stream}]
 lappend indicators [list overlay "Projection Bands" pbands 3 1 2 {high low close} {period} {pbands_lower pbands_upper} {ref stream}]
+lappend indicators [list overlay "Fractal Adaptive Moving Average" frama 2 2 1 {high low} {{period} {average period}} {frama}]
 
 #Momentum
 lappend indicators [list indicator "Accumulation/Distribution Line" ad 4 0 1 {high low close volume} {} {ad}]
