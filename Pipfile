@@ -7,6 +7,8 @@ verify_ssl = true
 pydocstyle = "*"
 pytest = "*"
 pylint = "*"
+autopep8 = "*"
+pandas = "*"
 
 [packages]
 numpy = "*"
