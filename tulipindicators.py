@@ -9,8 +9,6 @@ TI_TYPE_MATH = 3         # These aren't so good for plotting, but are useful wit
 TI_TYPE_SIMPLE =  4      # These apply a simple operator (e.g. addition, sin, sqrt). 
 TI_TYPE_COMPARATIVE = 5  # These are designed to take inputs from different securities. i.e. compare stock A to stock B.
 
-import code
-
 
 class ti_indicator_info(Structure):
     _fields_ = [
@@ -58,7 +56,6 @@ class _IndicatorInfo:
                              for i in range(info.options))
 
 
-
 class _Indicator:
     def __init__(self, lib, name):
         self._lib = lib
@@ -101,8 +98,9 @@ class _Indicator:
         result = self.pad(result, insize) if pad_left else result
 
         if len(result) != 1:
+            opt_str = "_".join(str(opt) for opt in options_lst)
             ret_t = namedtuple(
-                f'{name}_{"_".join(str(opt) for opt in options_lst)}',
+                f'{name}{("_" + opt_str) if opt_str else ""}',
                 self.info.outputs)
             result = self.__to_named_tuple(result, ret_t)
         else:
@@ -149,9 +147,8 @@ class _Indicator:
         padsize = insize - outsize
         pad_output = np.empty((len(self.info.outputs), insize))
         for idx in range(len(result)):
-            # pad_output[idx] = np.pad(result[idx], (padsize, 0),
-            #                     'constant', constant_values=(np.nan,))
-            pad_output[idx] = np.append([pad] * padsize, result[idx])
+            pad_output[idx] = np.pad(result[idx], (padsize, 0),
+                                'constant', constant_values=(np.nan,))
         return pad_output
 
 
@@ -165,4 +162,3 @@ class TulipIndicators:
 
 
 ti = TulipIndicators()
-# ti.sma(np.array([1,2,3]), period=3)
