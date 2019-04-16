@@ -9,6 +9,7 @@ pytest = "*"
 pylint = "*"
 autopep8 = "*"
 pandas = "*"
+flake8 = "*"
 
 [packages]
 numpy = "*"
