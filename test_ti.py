@@ -52,7 +52,7 @@ def test_convert_to_dataframe():
     delnan = lambda x: x[~np.isnan(x)]
     bbands = ti.bbands(ohlc.Close, period=3, stddev=2)
     ohlc['lower'], ohlc['middle'], ohlc['upper'] = bbands
-    assert np.allclose(delnan(ohlc['lower'].values), 
+    assert np.allclose(delnan(ohlc['lower'].values),
                        delnan(bbands.bbands_lower))
     assert np.allclose(delnan(ohlc['middle'].values),
                        delnan(bbands.bbands_middle))
@@ -74,7 +74,15 @@ def test_bop():
         'Low': np.array([81.29, 80.64, 81.31, 82.65, 83.07, 83.11, 82.49, 82.3, 84.15, 84.11, 84.03, 85.39]),
         'Close': np.array([81.59, 81.06, 82.87, 83, 83.61, 83.15, 82.84, 83.99, 84.55, 84.36, 85.53, 86.54])
     })
-    expected = np.array([-0.3023, -0.112, 0.7674, 0.1385, 0.6538, -0.3291, 
+    expected = np.array([-0.3023, -0.112, 0.7674, 0.1385, 0.6538, -0.3291,
                          0.1548, 0.645, 0.5072, 0.1236, 0.8021, 0.916])
     bop = ti.bop(ohlc.Open, ohlc.High, ohlc.Low, ohlc.Close, pad=False)
     assert np.allclose(bop, expected, rtol=1.e-3)
+
+def test_all():
+    tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe, test_vidya, test_bop]
+    for test in tests:
+        test()
+    print('ALL TESTS PASSED')
+
+test_all()
