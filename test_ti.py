@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from tulipindicators import TulipIndicators
+from tulipindicators import TulipIndicators, InvalidOption
 
 
 REAL = np.array([81.59, 81.06, 82.87, 83,    83.61,
@@ -79,8 +79,13 @@ def test_bop():
     bop = ti.bop(ohlc.Open, ohlc.High, ohlc.Low, ohlc.Close, pad=False)
     assert np.allclose(bop, expected, rtol=1.e-3)
 
+def test_exceptions():
+    try: ti.sma([], -1)
+    except InvalidOption: pass
+    else: assert False
+
 def test_all():
-    tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe, test_vidya, test_bop]
+    tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe, test_vidya, test_bop, test_exceptions]
     for test in tests:
         test()
     print('ALL TESTS PASSED')
