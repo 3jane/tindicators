@@ -11,4 +11,4 @@ steps:
 
   - label: ':hammer: Tests'
     command:
-      - docker run ${TEST_IMAGE_NAME}:latest
+      - docker run --cap-add SYS_PTRACE ${TEST_IMAGE_NAME}:latest
