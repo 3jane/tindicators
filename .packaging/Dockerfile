@@ -19,4 +19,6 @@ RUN mkdir build_release && cd build_release && cmake .. -DCMAKE_BUILD_TYPE=relea
 
 COPY tests /tulipindicators/tests/
 
-CMD cd build_debug && export LD_PRELOAD=libasan.so.5 && ./benchmark2 && ./smoke && ./fuzzer
+# docker run --cap-add SYS_PTRACE
+CMD cd build_debug && export LD_PRELOAD=libasan.so.5 && make check
+CMD cd build_release && ./benchmark2
