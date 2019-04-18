@@ -1,0 +1,14 @@
+env:
+  APP_NAME: 'tulipindicators-private'
+  TEST_IMAGE_NAME: '${APP_NAME}--test'
+  IMAGE_NAME: '${DOCKER_REGISTRY}/${APP_NAME}'
+
+steps:
+  - label: 'Build docker image'
+    command:
+      - docker build -t ${TEST_IMAGE_NAME} -f .packaging/Dockerfile .
+  - wait
+
+  - label: ':hammer: Tests'
+    command:
+      - docker run --cap-add SYS_PTRACE ${TEST_IMAGE_NAME}:latest

@@ -11,7 +11,8 @@ target_link_options(indicators PRIVATE $<$<C_COMPILER_ID:MSVC>:/PROFILE:linker /
 set_target_properties(indicators PROPERTIES PUBLIC_HEADER "indicators.h")
 install(TARGETS indicators
     PUBLIC_HEADER DESTINATION "include"
-    ARCHIVE DESTINATION "lib")
+    ARCHIVE DESTINATION "lib"
+    LIBRARY DESTINATION "lib")
 
 target_compile_options(indicators PUBLIC
    $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
@@ -72,4 +73,4 @@ add_executable(benchmark2 benchmark2.c)
 target_link_libraries(benchmark2 indicators)
 add_test(NAME benchmark2 COMMAND benchmark2)
 
-add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=1 LD_PRELOAD=libasan.so ${CMAKE_CTEST_COMMAND})
+add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
