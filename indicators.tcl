@@ -251,6 +251,7 @@ extern \"C\" {
 
 const char* ti_version();
 long int ti_build();
+int ti_indicator_count();
 
 
 "
@@ -474,6 +475,7 @@ puts $idx "#include \"indicators.h\"\n\n"
 puts $idx "
 const char* ti_version() {return TI_VERSION;}
 long int ti_build() {return TI_BUILD;}
+int ti_indicator_count() {return TI_INDICATOR_COUNT;}
 "
 
 puts $idx "\n\n\nstruct ti_indicator_info ti_indicators\[\] = {"
