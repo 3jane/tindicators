@@ -139,7 +139,6 @@ void ce_option_setter(double period, double *options) {
     options[1] = 3;
 }
 
-<<<<<<< HEAD
 void rmta_option_setter(double period,  double *options) {
     options[0] = period;
     options[1] = 1 - (2. / (period + 1));
@@ -184,6 +183,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "vidya") == 0) { options_setter = vidya_option_setter; }
     if (strcmp(info->name, "pfe") == 0) { options_setter = pfe_option_setter; }
     if (strcmp(info->name, "mama") == 0) { options_setter = mama_option_setter; }
+    if (strcmp(info->name, "kc") == 0) { options_setter = kc_option_setter; }
 
     TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
