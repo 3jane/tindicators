@@ -56,9 +56,9 @@ class _IndicatorInfo:
         self.type = self.type_names[info.type]
         self.full_name = info.full_name.decode('ascii')
 
-        self.inputs = tuple(info.input_names[i].decode('ascii') for i in range(info.inputs))
-        self.outputs = tuple(info.output_names[i].decode('ascii') for i in range(info.outputs))
-        self.options = tuple(info.option_names[i].decode('ascii') for i in range(info.options))
+        self.inputs = tuple(info.input_names[i].decode('ascii').replace(' ', '_') for i in range(info.inputs))
+        self.outputs = tuple(info.output_names[i].decode('ascii').replace(' ', '_') for i in range(info.outputs))
+        self.options = tuple(info.option_names[i].decode('ascii').replace(' ', '_') for i in range(info.options))
 
 class _Indicator:
     def __init__(self, lib, name):
