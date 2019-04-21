@@ -139,6 +139,7 @@ void ce_option_setter(double period, double *options) {
     options[1] = 3;
 }
 
+<<<<<<< HEAD
 void rmta_option_setter(double period,  double *options) {
     options[0] = period;
     options[1] = 1 - (2. / (period + 1));
