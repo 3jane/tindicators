@@ -139,7 +139,6 @@ void ce_option_setter(double period, double *options) {
     options[1] = 3;
 }
 
-<<<<<<< HEAD
 void rmta_option_setter(double period,  double *options) {
     options[0] = period;
     options[1] = 1 - (2. / (period + 1));
@@ -173,6 +172,11 @@ void copp_option_setter(double period, double *options) {
 }
 
 
+void posc_option_setter(double period, double *options) {
+    options[0] = period;
+    options[1] = 3;
+}
+
 void bench(const ti_indicator_info *info) {
     void (*options_setter)(double period, double *options) = simple_option_setter;
     if (strcmp(info->name, "apo") == 0) { options_setter = ppo_option_setter; }
@@ -183,7 +187,6 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "kst") == 0) { options_setter = kst_option_setter; }
     if (strcmp(info->name, "kvo") == 0) { options_setter = fast_slow_option_setter; }
     if (strcmp(info->name, "rmta") == 0) { options_setter = rmta_option_setter; }
-    if (strcmp(info->name, "kvo") == 0) { options_setter = fast_slow_option_setter; }
     if (strcmp(info->name, "stoch") == 0) { options_setter = stoch_option_setter; }
     if (strcmp(info->name, "stochrsi") == 0) { options_setter = stochrsi_option_setter; }
     if (strcmp(info->name, "ultosc") == 0) { options_setter = ultosc_option_setter; }
@@ -193,6 +196,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "mama") == 0) { options_setter = mama_option_setter; }
     if (strcmp(info->name, "kc") == 0) { options_setter = kc_option_setter; }
     if (strcmp(info->name, "copp") == 0) { options_setter = copp_option_setter; }
+    if (strcmp(info->name, "posc") == 0) { options_setter = posc_option_setter; }
 
     TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
