@@ -68,14 +68,14 @@ class _Indicator:
         self.__start.restype = c_int
         self.__run.restype = c_int
 
-    def __str__(self):
-        return (
-            f"Name: {self.info.name},\n"
-            f"Full Name: {self.info.full_name},\n"
-            f"Type: {self.info.type},\n"
-            f"Inputs: {' '.join(self.info.inputs)},\n"
-            f"Options: {' '.join(self.info.options)},\n"
-            f"Outputs: {' '.join(self.info.outputs)}")
+    def __repr__(self):
+        return '\n'.join((
+            f"Name:     \t{self.info.name}",
+            f"Full Name:\t{self.info.full_name}",
+            f"Type:     \t{self.info.type}",
+            f"Inputs:   \t{' '.join(self.info.inputs)}",
+            f"Options:  \t{' '.join(self.info.options)}",
+            f"Outputs:  \t{' '.join(self.info.outputs)}"))
 
     def __call__(self, *args, pad=True, **kwargs):
         inputs_lst = self.__parse(args, kwargs, 0, self.info.inputs)
@@ -132,7 +132,7 @@ class TulipIndicators:
     def __init__(self, sharedlib_path=None):
         if sharedlib_path is None:
             if os.name == 'nt':
-                sharedlib_path = r'.\libindicators.dll'
+                sharedlib_path = r'.\indicators.dll'
             elif os.name == 'posix':
                 sharedlib_path = './libindicators.so'
 
