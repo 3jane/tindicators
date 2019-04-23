@@ -46,7 +46,7 @@
     ((ptr)->buf_info).size_##name = size; \
     ((ptr)->buf_info).index_##name = -1; \
 } while (0);
-#define BUFFERS_SIZE(ptr) *((int*)(&((ptr)->buf_info)+1)-3) + *((int*)(&((ptr)->buf_info)+1)-4)
+#define BUFFERS_SIZE(ptr) (*((int*)(&((ptr)->buf_info)+1)-3) + *((int*)(&((ptr)->buf_info)+1)-4))
 #define BUFFER_AT(result, ptr, name, delta) { \
     int idx = ((ptr)->buf_info).index_##name + delta; \
     while (idx >= ((ptr)->buf_info).size_##name) { idx -= ((ptr)->buf_info).size_##name; } \

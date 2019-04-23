@@ -27,7 +27,7 @@
 /*********** FUNCTIONS **********/
 
 int equal_reals(TI_REAL a, TI_REAL b) {
-    return fabs(a - b) < 0.001;
+    return fabs(a - b) < 0.001 || fabs(1 - fabs(a / b)) < 0.001;
 }
 
 int equal_arrays(const TI_REAL *a, const TI_REAL *b, int size_a, int size_b) {

@@ -24,6 +24,7 @@
 #include "indicators.h"
 #include "utils/buffer.h"
 #include "utils/minmax.h"
+#include "utils/testing.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

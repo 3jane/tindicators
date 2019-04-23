@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.13.4)
 project(tulipindicators VERSION 0.9 LANGUAGES C)
 
 ## Library
-file(GLOB src utils/*.c indicators/*.c)
-add_library(indicators SHARED ${src} indicators.h indicators_index.c)
+file(GLOB src indicators/*.[hc])
+file(GLOB utils utils/*.[hc])
+add_library(indicators SHARED ${src} ${utils} indicators.h indicators_index.c)
 target_link_libraries(indicators PUBLIC
-	"$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
-target_link_options(indicators PRIVATE $<$<C_COMPILER_ID:MSVC>:/PROFILE:linker /STACK:10000000>)
+    "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
+target_link_options(indicators PUBLIC $<$<C_COMPILER_ID:MSVC>:/PROFILE:linker /STACK:10000000>)
 
 set_target_properties(indicators PROPERTIES PUBLIC_HEADER "indicators.h")
 install(TARGETS indicators
@@ -14,18 +15,23 @@ install(TARGETS indicators
     ARCHIVE DESTINATION "lib"
     LIBRARY DESTINATION "lib")
 
-target_compile_options(indicators PUBLIC
-   $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
+target_compile_options(indicators
+    PUBLIC
+    $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
         -Wall -Wextra -Wshadow -Wconversion -std=c99 -pedantic -g3 -ggdb -O2
-        	$<$<CONFIG:DEBUG>:
-        		-fsanitize=undefined -fsanitize=address -fsanitize=leak>
-        	$<$<CONFIG:RELEASE>:
-        		-ffast-math -march=native>>
-   $<$<C_COMPILER_ID:MSVC>:
-        /W4 /O2>
+        $<$<CONFIG:DEBUG>:
+            -fsanitize=undefined -fsanitize=address -fsanitize=leak>
+        $<$<CONFIG:RELEASE>:
+            -ffast-math>>
+    $<$<C_COMPILER_ID:MSVC>:
+        $<$<CONFIG:RELEASE>:
+            /pf:fast>> 
+    PRIVATE
+    $<$<C_COMPILER_ID:MSVC>:
+        /DBUILDING>
 )
 
-# file(COPY indicators.tcl DESTINATION ${CMAKE_SOURCE_DIR})
+
 execute_process(
     COMMAND tclsh indicators.tcl
     OUTPUT indicators.h indicators_index.c
@@ -56,7 +62,7 @@ target_link_libraries(sample indicators)
 ## Tests
 enable_testing()
 
-add_executable(smoke smoke.c)
+add_executable(smoke smoke.c ${utils})
 target_link_libraries(smoke indicators)
 add_test(NAME smoke COMMAND smoke WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
@@ -69,7 +75,7 @@ set_target_properties(benchmark PROPERTIES EXCLUDE_FROM_ALL 1)
 target_link_libraries(benchmark indicators ta_lib)
 #add_test(NAME benchmark COMMAND benchmark)
 
-add_executable(benchmark2 benchmark2.c)
+add_executable(benchmark2 benchmark2.c ${utils})
 target_link_libraries(benchmark2 indicators)
 add_test(NAME benchmark2 COMMAND benchmark2)
 

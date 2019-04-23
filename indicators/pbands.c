@@ -111,7 +111,7 @@ int ti_pbands_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options
     TI_REAL *pbands_upper = outputs[1];
 
     int start = ti_linregslope_start(options);
-    TI_REAL *b = malloc(sizeof(TI_REAL[size - start]));
+    TI_REAL *b = malloc(sizeof(TI_REAL) * (size - start));
 
     ti_linregslope(size, &close, &period, &b);
 
@@ -186,7 +186,7 @@ int ti_pbands_stream_new(TI_REAL const *options, ti_stream **stream) {
     BUFFER_INIT(*stream, low, period+1);
     BUFFER_INIT(*stream, close, period+1);
 
-    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) { return TI_OUT_OF_MEMORY; }
 
     return TI_OKAY;

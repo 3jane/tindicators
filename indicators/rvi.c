@@ -154,7 +154,7 @@ int ti_rvi_stream_new(TI_REAL const *options, ti_stream **stream) {
 
     BUFFER_INIT(*stream, price, stddev_period+1);
 
-    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) { return TI_OUT_OF_MEMORY; }
 
     return TI_OKAY;

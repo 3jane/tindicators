@@ -257,10 +257,19 @@ puts $h "$license
 extern \"C\" {
 #endif
 
+#ifdef _WIN32
+	#ifdef BUILDING
+		#define DLLEXPORT __declspec(dllexport)
+	#else
+		#define DLLEXPORT __declspec(dllimport)
+	#endif
+#else
+	#define DLLEXPORT
+#endif
 
-const char* ti_version();
-long int ti_build();
-int ti_indicator_count();
+DLLEXPORT extern const char* ti_version();
+DLLEXPORT extern long int ti_build();
+DLLEXPORT extern int ti_indicator_count();
 
 
 "
@@ -289,7 +298,6 @@ int ti_indicator_count();
 
 #define TI_MAXINDPARAMS 10 /* No indicator will use more than this many inputs, options, or outputs. */
 
-
 typedef int (*ti_indicator_start_function)($fun_args_start);
 typedef int (*ti_indicator_function)($fun_args);
 
@@ -317,22 +325,22 @@ typedef struct ti_indicator_info {
 
 
 /*Complete array of all indicators. Last element is 0,0,0,0...*/
-extern ti_indicator_info ti_indicators\[\];
+DLLEXPORT extern ti_indicator_info ti_indicators\[\];
 
 
 /*Searches for an indicator by name. Returns 0 if not found.*/
-const ti_indicator_info *ti_find_indicator(const char *name);
+DLLEXPORT extern const ti_indicator_info *ti_find_indicator(const char *name);
 
 
 
 
-int ti_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs);
+DLLEXPORT extern int ti_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs);
 
-ti_indicator_info *ti_stream_get_info(ti_stream *stream);
+DLLEXPORT extern ti_indicator_info *ti_stream_get_info(ti_stream *stream);
 
-int ti_stream_get_progress(ti_stream *stream);
+DLLEXPORT extern int ti_stream_get_progress(ti_stream *stream);
 
-void ti_stream_free(ti_stream *stream);
+DLLEXPORT extern void ti_stream_free(ti_stream *stream);
 
 
 
@@ -427,19 +435,19 @@ foreach func $indicators {
     }
     append prototype "/* Outputs: [join $out_names {, }] */\n"
     append prototype "#define TI_INDICATOR_[string toupper $n]_INDEX $index\n"
-    append prototype "$start;\n"
-    append prototype "$fun;\n"
+    append prototype "DLLEXPORT extern $start;\n"
+    append prototype "DLLEXPORT extern $fun;\n"
 
 
     if {[llength $func] > 9} {
         set extra [lindex $func 9]
         if {[lsearch $extra ref] != -1} {
-            append prototype "int ti_[set n]_ref($fun_args);\n"
+            append prototype "DLLEXPORT extern int ti_[set n]_ref($fun_args);\n"
         }
         if {[lsearch $extra stream] != -1} {
-            append prototype "int ti_[set n]_stream_new($fun_stream_new_args);\n"
-            append prototype "int ti_[set n]_stream_run($fun_stream_run_args);\n"
-            append prototype "void ti_[set n]_stream_free($fun_stream_free_args);\n"
+            append prototype "DLLEXPORT extern int ti_[set n]_stream_new($fun_stream_new_args);\n"
+            append prototype "DLLEXPORT extern int ti_[set n]_stream_run($fun_stream_run_args);\n"
+            append prototype "DLLEXPORT extern void ti_[set n]_stream_free($fun_stream_free_args);\n"
         }
     }
 

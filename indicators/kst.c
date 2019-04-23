@@ -146,10 +146,10 @@ int ti_kst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
         size_roc[i] = size - ti_roc_start(roc + i);
         size_ema[i] = size_roc[i] - ti_ema_start(ma + i);
 
-        roc_mem[i] = malloc(sizeof(TI_REAL[size_roc[i]]));
+        roc_mem[i] = malloc(sizeof(TI_REAL) * size_roc[i]);
         ti_roc(size, &real, roc + i, roc_mem + i);
 
-        ema_mem[i] = malloc(sizeof(TI_REAL[size_ema[i]]));
+        ema_mem[i] = malloc(sizeof(TI_REAL) * size_ema[i]);
         ti_ema(size_roc[i], roc_mem + i, ma + i, ema_mem + i);
     }
 

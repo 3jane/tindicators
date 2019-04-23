@@ -77,7 +77,7 @@ int ti_pc_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (!*stream) { return TI_OUT_OF_MEMORY; }
     BUFFER_INIT(*stream, high, period);
     BUFFER_INIT(*stream, low, period);
-    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) { return TI_OUT_OF_MEMORY; }
 
     (*stream)->index = TI_INDICATOR_PC_INDEX;

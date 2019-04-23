@@ -124,7 +124,7 @@ int ti_kc_stream_new(TI_REAL const *options, ti_stream **stream) {
 
     BUFFER_INIT(*stream, close, 2);
 
-    *stream = realloc(*stream, sizeof(struct ti_stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(struct ti_stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) {
         return TI_OUT_OF_MEMORY;
     }

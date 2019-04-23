@@ -74,8 +74,8 @@ int ti_rmi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
     if (lookback_period < 1) { return TI_INVALID_OPTION; }
 
     int start = ti_rmi_start(options);
-    TI_REAL *gains = malloc(sizeof(TI_REAL[size-start]));
-    TI_REAL *losses = malloc(sizeof(TI_REAL[size-start]));
+    TI_REAL *gains = malloc(sizeof(TI_REAL) * (size-start));
+    TI_REAL *losses = malloc(sizeof(TI_REAL) * (size-start));
 
     for (int i = lookback_period; i < size; ++i) {
         gains[i-start] = MAX(0, real[i] - real[i-(int)lookback_period]);
@@ -132,7 +132,7 @@ int ti_rmi_stream_new(TI_REAL const *options, ti_stream **stream) {
     (*stream)->options.lookback_period = lookback_period;
 
     BUFFER_INIT(*stream, price, lookback_period + 1);
-    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) { return TI_OUT_OF_MEMORY; }
 
     return TI_OKAY;

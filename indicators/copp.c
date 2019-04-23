@@ -24,6 +24,7 @@
 #include "../indicators.h"
 #include "../utils/localbuffer.h"
 
+#include <stdio.h>
 
 int ti_copp_start(TI_REAL const *options) {
     const TI_REAL roc_shorter_period = options[0];
@@ -56,7 +57,7 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     buffers = calloc(1, sizeof(*buffers));
     BUFFER_INIT(buffers, price, roc_longer_period+1);
     BUFFER_INIT(buffers, rocs, wma_period+1);
-    buffers = realloc(buffers, sizeof(*buffers) + sizeof(TI_REAL[BUFFERS_SIZE(buffers)]));
+    buffers = realloc(buffers, sizeof(*buffers) + sizeof(TI_REAL) * BUFFERS_SIZE(buffers));
 
     TI_REAL denominator = 1. / (wma_period * (wma_period + 1.) / 2.);
     TI_REAL rocs_per = 100. / 2.;
@@ -119,11 +120,11 @@ int ti_copp_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
     // wma of (roc1 + roc2) / 2 * 100
 
     int roc_short_len = size-ti_roc_start(&roc_shorter_period);
-    TI_REAL *roc_short = malloc(sizeof(TI_REAL[roc_short_len]));
+    TI_REAL *roc_short = malloc(sizeof(TI_REAL) * roc_short_len);
     int roc_long_len = size-ti_roc_start(&roc_longer_period);
-    TI_REAL *roc_long = malloc(sizeof(TI_REAL[roc_long_len]));
+    TI_REAL *roc_long = malloc(sizeof(TI_REAL) * roc_long_len);
 
-    TI_REAL *interm = malloc(sizeof(TI_REAL[roc_long_len]));
+    TI_REAL *interm = malloc(sizeof(TI_REAL) * roc_long_len);
 
     // int wma_len = roc_long_len-ti_wma_start(&wma_period);
     // TI_REAL *wma = malloc(sizeof(TI_REAL[wma_len]));
@@ -183,7 +184,7 @@ int ti_copp_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (!stream) { return TI_OUT_OF_MEMORY; }
     BUFFER_INIT(*stream, price, roc_longer_period+1);
     BUFFER_INIT(*stream, rocs, wma_period+1);
-    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!stream) { return TI_OUT_OF_MEMORY; }
 
     (*stream)->index = TI_INDICATOR_COPP_INDEX;

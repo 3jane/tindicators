@@ -132,7 +132,7 @@ int ti_ce_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI
     TI_REAL const *high = inputs[0];
     TI_REAL const *low = inputs[1];
     TI_REAL const *close = inputs[2];
-    const int period = options[0];
+    const TI_REAL period = options[0];
     const TI_REAL coef = options[1];
     TI_REAL *ce_high = outputs[0];
     TI_REAL *ce_low = outputs[1];
@@ -143,20 +143,23 @@ int ti_ce_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI
     #define MAX(a, b) (a > b ? a : b)
     #define MAX3(a, b, c) (a > b && a > c ? a : b > a && b > c ? b : c)
 
-    TI_REAL *atr = malloc((size - ti_atr_start(options)) * sizeof(TI_REAL));
-    ti_atr(size, inputs, options, &atr);
-    TI_REAL *max = malloc((size - ti_max_start(options)) * sizeof(TI_REAL));
-    ti_max(size, &high, options, &max);
-    TI_REAL *min = malloc((size - ti_min_start(options)) * sizeof(TI_REAL));
-    ti_min(size, &low, options, &min);
+    TI_REAL *atr = calloc(1, (size - ti_atr_start(&period)) * sizeof(TI_REAL));
+	if (!atr) { return TI_OUT_OF_MEMORY; }
+    ti_atr(size, inputs, &period, &atr);
+    TI_REAL *max = calloc(1, (size - ti_max_start(&period)) * sizeof(TI_REAL));
+	if (!atr) { return TI_OUT_OF_MEMORY; }
+	ti_max(size, &high, &period, &max);
+    TI_REAL *min = calloc(1, (size - ti_min_start(&period)) * sizeof(TI_REAL));
+	if (!atr) { return TI_OUT_OF_MEMORY; }
+	ti_min(size, &low, &period, &min);
 
 
     for (int i = 0; i < size - period + 1; ++i) {
         TI_REAL HP = max[i];
-        *ce_high++ = HP - coef * atr[i];
+        ce_high[i] = HP - coef * atr[i];
 
         TI_REAL LP = min[i];
-        *ce_low++ = LP + coef * atr[i];
+        ce_low[i] = LP + coef * atr[i];
     }
 
     free(atr);
@@ -255,13 +258,13 @@ int ti_ce_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (period < 1) {
         return TI_INVALID_OPTION;
     }
-    *stream = malloc(sizeof(ti_stream) + sizeof(TI_REAL[period][2]));
+    *stream = malloc(sizeof(ti_stream) + sizeof(TI_REAL) * period * 2);
     if (!*stream) {
         return TI_OUT_OF_MEMORY;
     }
 
     (*stream)->index = TI_INDICATOR_CE_INDEX;
-    (*stream)->progress = -ti_atr_start(options);
+    (*stream)->progress = -ti_ce_start(options);
 
     (*stream)->period = period;
     (*stream)->coef = coef;

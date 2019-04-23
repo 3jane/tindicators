@@ -85,7 +85,7 @@ int ti_mama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     BUFFER_INIT(data, alpha, 1)
     BUFFER_INIT(data, mama, 1)
     BUFFER_INIT(data, fama, 1)
-    data = realloc(data, sizeof(struct data) + sizeof(TI_REAL[BUFFERS_SIZE(data)]));
+    data = realloc(data, sizeof(struct data) + sizeof(TI_REAL) * BUFFERS_SIZE(data));
 
     for (int i = 0; i < 7; ++i) {
         BUFFER_PUSH(data, smooth, 0);
@@ -353,7 +353,7 @@ struct ti_stream {
         BUFFER(alpha)
         BUFFER(mama)
         BUFFER(fama)
-    );
+    )
 };
 
 int ti_mama_stream_new(TI_REAL const *options, ti_stream **stream) {
@@ -393,7 +393,7 @@ int ti_mama_stream_new(TI_REAL const *options, ti_stream **stream) {
     BUFFER_INIT(*stream, mama, 1)
     BUFFER_INIT(*stream, fama, 1)
 
-    *stream = realloc(*stream, sizeof(struct ti_stream) + sizeof(TI_REAL[BUFFERS_SIZE(*stream)]));
+    *stream = realloc(*stream, sizeof(struct ti_stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));
     if (!*stream) {
         return TI_OUT_OF_MEMORY;
     }

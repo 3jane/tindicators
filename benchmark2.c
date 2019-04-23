@@ -190,6 +190,7 @@ void rvi_option_setter(double period, double *options) {
 void bench(const ti_indicator_info *info) {
     void (*options_setter)(double period, double *options) = simple_option_setter;
     if (strcmp(info->name, "apo") == 0) { options_setter = ppo_option_setter; }
+    if (strcmp(info->name, "ce") == 0) { options_setter = ce_option_setter; }
     if (strcmp(info->name, "macd") == 0) { options_setter = macd_option_setter; }
     if (strcmp(info->name, "ppo") == 0) { options_setter = ppo_option_setter; }
     if (strcmp(info->name, "psar") == 0) { options_setter = psar_option_setter; }
