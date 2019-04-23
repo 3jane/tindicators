@@ -73,7 +73,7 @@ class _Indicator:
         return '\n'.join((
             f"Name:     \t{self.info.name}",
             f"Full Name:\t{self.info.full_name}",
-            f"Type:     \t{self.info.type}",
+            #f"Type:     \t{self.info.type}",
             f"Inputs:   \t{' '.join(self.info.inputs)}",
             f"Options:  \t{' '.join(self.info.options)}",
             f"Outputs:  \t{' '.join(self.info.outputs)}"))
