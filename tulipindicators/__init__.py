@@ -2,6 +2,7 @@ from ctypes import *
 import numpy as np
 from collections import namedtuple
 import os
+from datetime import datetime
 
 TI_MAXINDPARAMS = 10
 TI_TYPE_OVERLAY = 1      # These have roughly the same range as the input data.
@@ -138,8 +139,10 @@ class TulipIndicators:
                 sharedlib_path = os.path.join(dir_path, 'libindicators.so')
         self._lib = CDLL(sharedlib_path)
         self._lib.ti_find_indicator.restype = POINTER(ti_indicator_info)
+        self._lib.ti_build.restype = c_long
 
         self._indicator_count = self._lib.ti_indicator_count()
+        self._build = self._lib.ti_build()
         ti_indicators = (ti_indicator_info * self._indicator_count).in_dll(self._lib, "ti_indicators")
 
         self.available_indicators = [ti_indicators[idx].name.decode('ascii') for idx in range(self._indicator_count)]
@@ -148,6 +151,9 @@ class TulipIndicators:
         return _Indicator(self._lib, name)
 
     def __repr__(self):
-        return ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
+        return '\n'.join([
+            f'Tulip Indicators, built {datetime.utcfromtimestamp(self._build).strftime("%d.%m.%Y")}',
+            ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
+        ])
 
 ti = TulipIndicators()
