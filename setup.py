@@ -7,6 +7,7 @@ setuptools.setup(
     author_email="ilya.p@rcdb.io",
     description="Python wrapper for tulipindicators",
     packages=setuptools.find_packages(),
+    install_requires=["numpy"],
     classifiers=["Programming Language :: Python :: 3", "Operating System :: OS Independent"],
-    package_data={"": ["libindicators.so", "libindicators.dll"]}
+    package_data={"tulipindicators": ["libindicators.so", "indicators.dll"]}
 )

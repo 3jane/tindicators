@@ -130,12 +130,12 @@ class _Indicator:
 
 class TulipIndicators:
     def __init__(self, sharedlib_path=None):
+        dir_path = os.path.dirname(os.path.abspath(__file__))
         if sharedlib_path is None:
             if os.name == 'nt':
-                sharedlib_path = r'.\indicators.dll'
+                sharedlib_path = os.path.join(dir_path, r'indicators.dll')
             elif os.name == 'posix':
-                sharedlib_path = './libindicators.so'
-
+                sharedlib_path = os.path.join(dir_path, 'libindicators.so')
         self._lib = CDLL(sharedlib_path)
         self._lib.ti_find_indicator.restype = POINTER(ti_indicator_info)
 
