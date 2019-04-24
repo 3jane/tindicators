@@ -61,6 +61,8 @@ class _IndicatorInfo:
         self.outputs = tuple(info.output_names[i].decode('ascii').replace(' ', '_') for i in range(info.outputs))
         self.options = tuple(info.option_names[i].decode('ascii').replace(' ', '_') for i in range(info.options))
 
+        self.raw = info
+
 class _Indicator:
     def __init__(self, lib, name):
         self.info = _IndicatorInfo(lib, name)
@@ -134,7 +136,7 @@ class TulipIndicators:
         dir_path = os.path.dirname(os.path.abspath(__file__))
         if sharedlib_path is None:
             if os.name == 'nt':
-                sharedlib_path = os.path.join(dir_path, r'indicators.dll')
+                sharedlib_path = os.path.join(dir_path, 'indicators.dll')
             elif os.name == 'posix':
                 sharedlib_path = os.path.join(dir_path, 'libindicators.so')
         self._lib = CDLL(sharedlib_path)
