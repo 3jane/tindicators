@@ -283,9 +283,9 @@ void bench(const ti_indicator_info *info) {
                 ti_stream *stream;
                 const int ret = info->stream_new(options, &stream);
                 start_ts = clock();
-                info->stream_run(stream, INSIZE, inputs, outputs_stream_all);
+                ti_stream_run(stream, INSIZE, inputs, outputs_stream_all);
                 end_ts = clock();
-                info->stream_free(stream);
+                ti_stream_free(stream);
                 elapsed_stream_all += end_ts - start_ts;
                 if (ret != TI_OKAY) {
                     printf("%s_stream_new returned %i, exiting\n", info->name, ret);
@@ -308,7 +308,7 @@ void bench(const ti_indicator_info *info) {
                     for (int j = 0; j < info->outputs; ++j) {
                         outputs_[j] = outputs_stream_1[j] + ti_stream_get_progress(stream);
                     }
-                    const int ret = info->stream_run(stream, 1, inputs_, outputs_);
+                    const int ret = ti_stream_run(stream, 1, inputs_, outputs_);
                     if (ret != TI_OKAY) {
                         printf("%s_stream_new returned %i, exiting\n", info->name);
                         exit(2);
@@ -318,7 +318,7 @@ void bench(const ti_indicator_info *info) {
                 elapsed_stream_1 += end_ts - start_ts;
                 int ok = !compare_answers(info, outputs, outputs_stream_1, OUTSIZE, OUTSIZE);
                 if (!ok) { printf("%s_stream_1 mismatched, exiting\n", info->name); exit(1); }
-                info->stream_free(stream);
+                ti_stream_free(stream);
             }
         }
     }
