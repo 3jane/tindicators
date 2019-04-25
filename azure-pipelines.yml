@@ -1,15 +1,20 @@
-# C/C++ with GCC
-# Build your C/C++ project with GCC using make.
-# Add steps that publish test results, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
-
 trigger:
-- master
+- 0.9-dev
 
-pool:
-  vmImage: 'Ubuntu-16.04'
-
-steps:
-- script: |
-    make
-  displayName: 'make'
+jobs:
+- job: 'Windows'
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - task: CMake@1
+    inputs:
+     cmakeArgs: '-G "Visual Studio 16 2019" -A x64 ..'
+  - task: CMake@1
+    inputs:
+     cmakeArgs: '--build . --config Release -j'
+    displayName: 'Build'
+  - script: |
+      cd build
+      setx CTEST_OUTPUT_ON_FAILURE 1
+      ctest -C Release
+    displayName: 'Tests'
