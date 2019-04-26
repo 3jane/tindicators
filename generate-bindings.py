@@ -2,34 +2,30 @@ from tulipindicators import ti
 import os
 import shutil
 
-tmpl_toplevel = '''\
+toplevel = '''
 using System;
 using System.Runtime.InteropServices;
 using QuantConnect.Data.Market;
 using QuantConnect.Indicators;
 
 namespace Rcdb.TulipIndicators {
-    $util
+    class util {
+        public class InvalidOption : System.Exception {}
+        public class OutOfMemory : System.Exception {}
+        public static void DispatchError(int ret) {
+            switch(ret) {
+                case 0: break;
+                case 1: throw new InvalidOption();
+                case 2: throw new OutOfMemory();
+                default: throw new System.Exception();
+            }
+        }
+    }
     namespace Streaming {
         $streaming
     }
     namespace Default {
         $default
-    }
-}
-'''
-
-util = '''\
-class util {
-    public class InvalidOption : System.Exception {}
-    public class OutOfMemory : System.Exception {}
-    public static void DispatchError(int ret) {
-        switch(ret) {
-            case 0: break;
-            case 1: throw new InvalidOption();
-            case 2: throw new OutOfMemory();
-            default: throw new System.Exception();
-        }
     }
 }
 '''
@@ -149,8 +145,7 @@ if __name__ == '__main__':
     dirpath = os.path.dirname(os.path.abspath(__file__))
     shutil.copy(srclibpath, dirpath)
 
-    result = tmpl_toplevel \
-        .replace('$util', util) \
+    result = toplevel \
         .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators)) \
         .replace('$default', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators))
 
