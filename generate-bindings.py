@@ -2,10 +2,6 @@ from tulipindicators import ti
 import os
 import shutil
 
-# - base class `indicator' that implements run, stream_run etc on managed arrays
-# - successors that have static fields "name" etc and implement run_raw, stream_run_raw, etc
-# - the only method will need to be changed: https://github.com/hcmc-project/tulipindicators-net-lean/blob/STR-172-indicators-wrapper/TulipIndicators.cs#L13
-
 tmpl_toplevel = '''\
 using System;
 using System.Runtime.InteropServices;
