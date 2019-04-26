@@ -64,10 +64,10 @@ def streaming(indicator):
             IntPtr[] inputs = new IntPtr[{len(inputs)}];
             IntPtr[] outputs = new IntPtr[{len(outputs)}];
             double[] tmp = new double[{max(len(inputs), len(outputs))}];
-            {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(1);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
             {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], 1);' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(1);' for i, output in enumerate(outputs))}
+            {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
             int result = ti_{name}_stream_run(state, 1, inputs, outputs);
             util.DispatchError(result);
             {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, 1); {output.upper()}.Update(data.Time, (decimal)tmp[0]);' for i, output in enumerate(outputs))}
@@ -108,34 +108,34 @@ def default(indicator):
         bool ready;
         {f'{n}'.join(f'public Identity {output.upper()};' for output in outputs)}
         public {name}({', '.join(map('double {}'.format, options))}, int windowsize=0)
-            : base("{name}", Math.Max(windowsize, ti_{name}_start(options) + 1)) {{
+            : base("{name}", Math.Max(windowsize, ti_{name}_start(new double[]{{{', '.join(options)}}}) + 1)) {{
             options = new double[]{{{', '.join(options)}}};
             start = ti_{name}_start(options);
             ready = false;
             {f'{n}'.join(f'{output.upper()} = new Identity("{output}");' for output in outputs)}
         }}
-        protected override decimal ComputeNextValue(RollingWindow<{input_type}> window, {input_type} data) {{
-            ready = window.Size >= start;
+        protected override decimal ComputeNextValue(IReadOnlyWindow<{input_type}> window, {input_type} data) {{
+            ready = window.Count > start;
             if (!ready) {{ return 0; }}
             IntPtr[] inputs = new IntPtr[{len(inputs)}];
             IntPtr[] outputs = new IntPtr[{len(outputs)}];
-            double[] tmp = new double[window.Size];
-            {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(window.Size);' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'{{ int i; foreach ({input_type} value of window) {{ tmp[i] = (double)data.{input.capitalize() if not real else "Value"}; }}; i += 1; }}' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], window.Size);' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(window.Size - start);' for i, output in enumerate(outputs))}
-            int result = ti_{name}(window.Size, inputs, options, outputs);
+            double[] tmp = new double[window.Count];
+            {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * window.Count);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[i] = (double)value.{input.capitalize() if not real else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], window.Count);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * (window.Count - start));' for i, output in enumerate(outputs))}
+            int result = ti_{name}(window.Count, inputs, options, outputs);
             util.DispatchError(result);
-            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, window.Size - start); {output.upper()}.Update(data.Time, (decimal)tmp[window.Size - start - 1]);' for i, output in enumerate(outputs))}
+            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, window.Count - start); {output.upper()}.Update(data.Time, (decimal)tmp[window.Count - start - 1]);' for i, output in enumerate(outputs))}
             foreach (IntPtr input in inputs) {{ Marshal.FreeHGlobal(input); }}
             foreach (IntPtr output in outputs) {{ Marshal.FreeHGlobal(output); }}
-            return (decimal){outputs[0].upper()}.Current.Value;
+            return {outputs[0].upper()}.Current.Value;
         }}
         public override bool IsReady {{
             get {{ return ready; }}
         }}
-        {dllimport.format(fun=f'ti_{name}_start', ret='int', args='double[] options, ref IntPtr state')}
-        {dllimport.format(fun=f'ti_{name}', ret='void', args='IntPtr state')}
+        {dllimport.format(fun=f'ti_{name}_start', ret='int', args='double[] options')}
+        {dllimport.format(fun=f'ti_{name}', ret='int', args='int size, IntPtr[] inputs, double[] options, IntPtr[] outputs')}
     }}
     '''
     return result
@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     result = toplevel \
         .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators)) \
-        .replace('$default', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators))
+        .replace('$default', '\n'.join(default(ti.__getattr__(name).info) for name in ['sma']))
 
     with open('tulipindicators.cs', 'w') as f:
         f.write(result)
