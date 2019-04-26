@@ -9,8 +9,10 @@ import shutil
 tmpl_toplevel = '''\
 using System;
 using System.Runtime.InteropServices;
+using QuantConnect.Data.Market;
+using QuantConnect.Indicators;
 
-namespace TulipIndicators {
+namespace Rcdb.TulipIndicators {
     $util
     $streaming
     $default
@@ -50,88 +52,47 @@ dllimport = '\n'.join([
     'static extern {ret} {fun}({args});'
 ])
 
-def tradebar(indicator):
-    inputs = indicator.inputs;
-    outputs = indicator.outputs;
-    name = indicator.name;
-    options = indicator.options;
+def streaming(indicator):
+    inputs = indicator.inputs
+    outputs = indicator.outputs
+    name = indicator.name
+    options = indicator.options
 
-    result = f'''\
-    public class {name} : IndicatorBase<TradeBar> {{
+    n = '\n'
+    real = 'real' in inputs
+    if real and len(inputs) > 1:
+        print(f"warning: skipping '{name}' for its inputs: {inputs}")
+        return ''
+
+    input_type = ['TradeBar', 'IndicatorDataPoint'][real]
+
+    result = f'''
+    public class {name} : IndicatorBase<{input_type}> {{
         IntPtr state;
-        {'\n'.join(f'public Identity {output.capitalize()};') for output in outputs}
-        public {name}({', '.join(map('double {}'.format, options))}) {{
+        {f'{n}'.join(f'public Identity {output.capitalize()};' for output in outputs)}
+        public {name}({', '.join(map('double {}'.format, options))}) : base("{name}") {{
             int ret = ti_{name}_stream_new(new double[]{{{', '.join(options)}}}, ref state);
-            util.DispatchException(ret);
-            {'\n'.join(f'{output.capitalize()} = new Identity("{output}");') for output in outputs}
+            util.DispatchError(ret);
+            {f'{n}'.join(f'{output.capitalize()} = new Identity("{output}");' for output in outputs)}
         }}
-        public override decimal ComputeNextValue(TradeBar data) {{
-            IntPtr[] inputs;
-            IntPtr[] outputs;
-            {"\n".join(f'inputs[{i}] = AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
-            {"\n".join(f'Marshal.Copy(data.{input.capitalize()}, 0, inputs[{i}], sizeof(double));' for i, input in enumerate(inputs))}
-            {"\n".join(f'outputs[{i}] = AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
+        protected override decimal ComputeNextValue({input_type} data) {{
+            IntPtr[] inputs = new IntPtr[{len(inputs)}];
+            IntPtr[] outputs = new IntPtr[{len(outputs)}];
+            double[] tmp = new double[1];
+            {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(1);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'tmp[0] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], 1);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(1);' for i, output in enumerate(outputs))}
             int result = ti_{name}_stream_run(state, 1, inputs, outputs);
-            util.DispatchException(result);
-            double tmp;
-            {"\n".join(f'Marshal.Copy(outputs[{i}], tmp, 0, sizeof(double)); {output.capitalize()}.Update(tmp);' for i, output in enumerate(outputs))}
-            foreach (IntPtr input in inputs) {{ FreeHGlobal(input); }}
-            foreach (IntPtr output in outputs) {{ FreeHGlobal(output); }}
-            return {outputs[0].capitalize()}.Current.Value;
+            util.DispatchError(result);
+            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, 1); {output.capitalize()}.Update(data.Time, (decimal)tmp[0]);' for i, output in enumerate(outputs))}
+            foreach (IntPtr input in inputs) {{ Marshal.FreeHGlobal(input); }}
+            foreach (IntPtr output in outputs) {{ Marshal.FreeHGlobal(output); }}
+            return (decimal){outputs[0].capitalize()}.Current.Value;
         }}
-        public override bool IsReady = ti_stream_get_progress(state) > 0;
-        ~{name}() {{ ti_{name}_stream_free(state); }}
-        {dllimport.format(fun=f'ti_{name}_stream_free', ret='void', args='IntPtr state')}
-        {dllimport.format(fun='ti_stream_get_progress', ret='int', args='IntPtr state')}
-        {dllimport.format(fun=f'ti_{name}_stream_new', ret='int', args='double[] options, ref IntPtr state')}
-        {dllimport.format(fun=f'ti_{name}_stream_run', ret='int', args='IntPtr state, int size, IntPtr[] inputs, IntPtr[] outputs')}
-    }}
-    '''
-    return result
-
-tmpl_streaming_ind_tradebar = '''\
-public class $name : IndicatorBase<TradeBar> {
-    IntPtr state;
-    public $name($options) { util.DispatchException(ti_$name_stream_new(new double[]{$option_names}, ref state)); }
-    public override decimal ComputeNextValue(TradeBar data) {
-        ...
-    }
-    public override bool IsReady = ti_stream_get_progress(state) > 0;
-    ~$name() { ti_$name_stream_free(state); }
-    $imported
-}
-'''
-
-def datapoint(indicator):
-    inputs = indicator.inputs;
-    outputs = indicator.outputs;
-    name = indicator.name;
-    options = indicator.options;
-
-    result = f'''\
-    public class {name} : IndicatorBase<IndicatorDataPoint> {{
-        IntPtr state;
-        {'\n'.join(f'public Identity {output.capitalize()};') for output in outputs}
-        public {name}({', '.join(map('double {}'.format, options))}) {{
-            int ret = ti_{name}_stream_new(new double[]{{{', '.join(options)}}}, ref state);
-            util.DispatchException(ret);
-            {'\n'.join(f'{output.capitalize()} = new Identity("{output}");') for output in outputs}
+        public override bool IsReady {{
+            get {{ return ti_stream_get_progress(state) > 0; }}
         }}
-        public override decimal ComputeNextValue(IndicatorDataPoint data) {{
-            IntPtr[] inputs;
-            IntPtr[] outputs;
-            {"\n".join(f'inputs[{i}] = AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
-            {"\n".join(f'Marshal.Copy(data.Value, 0, inputs[{i}], sizeof(double));' for i, input in enumerate(inputs))}
-            {"\n".join(f'outputs[{i}] = AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
-            int result = ti_{name}_stream_run(state, 1, inputs, outputs);
-            util.DispatchException(result);
-            double tmp;
-            {"\n".join(f'Marshal.Copy(outputs[{i}], tmp, 0, sizeof(double)); {output.capitalize()}.Update(tmp);' for i, output in enumerate(outputs))}
-            foreach (IntPtr input in inputs) {{ FreeHGlobal(input); }}
-            foreach (IntPtr output in outputs) {{ FreeHGlobal(output); }}
-            return {outputs[0].capitalize()}.Current.Value;
-        }}
-        public override bool IsReady = ti_stream_get_progress(state) > 0;
         ~{name}() {{ ti_{name}_stream_free(state); }}
         {dllimport.format(fun=f'ti_{name}_stream_free', ret='void', args='IntPtr state')}
         {dllimport.format(fun='ti_stream_get_progress', ret='int', args='IntPtr state')}
@@ -146,8 +107,10 @@ if __name__ == '__main__':
     dirpath = os.path.dirname(os.path.abspath(__file__))
     shutil.copy(srclibpath, dirpath)
 
-    indicators = '\n\n'.join(indicator(name) for name in ti.available_indicators)
-    result =
+    result = tmpl_toplevel \
+        .replace('$util', util) \
+        .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ['pbands'])) \
+        .replace('$default', '')
 
     with open('tulipindicators.cs', 'w') as f:
         f.write(result)
