@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="QuantConnect.Lean" Version="2.4.5563" /> -->
     <PackageReference Include="QuantConnect.Lean" Version="2.4.5563" />
     <PackageReference Include="system.io.packaging" Version="4.5.0" />
   </ItemGroup>
