@@ -67,7 +67,7 @@ def streaming(indicator):
         protected override decimal ComputeNextValue({input_type} data) {{
             IntPtr[] inputs = new IntPtr[{len(inputs)}];
             IntPtr[] outputs = new IntPtr[{len(outputs)}];
-            double[] tmp = new double[1];
+            double[] tmp = new double[{max(len(inputs), len(outputs))}];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(1);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], 1);' for i, input in enumerate(inputs))}
