@@ -6,114 +6,148 @@ import shutil
 # - successors that have static fields "name" etc and implement run_raw, stream_run_raw, etc
 # - the only method will need to be changed: https://github.com/hcmc-project/tulipindicators-net-lean/blob/STR-172-indicators-wrapper/TulipIndicators.cs#L13
 
-proto = '\n'.join([
-    '[DllImport("indicators", EntryPoint="{fun}")]',
-    '{specs} extern {ret} {as_}({args});'
-])
+tmpl_toplevel = '''\
+using System;
+using System.Runtime.InteropServices;
 
-def indicator(name):
-    return f'''
-public class {name} : indicator {{
-    {proto.format(fun='ti_{name}'.format(name=name), as_='raw_run', ret='int', args=', '.join(['int size', 'IntPtr[] inputs', 'double[] options', 'IntPtr[] outputs']), specs='override ')}
-    {proto.format(fun='ti_{name}_stream_run'.format(name=name), as_='raw_stream_run', ret='int', args=', '.join(['IntPtr stream', 'int size', 'IntPtr[] inputs', 'IntPtr[] outputs']), specs='override ')}
-    {proto.format(fun='ti_{name}_stream_new'.format(name=name), as_='stream_new', ret='int', args=', '.join(['double[] options', 'ref IntPtr stream']), specs='override public')}
-    {proto.format(fun='ti_{name}_stream_free'.format(name=name), as_='stream_free', ret='int', args='IntPtr stream', specs='override public')}
-    {proto.format(fun='ti_{name}_start'.format(name=name), as_='start', ret='int', args='double[] options', specs='override public')}
-}}
+namespace TulipIndicators {
+    $util
+    $streaming
+    $default
+}
 '''
 
+util = '''\
+class util {
+    public class InvalidOption : System.Exception {}
+    public class OutOfMemory : System.Exception {}
+    public static void DispatchError(int ret) {
+        switch(ret) {
+            case 0: break;
+            case 1: throw new InvalidOption();
+            case 2: throw new OutOfMemory();
+            default: throw new System.Exception();
+        }
+    }
+}
+'''
+
+tmpl_streaming = '''\
+namespace Streaming {
+    $indicators
+}
+'''
+
+tmpl_default = '''\
+namespace Default {
+    $indicators
+}
+'''
+
+
+dllimport = '\n'.join([
+    '[DllImport("indicators", EntryPoint="{fun}")]',
+    'static extern {ret} {fun}({args});'
+])
+
+def tradebar(indicator):
+    inputs = indicator.inputs;
+    outputs = indicator.outputs;
+    name = indicator.name;
+    options = indicator.options;
+
+    result = f'''\
+    public class {name} : IndicatorBase<TradeBar> {{
+        IntPtr state;
+        {'\n'.join(f'public Identity {output.capitalize()};') for output in outputs}
+        public {name}({', '.join(map('double {}'.format, options))}) {{
+            int ret = ti_{name}_stream_new(new double[]{{{', '.join(options)}}}, ref state);
+            util.DispatchException(ret);
+            {'\n'.join(f'{output.capitalize()} = new Identity("{output}");') for output in outputs}
+        }}
+        public override decimal ComputeNextValue(TradeBar data) {{
+            IntPtr[] inputs;
+            IntPtr[] outputs;
+            {"\n".join(f'inputs[{i}] = AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
+            {"\n".join(f'Marshal.Copy(data.{input.capitalize()}, 0, inputs[{i}], sizeof(double));' for i, input in enumerate(inputs))}
+            {"\n".join(f'outputs[{i}] = AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
+            int result = ti_{name}_stream_run(state, 1, inputs, outputs);
+            util.DispatchException(result);
+            double tmp;
+            {"\n".join(f'Marshal.Copy(outputs[{i}], tmp, 0, sizeof(double)); {output.capitalize()}.Update(tmp);' for i, output in enumerate(outputs))}
+            foreach (IntPtr input in inputs) {{ FreeHGlobal(input); }}
+            foreach (IntPtr output in outputs) {{ FreeHGlobal(output); }}
+            return {outputs[0].capitalize()}.Current.Value;
+        }}
+        public override bool IsReady = ti_stream_get_progress(state) > 0;
+        ~{name}() {{ ti_{name}_stream_free(state); }}
+        {dllimport.format(fun=f'ti_{name}_stream_free', ret='void', args='IntPtr state')}
+        {dllimport.format(fun='ti_stream_get_progress', ret='int', args='IntPtr state')}
+        {dllimport.format(fun=f'ti_{name}_stream_new', ret='int', args='double[] options, ref IntPtr state')}
+        {dllimport.format(fun=f'ti_{name}_stream_run', ret='int', args='IntPtr state, int size, IntPtr[] inputs, IntPtr[] outputs')}
+    }}
+    '''
+    return result
+
+tmpl_streaming_ind_tradebar = '''\
+public class $name : IndicatorBase<TradeBar> {
+    IntPtr state;
+    public $name($options) { util.DispatchException(ti_$name_stream_new(new double[]{$option_names}, ref state)); }
+    public override decimal ComputeNextValue(TradeBar data) {
+        ...
+    }
+    public override bool IsReady = ti_stream_get_progress(state) > 0;
+    ~$name() { ti_$name_stream_free(state); }
+    $imported
+}
+'''
+
+def datapoint(indicator):
+    inputs = indicator.inputs;
+    outputs = indicator.outputs;
+    name = indicator.name;
+    options = indicator.options;
+
+    result = f'''\
+    public class {name} : IndicatorBase<IndicatorDataPoint> {{
+        IntPtr state;
+        {'\n'.join(f'public Identity {output.capitalize()};') for output in outputs}
+        public {name}({', '.join(map('double {}'.format, options))}) {{
+            int ret = ti_{name}_stream_new(new double[]{{{', '.join(options)}}}, ref state);
+            util.DispatchException(ret);
+            {'\n'.join(f'{output.capitalize()} = new Identity("{output}");') for output in outputs}
+        }}
+        public override decimal ComputeNextValue(IndicatorDataPoint data) {{
+            IntPtr[] inputs;
+            IntPtr[] outputs;
+            {"\n".join(f'inputs[{i}] = AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
+            {"\n".join(f'Marshal.Copy(data.Value, 0, inputs[{i}], sizeof(double));' for i, input in enumerate(inputs))}
+            {"\n".join(f'outputs[{i}] = AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
+            int result = ti_{name}_stream_run(state, 1, inputs, outputs);
+            util.DispatchException(result);
+            double tmp;
+            {"\n".join(f'Marshal.Copy(outputs[{i}], tmp, 0, sizeof(double)); {output.capitalize()}.Update(tmp);' for i, output in enumerate(outputs))}
+            foreach (IntPtr input in inputs) {{ FreeHGlobal(input); }}
+            foreach (IntPtr output in outputs) {{ FreeHGlobal(output); }}
+            return {outputs[0].capitalize()}.Current.Value;
+        }}
+        public override bool IsReady = ti_stream_get_progress(state) > 0;
+        ~{name}() {{ ti_{name}_stream_free(state); }}
+        {dllimport.format(fun=f'ti_{name}_stream_free', ret='void', args='IntPtr state')}
+        {dllimport.format(fun='ti_stream_get_progress', ret='int', args='IntPtr state')}
+        {dllimport.format(fun=f'ti_{name}_stream_new', ret='int', args='double[] options, ref IntPtr state')}
+        {dllimport.format(fun=f'ti_{name}_stream_run', ret='int', args='IntPtr state, int size, IntPtr[] inputs, IntPtr[] outputs')}
+    }}
+    '''
+    return result
 
 if __name__ == '__main__':
     srclibpath = ti._lib._name
     dirpath = os.path.dirname(os.path.abspath(__file__))
     shutil.copy(srclibpath, dirpath)
 
-    # functions = [
-    #     proto.format(fun='stream_run', ret='int', args=', '.join(['IntPtr stream, int size, IntPtr[] inputs, IntPtr[] outputs'])),
-    #     proto.format(fun='stream_free', ret='void', args=', '.join(['IntPtr stream'])),
-    #     proto.format(fun='stream_get_progress', ret='int', args=', '.join(['IntPtr stream']))
-    # ]
-
-    # for name in ti.available_indicators:
-    #     indicator = ti.__getattr__(name)
-    #     functions.extend([
-    #         proto.format(fun=f'{name}', ret='int', args=', '.join(['int size', 'IntPtr[] inputs', 'double[] options', 'IntPtr[] outputs'])),
-    #         proto.format(fun=f'{name}_start', ret='int', args=', '.join(['double[] options']))
-    #     ])
-    #     if indicator.info.raw.stream_new:
-    #         functions.extend([
-    #             proto.format(fun=f'{name}_stream_new', ret='int', args=', '.join(['double[] options', 'IntPtr *stream']))
-    #         ])
-
-    # result = tulipindicators_template.format(functions='\n\n'.join(functions))
-
     indicators = '\n\n'.join(indicator(name) for name in ti.available_indicators)
-    result = '''\
-using System;
-using System.Runtime.InteropServices;
-
-class TulipIndicators {
-    public abstract class indicator {
-        abstract int raw_run(int size, IntPtr[] inputs, double[] options, IntPtr[] outputs);
-        abstract int raw_stream_run(IntPtr stream, int size, IntPtr[] inputs, IntPtr[] outputs);
-        public abstract int stream_new(double[] options, ref IntPtr stream);
-        public abstract int stream_free(IntPtr stream);
-        public abstract int start(double[] options);
-''' f'''
-        {proto.format(fun='ti_stream_get_progress', as_='stream_get_progress', ret='int', args='IntPtr stream', specs='public')}
-''' '''
-        int run(double[][] inputs, double[] options, double[][] outputs) {
-            int size = inputs[0].Length;
-            int outlen = size - start(options);
-
-            IntPtr[] m_inputs = new IntPtr[inputs.Length];
-            for (int i = 0; i < inputs.Length; ++i) {
-                m_inputs[i] = Marshal.AllocHGlobal(inputs[i].Length*sizeof(double));
-                Marshal.Copy(inputs[i], 0, m_inputs[i], size);
-            }
-            IntPtr[] m_outputs = new IntPtr[outputs.Length];
-            for (int i = 0; i < outputs.Length; ++i) {
-                m_outputs[i] = Marshal.AllocHGlobal(outlen * sizeof(double));
-            }
-            int result = raw_run(size, m_inputs, options, m_outputs);
-            for (int i = 0; i < outputs.Length; ++i) {
-                Marshal.Copy(m_outputs[i], outputs[i], 0, outlen);
-                Marshal.FreeHGlobal(m_outputs[i]);
-            }
-            for (int i = 0; i < inputs.Length; ++i) {
-                Marshal.FreeHGlobal(m_inputs[i]);
-            }
-            return result;
-        }
-
-        int stream_run(IntPtr stream, double[][] inputs, double[][] outputs) {
-            int size = inputs[0].Length;
-            int outlen = size + get_progress(stream);
-            if (outlen < 0) { outlen = 0; }
-
-            IntPtr[] m_inputs = new IntPtr[inputs.Length];
-            for (int i = 0; i < inputs.Length; ++i) {
-                m_inputs[i] = Marshal.AllocHGlobal(inputs[i].Length * sizeof(double));
-                Marshal.Copy(inputs[i], 0, m_inputs[i], size);
-            }
-            IntPtr[] m_outputs = new IntPtr[outputs.Length];
-            for (int i = 0; i < outputs.Length; ++i) {
-                m_outputs[i] = Marshal.AllocHGlobal(outlen * sizeof(double));
-            }
-            int result = raw_stream_run(stream, size, m_inputs, m_outputs);
-            for (int i = 0; i < outputs.Length; ++i) {
-                Marshal.Copy(m_outputs[i], outputs[i], 0, outlen);
-                Marshal.FreeHGlobal(m_outputs[i]);
-            }
-            for (int i = 0; i < inputs.Length; ++i) {
-                Marshal.FreeHGlobal(m_inputs[i]);
-            }
-            return result;
-        }
-    } ''' f'''
-    {indicators} ''' '''
-}
-'''
+    result =
 
     with open('tulipindicators.cs', 'w') as f:
         f.write(result)
