@@ -107,7 +107,7 @@ def default(indicator):
         int start;
         bool ready;
         {f'{n}'.join(f'public Identity {output.upper()};' for output in outputs)}
-        public {name}({', '.join(map('double {}'.format, options))}, int windowsize=0)
+        public {name}({', '.join(list(map('double {}'.format, options)) + ['int windowsize=0'])})
             : base("{name}", Math.Max(windowsize, ti_{name}_start(new double[]{{{', '.join(options)}}}) + 1)) {{
             options = new double[]{{{', '.join(options)}}};
             start = ti_{name}_start(options);
@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     result = toplevel \
         .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators)) \
-        .replace('$default', '\n'.join(default(ti.__getattr__(name).info) for name in ['sma']))
+        .replace('$default', '\n'.join(default(ti.__getattr__(name).info) for name in ti.available_indicators))
 
     with open('tulipindicators.cs', 'w') as f:
         f.write(result)
