@@ -121,12 +121,12 @@ def default(indicator):
             IntPtr[] outputs = new IntPtr[{len(outputs)}];
             double[] tmp = new double[window.Count];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * window.Count);' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[i] = (double)value.{input.capitalize() if not real else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[window.Count-i-1] = (double)value.{input.capitalize() if not real else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], window.Count);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * (window.Count - start));' for i, output in enumerate(outputs))}
             int result = ti_{name}(window.Count, inputs, options, outputs);
             util.DispatchError(result);
-            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, window.Count - start); {output.upper()}.Update(data.Time, (decimal)tmp[window.Count - start - 1]);' for i, output in enumerate(outputs))}
+            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, window.Count - start); {output.upper()}.Update(data.Time, (decimal)tmp[window.Count-start-1]);' for i, output in enumerate(outputs))}
             foreach (IntPtr input in inputs) {{ Marshal.FreeHGlobal(input); }}
             foreach (IntPtr output in outputs) {{ Marshal.FreeHGlobal(output); }}
             return {outputs[0].upper()}.Current.Value;
