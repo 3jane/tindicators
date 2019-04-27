@@ -192,6 +192,12 @@ void frama_option_setter(double period, double* options) {
 	options[1] = 198;
 }
 
+void smi_option_setter(double period, double* options) {
+    options[0] = period;
+    options[1] = 25;
+    options[2] = 3;
+}
+
 void bench(const ti_indicator_info *info) {
     void (*options_setter)(double period, double *options) = simple_option_setter;
     if (strcmp(info->name, "apo") == 0) { options_setter = ppo_option_setter; }
@@ -206,6 +212,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "rmta") == 0) { options_setter = rmta_option_setter; }
     if (strcmp(info->name, "rmi") == 0) { options_setter = rmi_option_setter; }
     if (strcmp(info->name, "rvi") == 0) { options_setter = rvi_option_setter; }
+    if (strcmp(info->name, "smi") == 0) { options_setter = smi_option_setter; }
     if (strcmp(info->name, "stoch") == 0) { options_setter = stoch_option_setter; }
     if (strcmp(info->name, "stochrsi") == 0) { options_setter = stochrsi_option_setter; }
     if (strcmp(info->name, "ultosc") == 0) { options_setter = ultosc_option_setter; }
