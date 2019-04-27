@@ -18,3 +18,13 @@ jobs:
       setx CTEST_OUTPUT_ON_FAILURE 1
       ctest -C Release
     displayName: 'Tests'
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)\build\Release\'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      contents: 'indicators.dll'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: artifacts
