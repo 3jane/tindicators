@@ -1,5 +1,37 @@
 Forked from [https://github.com/TulipCharts/tulipindicators](https://github.com/TulipCharts/tulipindicators)
 
+-------------------------------
+
+## Bindings
+There are some nice bindings available, for use in [Python](https://github.com/hcmc-project/tulipindicators-python) and [Lean](https://github.com/hcmc-project/tulipindicators-net).
+
+## Testing
+
+The testing process consists of three stages:
+1. **`benchmark2`**: a series of 4000 bars is randomly generated, then the behavior of different implementations (plain, `ref`, `stream`) is matched against each other, and also benchmarked.
+2. **`fuzzer`**: trying to find options that would trigger a segfault, memleak, of something alike.
+3. **`smoke`**: we match the behavior of the indicator against precomputed values.
+
+With debug build on Linux, these are run under sanitizers, namely `-fsanitize=undefined -fsanitize=address -fsanitize=leak`.
+
+## Architecture
+
+1. **indicators.tcl**: this is the heart of the project, it's the script that generates
+    + the boilerplate under `indicators/` for further indicator implementation
+    + `indicators.h`
+    + `indicators_index.c`
+2. **indicators/xxx.c**: this is the file implementing *xxx*, namely:
+    + `int xxx(int size, double **inputs, double *options, double **outputs)`
+    + `int xxx_start(double *options)`  
+    *and optionally,*
+    + `int xxx_stream_new(double *options, ti_stream **stream)`
+    + `int xxx_stream_run(ti_stream *stream, int size, double **inputs, double **outputs)`
+    + `void xxx_stream_free(ti_stream *stream)`   
+    *and*
+    + `int xxx_ref(int size, double **inputs, double *options, double **outputs)`  
+
+-------------------------------
+
 # Tulip Indicators
 
 ## Introduction
