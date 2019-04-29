@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="tulipindicators",
-    version="0.2",
+    version="0.3",
     author="Ilya Pikulin",
     author_email="ilya.p@rcdb.io",
     description="Python wrapper for Tulip Indicators",
