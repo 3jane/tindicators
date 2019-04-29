@@ -9,7 +9,7 @@ There are some nice bindings available, for use in [Python](https://github.com/h
 
 The testing process consists of three stages:
 1. **`benchmark2`**: a series of 4000 bars is randomly generated, then the behavior of different implementations (plain, `ref`, `stream`) is matched against each other, and also benchmarked.
-2. **`fuzzer`**: trying to find options that would trigger a segfault, memleak, of something alike.
+2. **`fuzzer`**: tries to find options that would trigger a segfault, memleak, of something alike.
 3. **`smoke`**: we match the behavior of the indicator against precomputed values.
 
 With debug build on Linux, these are run under sanitizers, namely `-fsanitize=undefined -fsanitize=address -fsanitize=leak`.
