@@ -42,6 +42,7 @@ int ti_rmi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     if (period < 1) { return TI_INVALID_OPTION; }
     if (lookback_period < 1) { return TI_INVALID_OPTION; }
+    if (size < lookback_period + 1) { return TI_OKAY; }
 
     TI_REAL gains_ema;
     TI_REAL losses_ema;
