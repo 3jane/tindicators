@@ -2,6 +2,7 @@ from ctypes import *
 import numpy as np
 from collections import namedtuple
 import os
+import platform
 from datetime import datetime
 
 TI_MAXINDPARAMS = 10
@@ -135,10 +136,15 @@ class TulipIndicators:
     def __init__(self, sharedlib_path=None):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         if sharedlib_path is None:
-            if os.name == 'nt':
+            if platform.system() == 'Windows':
                 sharedlib_path = os.path.join(dir_path, 'indicators.dll')
-            elif os.name == 'posix':
+            elif platform.system() == 'Linux':
                 sharedlib_path = os.path.join(dir_path, 'libindicators.so')
+            elif platform.system() == 'Darwin':
+                sharedlib_path = os.path.join(dir_path, 'libindicators.dylib')
+            else:
+                printf(f'warning: platform {platform.system()} unknown, defaulting to sharedlib_path=libindicators.so')
+                sharedlib_path = 'libindicators.so'
         self._lib = CDLL(sharedlib_path)
         self._lib.ti_find_indicator.restype = POINTER(ti_indicator_info)
         self._lib.ti_build.restype = c_long
