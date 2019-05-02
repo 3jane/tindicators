@@ -1,0 +1,156 @@
+# Interpretation of function types:
+#   overlay: These have roughly the same range as the input data
+#   indicator: Everything else (e.g. oscillators)
+#   math: These aren't so good for plotting, but are useful with formulas
+#   simple: These apply a simple operator (e.g. addition, sin, sqrt)
+#   comparative: These are designed to take inputs from different securities. i.e. compare stock A to stock B
+
+# Moving averages
+dema: ["Double Exponential Moving Average", overlay, [real], [period], [dema], []]
+ema: ["Exponential Moving Average", overlay, [real], [period], [ema], []]
+hma: ["Hull Moving Average", overlay, [real], [period], [hma], []]
+sma: ["Simple Moving Average", overlay, [real], [period], [sma], [stream]]
+mama: ["MESA Adaptive Moving Average", overlay, [real], [fastlimit, slowlimit], [mama, fama], [ref, stream]]
+tema: ["Triple Exponential Moving Average", overlay, [real], [period], [tema], []]
+trima: ["Triangular Moving Average", overlay, [real], [period], [trima], []]
+vidya: ["Variable Index Dynamic Average", overlay, [real], [short period, long period, alpha], [vidya], []]
+vwma: ["Volume Weighted Moving Average", overlay, [close, volume], [period], [vwma], []]
+vwap: ["Volume Weighted Average Price", overlay, [high, low, close, volume], [period], [vwap], [stream, ref]]
+wilders: ["Wilders Smoothing", overlay, [real], [period], [wilders], []]
+wma: ["Weighted Moving Average", overlay, [real], [period], [wma], []]
+zlema: ["Zero-Lag Exponential Moving Average", overlay, [real], [period], [zlema], []]
+rmta: ["Recursive Moving Trend Average", overlay, [real], [period, beta], [rmta], []]
+
+# Line fitting
+linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
+linregintercept: ["Linear Regression Intercept", indicator, [real], [period], [linregintercept], []]
+linregslope: ["Linear Regression Slope", indicator, [real], [period], [linregslope], []]
+tsf: ["Time Series Forecast", overlay, [real], [period], [tsf], []]
+fosc: ["Forecast Oscillator", indicator, [real], [period], [fosc], []]
+
+# Special moving averages and other overlays
+bbands: ["Bollinger Bands", overlay, [real], [period, stddev], [bbands_lower, bbands_middle, bbands_upper], []]
+dc: ["Donchian Channel", overlay, [real], [period], [dc_lower, dc_upper], [stream]]
+kc: ["Keltner Channel", overlay, [high, low, close], [period, multiple], [kc_lower, kc_middle, kc_upper], [stream]]
+kama: ["Kaufman Adaptive Moving Average", overlay, [real], [period], [kama], []]
+psar: ["Parabolic SAR", overlay, [high, low], [acceleration factor step, acceleration factor maximum], [psar], []]
+pc: ["Price Channel", overlay, [high, low], [period], [pc_low, pc_high], [stream]]
+pbands: ["Projection Bands", overlay, [high, low, close], [period], [pbands_lower, pbands_upper], [ref, stream]]
+frama: ["Fractal Adaptive Moving Average", overlay, [high, low], [period, average period], [frama], []]
+
+# Momentum
+ad: ["Accumulation/Distribution Line", indicator, [high, low, close, volume], [], [ad], []]
+adosc: ["Accumulation/Distribution Oscillator", indicator, [high, low, close, volume], [short period, long period], [adosc], []]
+abands: ["Acceleration Bands", indicator, [high, low, close], [period], [abands_lower, abands_upper, abands_middle], [ref]]
+apo: ["Absolute Price Oscillator", indicator, [real], [short period, long period], [apo], []]
+aroon: ["Aroon", indicator, [high, low], [period], [aroon_down, aroon_up], []]
+aroonosc: ["Aroon Oscillator", indicator, [high, low], [period], [aroonosc], []]
+ao: ["Awesome Oscillator", indicator, [high, low], [], [ao], []]
+bop: ["Balance of Power", indicator, [open, high, low, close], [], [bop], []]
+cmf: ["Chaikin Money Flow", indicator, [high, low, close, volume], [period], [cmf], []]
+cmo: ["Chande Momentum Oscillator", indicator, [real], [period], [cmo], []]
+cci: ["Commodity Channel Index", indicator, [high, low, close], [period], [cci], []]
+copp: ["Coppock Curve", indicator, [real], [roc_shorter_period, roc_longer_period, wma_period], [copp], [ref, stream]]
+dpo: ["Detrended Price Oscillator", indicator, [real], [period], [dpo], []]
+emv: ["Ease of Movement", indicator, [high, low, volume], [], [emv], []]
+fisher: ["Fisher Transform", indicator, [high, low], [period], [fisher, fisher_signal], []]
+fi: ["Force Index", indicator, [close, volume], [period], [fi], [ref, stream]]
+kvo: ["Klinger Volume Oscillator", indicator, [high, low, close, volume], [short period, long period], [kvo], []]
+kst: ["Know Sure Thing", indicator, [real], [roc1, roc2, roc3, roc4, ma1, ma2, ma3, ma4], [kst, kst_signal], [ref]]
+marketfi: ["Market Facilitation Index", indicator, [high, low, volume], [], [marketfi], []]
+mass: ["Mass Index", indicator, [high, low], [period], [mass], []]
+mfi: ["Money Flow Index", indicator, [high, low, close, volume], [period], [mfi], []]
+macd: ["Moving Average Convergence/Divergence", indicator, [real], [short period, long period, signal period], [macd, macd_signal, macd_histogram], []]
+nvi: ["Negative Volume Index", indicator, [close, volume], [], [nvi], []]
+obv: ["On Balance Volume", indicator, [close, volume], [], [obv], []]
+ppo: ["Percentage Price Oscillator", indicator, [real], [short period, long period], [ppo], []]
+pfe: ["Polarized Fractal Efficiency", indicator, [real], [period, ema_period], [pfe], [ref, stream]]
+pvi: ["Positive Volume Index", indicator, [close, volume], [], [pvi], []]
+posc: ["Projection Oscillator", indicator, [high, low, close], [period, ema_period], [posc], [stream, ref]]
+qstick: ["Qstick", indicator, [open, close], [period], [qstick], []]
+rsi: ["Relative Strength Index", indicator, [real], [period], [rsi], []]
+tsi: ["True Strength Index", indicator, [real], [y_period, z_period], [tsi], [stream, ref]]
+rmi: ["Relative Momentum Index", indicator, [real], [period, lookback_period], [rmi], [ref, stream]]
+rvi: ["Relative Volatility Index", indicator, [real], [period, stddev_period], [rvi], [stream]]
+smi: ["Stochastic Momentum Index", indicator, [high, low, close], [q_period, r_period, s_period], [smi], [stream, ref]]
+stoch: ["Stochastic Oscillator", indicator, [high, low, close], [k period, k slowing period, d period], [stoch_k, stoch_d], []]
+stochrsi: ["Stochastic RSI", indicator, [real], [period], [stochrsi], []]
+trix: ["Trix", indicator, [real], [period], [trix], []]
+wad: ["Williams Accumulation/Distribution", indicator, [high, low, close], [], [wad], []]
+willr: ["Williams %R", indicator, [high, low, close], [period], [willr], []]
+ultosc: ["Ultimate Oscillator", indicator, [high, low, close], [short period, medium period, long period], [ultosc], []]
+vhf: ["Vertical Horizontal Filter", indicator, [real], [period], [vhf], []]
+vosc: ["Volume Oscillator", indicator, [volume], [short period, long period], [vosc], []]
+
+# DX, ADX, ADXR, etc
+dm: ["Directional Movement", indicator, [high, low], [period], [plus_dm, minus_dm], []]
+dx: ["Directional Movement Index", indicator, [high, low], [period], [dx], []]
+di: ["Directional Indicator", indicator, [high, low, close], [period], [plus_di, minus_di], []]
+adx: ["Average Directional Movement Index", indicator, [high, low], [period], [adx], []]
+adxr: ["Average Directional Movement Rating", indicator, [high, low], [period], [adxr], []]
+
+# Waves
+msw: ["Mesa Sine Wave", indicator, [real], [period], [msw_sine, msw_lead], []]
+
+# Rate of return, rate of change, momentum indicators
+mom: ["Momentum", indicator, [real], [period], [mom], []]
+roc: ["Rate of Change", indicator, [real], [period], [roc], []]
+rocr: ["Rate of Change Ratio", indicator, [real], [period], [rocr], []]
+
+# Math functions
+lag: ["Lag", math, [real], [period], [lag], []]
+max: ["Maximum In Period", math, [real], [period], [max], [ref]]
+min: ["Minimum In Period", math, [real], [period], [min], [ref]]
+sum: ["Sum Over Period", math, [real], [period], [sum], []]
+stddev: ["Standard Deviation Over Period", math, [real], [period], [stddev], []]
+stderr: ["Standard Error Over Period", math, [real], [period], [stderr], []]
+md: ["Mean Deviation Over Period", math, [real], [period], [md], []]
+var: ["Variance Over Period", math, [real], [period], [var], []]
+
+# Price average functions
+avgprice: ["Average Price", overlay, [open, high, low, close], [], [avgprice], []]
+medprice: ["Median Price", overlay, [high, low], [], [medprice], []]
+typprice: ["Typical Price", overlay, [high, low, close], [], [typprice], []]
+wcprice: ["Weighted Close Price", overlay, [high, low, close], [], [wcprice], []]
+atr: ["Average True Range", indicator, [high, low, close], [period], [atr], [stream, ref]]
+ce: ["Chandelier Exit", indicator, [high, low, close], [period, coef], [ce_high, ce_low], [stream, ref]]
+natr: ["Normalized Average True Range", indicator, [high, low, close], [period], [natr], []]
+tr: ["True Range", indicator, [high, low, close], [], [tr], []]
+
+# Volatility
+volatility: ["Annualized Historical Volatility", indicator, [real], [period], [volatility], []]
+cvi: ["Chaikins Volatility", indicator, [high, low], [period], [cvi], []]
+
+# Utility functions
+crossany: ["Crossany", math, [real, real], [], [crossany], []]
+crossover: ["Crossover", math, [real, real], [], [crossover], []]
+decay: ["Linear Decay", math, [real], [period], [decay], []]
+edecay: ["Exponential Decay", math, [real], [period], [edecay], []]
+
+# Simple functions taking two inputs
+add: ["Vector Addition", simple, [real, real], [], [add], []]
+sub: ["Vector Subtraction", simple, [real, real], [], [sub], []]
+mul: ["Vector Multiplication", simple, [real, real], [], [mul], []]
+div: ["Vector Division", simple, [real, real], [], [div], []]
+abs: ["Vector Absolute Value", simple, [real], [], [abs], []]
+acos: ["Vector Arccosine", simple, [real], [], [acos], []]
+asin: ["Vector Arcsine", simple, [real], [], [asin], []]
+
+# Simple functions taking one input
+atan: ["Vector Arctangent", simple, [real], [], [atan], []]
+ceil: ["Vector Ceiling", simple, [real], [], [ceil], []]
+cos: ["Vector Cosine", simple, [real], [], [cos], []]
+cosh: ["Vector Hyperbolic Cosine", simple, [real], [], [cosh], []]
+exp: ["Vector Exponential", simple, [real], [], [exp], []]
+floor: ["Vector Floor", simple, [real], [], [floor], []]
+ln: ["Vector Natural Log", simple, [real], [], [ln], []]
+log10: ["Vector Base-10 Log", simple, [real], [], [log10], []]
+round: ["Vector Round", simple, [real], [], [round], []]
+sin: ["Vector Sine", simple, [real], [], [sin], []]
+sinh: ["Vector Hyperbolic Sine", simple, [real], [], [sinh], []]
+sqrt: ["Vector Square Root", simple, [real], [], [sqrt], []]
+tan: ["Vector Tangent", simple, [real], [], [tan], []]
+tanh: ["Vector Hyperbolic Tangent", simple, [real], [], [tanh], []]
+todeg: ["Vector Degree Conversion", simple, [real], [], [degrees], []]
+torad: ["Vector Radian Conversion", simple, [real], [], [radians], []]
+trunc: ["Vector Truncate", simple, [real], [], [trunc], []]

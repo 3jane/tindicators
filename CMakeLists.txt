@@ -33,7 +33,7 @@ target_compile_options(indicators
 
 
 execute_process(
-    COMMAND tclsh indicators.tcl
+    COMMAND python3 codegen.py
     OUTPUT indicators.h indicators_index.c
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
