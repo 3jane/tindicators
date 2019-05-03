@@ -1,197 +1,79 @@
-Forked from [https://github.com/TulipCharts/tulipindicators](https://github.com/TulipCharts/tulipindicators)
+# Tulip Indicators
 
--------------------------------
+Tulip Indicators is a library of technical analysis indicators.
+
+It was [originally](https://github.com/TulipCharts/tulipindicators) written in C89 and extended in C++17 by us later.
+
+Please refer to [indicators.yaml](./indicators.yaml) for the comprehensive list of the available indicators. Some extra info regarding formulae sources and future plans is available in the [doc](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31Tgy6z-pR9rOv1Nr3dxLn5g).
 
 ## Bindings
+
 There are some nice bindings available, for use in [Python](https://github.com/hcmc-project/tulipindicators-python) and [Lean](https://github.com/hcmc-project/tulipindicators-net).
 
 ## Testing
 
 The testing process consists of three stages:
 1. **`benchmark2`**: a series of 4000 bars is randomly generated, then the behavior of different implementations (plain, `ref`, `stream`) is matched against each other, and also benchmarked.
-2. **`fuzzer`**: tries to find options that would trigger a segfault, memleak, of something alike.
+2. **`fuzzer`**: let's try to find options that would trigger a segfault, memleak, of something alike.
 3. **`smoke`**: we match the behavior of the indicator against precomputed values.
 
-With debug build on Linux, these are run under sanitizers, namely `-fsanitize=undefined -fsanitize=address -fsanitize=leak`.
+Built on Linux with `-DCMAKE_BUILD_TYPE=Debug`, these are run under sanitizers, namely `-fsanitize=undefined -fsanitize=address -fsanitize=leak`.
 
 ## Architecture
 
-1. **indicators.tcl**: this is the heart of the project, it's the script that generates
+1. **indicators.yaml**: the comprehensive index of the indicators present in the library.
+1. **codegen.py**: generates, based on `indicators.yaml`,
     + the boilerplate under `indicators/` for further indicator implementation
     + `indicators.h`
     + `indicators_index.c`
-2. **indicators/xxx.c**: this is the file implementing *xxx*, namely:
+2. **indicators/\***: `xxx.c` contains code implementing xxx, namely:
     + `int xxx(int size, double **inputs, double *options, double **outputs)`
     + `int xxx_start(double *options)`  
-    *and optionally,*
     + `int xxx_stream_new(double *options, ti_stream **stream)`
     + `int xxx_stream_run(ti_stream *stream, int size, double **inputs, double **outputs)`
     + `void xxx_stream_free(ti_stream *stream)`   
-    *and*
     + `int xxx_ref(int size, double **inputs, double *options, double **outputs)`  
-
--------------------------------
-
-# Tulip Indicators
-
-## Introduction
-
-Tulip Indicators is a library of technical analysis functions written in ANSI C.
-
-Lots of information is available on the website:
-[https://tulipindicators.org](https://tulipindicators.org)
-
-High quality bindings are available for [Node.js](https://github.com/TulipCharts/tulipnode),
-[Python](https://github.com/cirla/tulipy), and [.NET](https://github.com/TulipCharts/tinet).
-
-## Features
-
- - **C99 with no dependencies**.
- - Uses fast algorithms.
- - Easy to use programming interface.
- - Release under LGPL license.
-
+3. **utils/\***: some data structures and macros that come up frequently, namely
+    + `buffer.h`: simple ringbuffer
+    + `localbuffer.h`: ringbuffer allocated locally to the rest of the data
+    + `log.h`: contains `LOG()` macro, useful for debugging
+    + `minmax.h`: contains `MIN()`, `MAX()` macros
+    + `testing.h`: some code shared by testing utilities, like `compare_answers()`
+4. **tests/\***: contains precomputed tests, namely
+    + `atoz.txt`: cases from *Technical Analysis from A to Z*
+    + `extra.txt`: cases from other sources
+    + `untest.txt`: regression tests
+4. **indicators.h**: the ultimate library header file.
+5. **indicators_index.c**: the runtime table of the indicators.
 
 ## Building
 
-Building is easy. You only need a decent C compiler. Tulip Indicators has no
-other dependencies.
-
-Just download the code and run `make`.
+Dependencies:
 
 ```
-git clone https://github.com/TulipCharts/tulipindicators
-cd tulipindicators
-make
+- python3, pyyaml
+- cmake
+- some reasonably modern C++ compiler
 ```
 
-You should get a static library, `libindicators.a`. You'll need that library
-and the header file `indicators.h` to use Tulip Indicators in your code.
+Build as a regular CMake project:
 
-## Usage
-
-For usage information, please see:
-[https://tulipindicators.org/usage](https://tulipindicators.org/usage)
-
-
-## Indicator Listing
-```
-104 total indicators
-
-Overlay
-   avgprice            Average Price
-   bbands              Bollinger Bands
-   dema                Double Exponential Moving Average
-   ema                 Exponential Moving Average
-   hma                 Hull Moving Average
-   kama                Kaufman Adaptive Moving Average
-   linreg              Linear Regression
-   medprice            Median Price
-   psar                Parabolic SAR
-   sma                 Simple Moving Average
-   tema                Triple Exponential Moving Average
-   trima               Triangular Moving Average
-   tsf                 Time Series Forecast
-   typprice            Typical Price
-   vidya               Variable Index Dynamic Average
-   vwma                Volume Weighted Moving Average
-   wcprice             Weighted Close Price
-   wilders             Wilders Smoothing
-   wma                 Weighted Moving Average
-   zlema               Zero-Lag Exponential Moving Average
-
-Indicator
-   ad                  Accumulation/Distribution Line
-   adosc               Accumulation/Distribution Oscillator
-   adx                 Average Directional Movement Index
-   adxr                Average Directional Movement Rating
-   ao                  Awesome Oscillator
-   apo                 Absolute Price Oscillator
-   aroon               Aroon
-   aroonosc            Aroon Oscillator
-   atr                 Average True Range
-   bop                 Balance of Power
-   cci                 Commodity Channel Index
-   cmo                 Chande Momentum Oscillator
-   cvi                 Chaikins Volatility
-   di                  Directional Indicator
-   dm                  Directional Movement
-   dpo                 Detrended Price Oscillator
-   dx                  Directional Movement Index
-   emv                 Ease of Movement
-   fisher              Fisher Transform
-   fosc                Forecast Oscillator
-   kvo                 Klinger Volume Oscillator
-   linregintercept     Linear Regression Intercept
-   linregslope         Linear Regression Slope
-   macd                Moving Average Convergence/Divergence
-   marketfi            Market Facilitation Index
-   mass                Mass Index
-   mfi                 Money Flow Index
-   mom                 Momentum
-   msw                 Mesa Sine Wave
-   natr                Normalized Average True Range
-   nvi                 Negative Volume Index
-   obv                 On Balance Volume
-   ppo                 Percentage Price Oscillator
-   pvi                 Positive Volume Index
-   qstick              Qstick
-   roc                 Rate of Change
-   rocr                Rate of Change Ratio
-   rsi                 Relative Strength Index
-   stoch               Stochastic Oscillator
-   stochrsi            Stochastic RSI
-   tr                  True Range
-   trix                Trix
-   ultosc              Ultimate Oscillator
-   vhf                 Vertical Horizontal Filter
-   volatility          Annualized Historical Volatility
-   vosc                Volume Oscillator
-   wad                 Williams Accumulation/Distribution
-   willr               Williams %R
-
-Math
-   crossany            Crossany
-   crossover           Crossover
-   decay               Linear Decay
-   edecay              Exponential Decay
-   lag                 Lag
-   max                 Maximum In Period
-   md                  Mean Deviation Over Period
-   min                 Minimum In Period
-   stddev              Standard Deviation Over Period
-   stderr              Standard Error Over Period
-   sum                 Sum Over Period
-   var                 Variance Over Period
-
-Simple
-   abs                 Vector Absolute Value
-   acos                Vector Arccosine
-   add                 Vector Addition
-   asin                Vector Arcsine
-   atan                Vector Arctangent
-   ceil                Vector Ceiling
-   cos                 Vector Cosine
-   cosh                Vector Hyperbolic Cosine
-   div                 Vector Division
-   exp                 Vector Exponential
-   floor               Vector Floor
-   ln                  Vector Natural Log
-   log10               Vector Base-10 Log
-   mul                 Vector Multiplication
-   round               Vector Round
-   sin                 Vector Sine
-   sinh                Vector Hyperbolic Sine
-   sqrt                Vector Square Root
-   sub                 Vector Subtraction
-   tan                 Vector Tangent
-   tanh                Vector Hyperbolic Tangent
-   todeg               Vector Degree Conversion
-   torad               Vector Radian Conversion
-   trunc               Vector Truncate
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j
 ```
 
+You should get a shared library `libindicators.so` as a result (the exact name depends on the platform) and the test binaries. You may want to run `./benchmark2` to see the performance of the indicators of your interest.
 
-## Special Thanks
+## Contributing
 
-The stochrsi indicator was sponsored by: [Gunthy](https://gunthy.org).
+1. find a reliable source like a book or a publication at [traders.com](https://traders.com)
+1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md)
+1. add an entry to `indicators.yaml` and run `codegen.py`
+2. go to `indicators/xxx.cc` and implement the indicator
+3. for the idiomatic constructs, you may want to look at some recently added indicators
+4. consider adding a precomputed testcase to `tests/extra.txt` if the author provides one
+4. make sure your implementation passes `ctest` in debug mode
+5. squash your commits into one
+5. create a PR, specify the source, and attach a screenshot of the definition - see older [PRs](https://github.com/hcmc-project/tulipindicators-private/pull/6) for an example
