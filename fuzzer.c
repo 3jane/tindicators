@@ -88,12 +88,15 @@ void check_output(const ti_indicator_info *info, int size, TI_REAL const *const 
                 default:
                     break;
 
-                case TI_TYPE_OVERLAY:
+                    // It doesn't make any sense: for instance, in Keltner Channels,
+                    // if we don't restrict the user with the range of allowed multipler values,
+                    // given multiplier=100, the lower and upper bands will easily exceed these bounds
+                // case TI_TYPE_OVERLAY:
                     if (op > max * 1.5 + 2 || op < min * 0.5 - 2) {
                         DUMP_STATE();
                         printf("\nERROR Output is out of range for input: input: %f output: %f\n", in, op);
                         errors_cnt += 1;
-                        assert(0);
+                        exit(1);
                     }
                     break;
             }
