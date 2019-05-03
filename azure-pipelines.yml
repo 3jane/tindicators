@@ -6,6 +6,13 @@ jobs:
   pool:
     vmImage: 'windows-2019'
   steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+  - script: |
+      copy C:\hostedtoolcache\windows\Python\3.7.2\x64\python.exe C:\hostedtoolcache\windows\Python\3.7.2\x64\python3.exe
+      pip install -r requirements.txt
+    displayName: 'InstallPythonRequirements'
   - task: CMake@1
     inputs:
      cmakeArgs: '-G "Visual Studio 16 2019" -A x64 ..'
@@ -13,11 +20,11 @@ jobs:
     inputs:
      cmakeArgs: '--build . --config Release -j'
     displayName: 'Build'
-#  - script: |
-#      cd build
-#      setx CTEST_OUTPUT_ON_FAILURE 1
-#      ctest -C Release
-#    displayName: 'Tests'
+  - script: |
+      cd build
+      setx CTEST_OUTPUT_ON_FAILURE 1
+      ctest -C Release
+    displayName: 'Tests'
 
   - task: CopyFiles@2
     inputs:
@@ -30,13 +37,35 @@ jobs:
       artifactName: windows_artifacts
 
 
+- job: 'Linux'
+  steps:
+  - task: Docker@2
+    inputs:
+      command: build
+      arguments: -t ti_image
+      Dockerfile: .packaging/Dockerfile
+      buildContext: .
+    displayName: 'BuildDockerContainer'
+  - script: |
+      docker run --cap-add SYS_PTRACE ti_image
+    displayName: 'RunDockerContainerTests'
+
+  - script: |
+      docker cp $(docker ps --latest -q):/tulipindicators/build_release/libindicators.so $(Build.ArtifactStagingDirectory)/libindicators.so
+    displayName: 'CopyBuildArtifactsFromDockerContainer'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: linux_artifacts
+
+
 # DownloadPipelineArtifact can be replaced with DownloadPipelineArtifact and also with PublishPipelineArtifacts in the task above
 # Difference between 'build artifact' and 'pipeline artifact'
 # https://github.com/MicrosoftDocs/vsts-docs/issues/2341#issuecomment-439483135
 - job: 'GithubRelease'
   dependsOn:
   - 'Windows'
-#    - 'Linux'
+  - 'Linux'
   condition: succeeded()
   #  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   steps:
@@ -44,18 +73,13 @@ jobs:
   - task: DownloadBuildArtifacts@0
     inputs:
       buildType: 'current'
-      #project: # Required when buildType == Specific
-      #pipeline: # Required when buildType == Specific
-      #specificBuildWithTriggering: false # Optional
-      #buildVersionToDownload: 'latest' # Required when buildType == Specific# Options: latest, latestFromBranch, specific
-      #allowPartiallySucceededBuilds: false # Optional
-      #branchName: 'refs/heads/master' # Required when buildType == Specific && BuildVersionToDownload == LatestFromBranch
-      #buildId: # Required when buildType == Specific && BuildVersionToDownload == Specific
-      #tags: # Optional
-      #downloadType: 'single' # Options: single, specific
       artifactName: windows_artifacts
-      #itemPattern: '**' # Optional
-      #parallelizationLimit: '8' # Optional
+      downloadPath: '$(System.ArtifactsDirectory)'
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      buildType: 'current'
+      downloadType: 'specific'
+      itemPattern: '**'
       downloadPath: '$(System.ArtifactsDirectory)'
   - task: GitHubRelease@0
     inputs:
@@ -73,6 +97,4 @@ jobs:
       isDraft: true
       isPreRelease: true
       assetUploadMode: 'replace' # Optional. Options: delete, replace
-#      assets: |
-#          $(Build.ArtifactStagingDirectory)/indicators.dll
       assets: '$(System.ArtifactsDirectory)/**/?(*.dll|*.so)'
