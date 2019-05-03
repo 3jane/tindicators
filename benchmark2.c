@@ -313,10 +313,13 @@ void bench(const ti_indicator_info *info) {
                 const int ret = info->stream_new(options, &stream);
                 TI_REAL *inputs_[TI_MAXINDPARAMS] = {0};
                 TI_REAL *outputs_[TI_MAXINDPARAMS] = {0};
+                for (int j = 0; j < info->inputs; ++j) {
+                    inputs_[j] = malloc(sizeof(TI_REAL));
+                }
                 start_ts = clock();
                 for (int bar = 0; bar < INSIZE; ++bar) {
                     for (int j = 0; j < info->inputs; ++j) {
-                        inputs_[j] = inputs[j] + bar;
+                        *inputs_[j] = inputs[j][bar];
                     }
                     for (int j = 0; j < info->outputs; ++j) {
                         outputs_[j] = outputs_stream_1[j] + ti_stream_get_progress(stream);
@@ -328,6 +331,7 @@ void bench(const ti_indicator_info *info) {
                     }
                 }
                 end_ts = clock();
+                for (int j = 0; j < info->inputs; ++j) { free(inputs_[j]); }
                 elapsed_stream_1 += end_ts - start_ts;
                 int ok = !compare_answers(info, outputs, outputs_stream_1, OUTSIZE, OUTSIZE);
                 if (!ok) { printf("%s_stream_1 mismatched, exiting\n", info->name); exit(1); }
