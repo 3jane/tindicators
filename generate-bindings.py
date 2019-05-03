@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using QuantConnect.Data.Market;
 using QuantConnect.Indicators;
 
-namespace Rcdb.TulipIndicators {
+namespace QuantConnect.Rcdb.TulipIndicators {
     class util {
         public class InvalidOption : System.Exception {}
         public class OutOfMemory : System.Exception {}
@@ -66,11 +66,12 @@ def streaming(indicator):
             double[] tmp = new double[{max(len(inputs), len(outputs))}];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
             {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], 1);' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'Marshal.Copy(tmp, {i}, inputs[{i}], 1);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
             int result = ti_{name}_stream_run(state, 1, inputs, outputs);
             util.DispatchError(result);
-            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, 0, 1); {output.upper()}.Update(data.Time, (decimal)tmp[0]);' for i, output in enumerate(outputs))}
+            {f"{n}".join(f'Marshal.Copy(outputs[{i}], tmp, {i}, 1);' for i, output in enumerate(outputs))}
+            {f"{n}".join(f'{output.upper()}.Update(data.Time, (decimal)tmp[{i}]);' for i, output in enumerate(outputs))}
             foreach (IntPtr input in inputs) {{ Marshal.FreeHGlobal(input); }}
             foreach (IntPtr output in outputs) {{ Marshal.FreeHGlobal(output); }}
             return (decimal){outputs[0].upper()}.Current.Value;
