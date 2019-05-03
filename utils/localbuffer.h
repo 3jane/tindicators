@@ -53,6 +53,8 @@
     while (idx < 0) { idx += ((ptr)->buf_info).size_##name; } \
     result = *((TI_REAL*)(&((ptr)->buf_info) + 1) + ((ptr)->buf_info).offset_##name + idx); \
 }
+#define BUFFER_AT1(ptr, name, delta) \
+    (*((TI_REAL*)(&((ptr)->buf_info) + 1) + ((ptr)->buf_info).offset_##name + (((ptr)->buf_info).index_##name + delta + ((ptr)->buf_info).size_##name) % ((ptr)->buf_info).size_##name))
 #define BUFFER_PUSH(ptr, name, value) { \
     int idx = ((ptr)->buf_info).index_##name + 1; \
     if (idx == ((ptr)->buf_info).size_##name) { idx = 0; } \
