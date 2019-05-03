@@ -1,4 +1,12 @@
-# Interpretation of function types:
+# This is the index of all indicators present in the library.
+
+# Each entry contains data in the following order:
+# - name, elaborated name
+# - type
+# - inputs, options, outputs
+# - extra features
+
+# Interpretation of types:
 #   overlay: These have roughly the same range as the input data
 #   indicator: Everything else (e.g. oscillators)
 #   math: These aren't so good for plotting, but are useful with formulas
