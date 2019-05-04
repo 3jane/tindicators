@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(tulipindicators VERSION 0.9 LANGUAGES C)
+project(tulipindicators VERSION 0.9 LANGUAGES C CXX)
 
 ## Library
-file(GLOB src indicators/*.[hc])
-file(GLOB utils utils/*.[hc])
+file(GLOB src indicators/*)
+file(GLOB utils utils/*)
 add_library(indicators SHARED ${src} ${utils} indicators.h indicators_index.c)
 target_link_libraries(indicators PUBLIC
     "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
@@ -18,14 +18,17 @@ install(TARGETS indicators
 target_compile_options(indicators
     PUBLIC
     $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
-        -Wall -Wextra -Wshadow -Wconversion -std=c99 -pedantic -g3 -ggdb -O2
+        -Wall -Wextra -Wshadow -Wconversion -g3 -ggdb -O2
+        $<$<COMPILE_LANGUAGE:CXX>:-fpermissive -std=c++17>
+        $<$<COMPILE_LANGUAGE:C>:-std=c99 -pedantic>
         $<$<CONFIG:DEBUG>:
             -fsanitize=undefined -fsanitize=address -fsanitize=leak>
         $<$<CONFIG:RELEASE>:
             -ffast-math>>
     $<$<C_COMPILER_ID:MSVC>:
+        /std:c++17
         $<$<CONFIG:RELEASE>:
-            /pf:fast>> 
+            /pf:fast>>
     PRIVATE
     $<$<C_COMPILER_ID:MSVC>:
         /DBUILDING>

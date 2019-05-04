@@ -199,8 +199,9 @@ with open(path_prefix+'indicators_index.c', 'w') as f:
 
 for indicator in indicators.items():
     name, (elab_name, type, inputs, options, outputs, features) = indicator
-    file_path = os.path.join(path_prefix+'indicators', f'{name}.c')
-    if not os.path.exists(file_path):
+    file_path_c = os.path.join(path_prefix+'indicators', f'{name}.c')
+    file_path_cc = os.path.join(path_prefix+'indicators', f'{name}.cc')
+    if not os.path.exists(file_path_c) and not os.path.exists(file_path_cc):
         nl = '\n'
         unpack_options = '\n    '.join(f'TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
         unpack_inputs = '\n    '.join(f'TI_REAL *{inp} = inputs[{i}];' for i, inp in enumerate(inputs))
@@ -208,6 +209,7 @@ for indicator in indicators.items():
         result = '\n'.join([
             '#include "../indicators.h"',
             '#include "../utils/localbuffer.h"',
+            '#include "../utils/log.h"',
             '',
             f'{declaration_start(name)} {{',
             f'    {unpack_options}',
@@ -291,6 +293,9 @@ for indicator in indicators.items():
             '    int progress = stream->progress;',
             '\n'.join(map("    TI_REAL {0} = stream->options.{0};".format, options)),
             '',
+            '    int i = 0;',
+            '    #error "streaming implementation goes here"',
+            '',
             '    stream->progress = progress;',
             '',
             '    #error "be sure to save all the state"',
@@ -299,7 +304,7 @@ for indicator in indicators.items():
             '}',
 
         ])
-        with open(file_path, 'w') as f:
-            print(f'codegen.py: indicators/{name}.c')
+        with open(file_path_cc, 'w') as f:
+            print(f'codegen.py: indicators/{name}.cc')
             print(file_path)
             f.write(result)
