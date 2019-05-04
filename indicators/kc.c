@@ -51,7 +51,7 @@ int ti_kc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     if (period < 1) {
         return TI_INVALID_OPTION;
     }
-    if (multiple < 0 || multiple > 1) {
+    if (multiple < 0) {
         return TI_INVALID_OPTION;
     }
 
@@ -108,7 +108,7 @@ int ti_kc_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (period < 0) {
         return TI_INVALID_OPTION;
     }
-    if (multiple < 0 || multiple > 1) {
+    if (multiple < 0) {
         return TI_INVALID_OPTION;
     }
 
