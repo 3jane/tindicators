@@ -98,6 +98,11 @@ namespace Test {
                         return 1;
                     }
                     Console.Write(kc.Current.Value); Console.Write(" ");
+
+                    // Such an inexact comparison is employed because of a slightly different formula: in Lean,
+                    // 1) middle band is computed as ema of typical price
+                    // 2) atr is smoothed with sma
+                    // Otherwise, the numbers would be equal up to at least 1e-3
                     if (kc.IsReady && Math.Abs(kc.KC_MIDDLE.Current.Value / kc_baseline.Current.Value - 1) > (decimal)0.01) {
                         Console.Write($"kc error: expected {kc.Current.Value}, got {kc_baseline.Current.Value}\n");
                         ok = false;
