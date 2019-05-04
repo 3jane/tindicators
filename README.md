@@ -1,6 +1,6 @@
 # tulipindicators-net
 
-Binding to our [base lib](https://github.com/hcmc-project/tulipindicators-private) of TA indicators for use in [Lean](https://www.quantconnect.com/lean/), our core backtesting and trading engine.
+This is a binding to our [base lib of TA indicators](https://github.com/hcmc-project/tulipindicators-private) that can be used with [Lean](https://www.quantconnect.com/lean/), our core backtesting and trading engine.
 
 ## Installation and Usage
 
@@ -12,4 +12,4 @@ Interop file `tulipindicators.cs` will be generated. Copy it together with the l
 
 ## Support
 
-For any questions, please contact **@ilya.p** on Slack.
+For any questions please reach out **@ilya.p** on Slack.
