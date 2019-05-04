@@ -19,7 +19,7 @@ The testing process consists of three stages:
 
 Built on Linux with `-DCMAKE_BUILD_TYPE=Debug`, these are run under sanitizers, namely `-fsanitize=undefined -fsanitize=address -fsanitize=leak`.
 
-## Architecture
+## Overview
 
 1. **indicators.yaml**: the comprehensive index of the indicators present in the library.
 1. **codegen.py**: generates, based on `indicators.yaml`,
@@ -48,7 +48,7 @@ Built on Linux with `-DCMAKE_BUILD_TYPE=Debug`, these are run under sanitizers, 
 
 ## Building
 
-Dependencies:
+Install the dependencies:
 
 ```
 - python3, pyyaml
