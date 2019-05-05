@@ -306,6 +306,5 @@ for indicator in indicators.items():
         ])
         with open(file_path_cc, 'w') as f:
             print(f'codegen.py: indicators/{name}.cc')
-            print(file_path)
             f.write(result)
             os.system(f'git add -N {file_path_cc}')
