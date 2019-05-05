@@ -297,7 +297,6 @@ for indicator in indicators.items():
             '    #error "streaming implementation goes here"',
             '',
             '    stream->progress = progress;',
-            '',
             '    #error "be sure to save all the state"',
             '',
             '    return TI_OKAY;',
