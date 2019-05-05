@@ -47,7 +47,8 @@ kama: ["Kaufman Adaptive Moving Average", overlay, [real], [period], [kama], []]
 psar: ["Parabolic SAR", overlay, [high, low], [acceleration factor step, acceleration factor maximum], [psar], []]
 pc: ["Price Channel", overlay, [high, low], [period], [pc_low, pc_high], [stream]]
 pbands: ["Projection Bands", overlay, [high, low, close], [period], [pbands_lower, pbands_upper], [ref, stream]]
-frama: ["Fractal Adaptive Moving Average", overlay, [high, low], [period, average_period], [frama], [stream]]
+edcf: ["Ehlers Distance Coefficient Filter", overlay, [real], [length], [edcf], [stream]]
+frama: ["Fractal Adaptive Moving Average", overlay, [high, low], [period, average period], [frama], []]
 
 # Momentum
 ad: ["Accumulation/Distribution Line", indicator, [high, low, close, volume], [], [ad], []]
