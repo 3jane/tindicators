@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <RootNamespace>tulipindicators_net</RootNamespace>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QuantConnect.Lean" Version="2.4.5563" />
+    <PackageReference Include="system.io.packaging" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>
