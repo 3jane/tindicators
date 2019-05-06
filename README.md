@@ -8,7 +8,7 @@ Please refer to [indicators.yaml](./indicators.yaml) for the comprehensive list 
 
 ## Bindings
 
-There are some nice bindings available, for use in [Python](https://github.com/hcmc-project/tulipindicators-python) and [Lean](https://github.com/hcmc-project/tulipindicators-net).
+There are some nice bindings available, for use in [Python](https://github.com/hcmc-project/tulipindicators-bindings/tree/master/python) and [Lean](https://github.com/hcmc-project/tulipindicators-bindings/tree/master/lean).
 
 ## Testing
 
