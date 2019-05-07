@@ -36,7 +36,7 @@ target_compile_options(indicators
 
 
 execute_process(
-    COMMAND python3 codegen.py
+    COMMAND python codegen.py
     OUTPUT indicators.h indicators_index.c
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
