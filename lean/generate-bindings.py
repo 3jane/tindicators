@@ -142,9 +142,10 @@ def default(indicator):
     return result
 
 if __name__ == '__main__':
-    srclibpath = ti._lib._name
-    dirpath = os.path.dirname(os.path.abspath(__file__))
-    shutil.copy(srclibpath, dirpath)
+    srcdirpath = os.path.dirname(os.path.abspath(ti._lib._name))
+    tgtdirpath = os.path.dirname(os.path.abspath(__file__))
+    shutil.copy(os.path.join(srcdirpath, 'indicators.dll'), tgtdirpath)
+    shutil.copy(os.path.join(srcdirpath, 'libindicators.so'), tgtdirpath)
 
     result = toplevel \
         .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators)) \
