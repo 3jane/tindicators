@@ -1,8 +1,12 @@
 import setuptools
 
+import sys
+sys.path.insert(0, '../..')
+from version import version
+
 setuptools.setup(
     name="tulipindicators",
-    version="0.3",
+    version=version,
     author="Ilya Pikulin",
     author_email="ilya.p@rcdb.io",
     description="Python wrapper for Tulip Indicators",

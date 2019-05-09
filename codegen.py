@@ -1,9 +1,9 @@
 import yaml
 import os.path
 import time
+from version import version
 
 build = int(time.time())
-version = '0.9'
 
 path_prefix = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
 
