@@ -5,12 +5,14 @@ import pandas as pd
 from tulipindicators import TulipIndicators, InvalidOption
 
 
-REAL = np.array([81.59, 81.06, 82.87, 83,    83.61,
-                  83.15, 82.84, 83.99, 84.55, 84.36,
-                  85.53, 86.54, 86.89, 87.77, 87.29])
-EXPECTED = np.array([82.426, 82.738, 83.094, 83.318, 83.628,
-                     83.778, 84.254, 84.994, 85.574, 86.218,
-                     86.804]),
+REAL = np.array([
+    81.59, 81.06, 82.87, 83, 83.61,
+    83.15, 82.84, 83.99, 84.55, 84.36,
+    85.53, 86.54, 86.89, 87.77, 87.29])
+EXPECTED = np.array([
+    82.426, 82.738, 83.094, 83.318, 83.628,
+    83.778, 84.254, 84.994, 85.574, 86.218,
+    86.804]),
 
 ti = TulipIndicators()
 
@@ -61,7 +63,7 @@ def test_convert_to_dataframe():
 
 
 def test_vidya():
-    real = np.array([50.25,50.55,52.5,54.5,54.1,54.12,55.5,50.2,50.45,50.24,50.24,55.12,56.54,56.12,56.1,54.12,59.54,54.52])
+    real = np.array([50.25, 50.55, 52.5, 54.5, 54.1, 54.12, 55.5, 50.2, 50.45, 50.24, 50.24, 55.12, 56.54, 56.12, 56.1, 54.12, 59.54, 54.52])
     expected = np.array([54.1000, 54.1004, 54.2148, 53.1633, 52.5165, 52.4937, 52.4732, 52.9862, 53.7103, 53.8114, 53.8453, 53.8693, 55.3888, 55.1443])
     vidya = ti.vidya(real, 3, 6, .2, pad=False)
     assert np.allclose(vidya, expected)
@@ -79,15 +81,18 @@ def test_bop():
     bop = ti.bop(ohlc.Open, ohlc.High, ohlc.Low, ohlc.Close, pad=False)
     assert np.allclose(bop, expected, rtol=1.e-3)
 
+
 def test_exceptions():
-    try: ti.sma([], -1)
-    except InvalidOption: pass
-    else: assert False
+    with pytest.raises(InvalidOption):
+        ti.sma([], -1)
 
-def test_all():
-    tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe, test_vidya, test_bop, test_exceptions]
-    for test in tests:
-        test()
-    print('ALL TESTS PASSED')
 
-test_all()
+if __name__ == "__main__":
+    def test_all():
+        tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe,
+                 test_vidya, test_bop, test_exceptions]
+        for test in tests:
+            test()
+        print('ALL TESTS PASSED')
+
+    test_all()

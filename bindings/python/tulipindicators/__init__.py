@@ -5,6 +5,7 @@ import os
 import platform
 from datetime import datetime
 
+
 TI_MAXINDPARAMS = 10
 TI_TYPE_OVERLAY = 1      # These have roughly the same range as the input data.
 TI_TYPE_INDICATOR = 2    # Everything else (e.g. oscillators).
@@ -12,14 +13,17 @@ TI_TYPE_MATH = 3         # These aren't so good for plotting, but are useful wit
 TI_TYPE_SIMPLE = 4       # These apply a simple operator (e.g. addition, sin, sqrt).
 TI_TYPE_COMPARATIVE = 5  # These are designed to take inputs from different securities. i.e. compare stock A to stock B.
 
+
 class InvalidOption(Exception): pass
 class OutOfMemory(Exception): pass
 class NoSuchIndicator(Exception): pass
+
 
 ret2exc = {
     1: InvalidOption,
     2: OutOfMemory,
 }
+
 
 class ti_indicator_info(Structure):
     _fields_ = [
@@ -51,8 +55,10 @@ class _IndicatorInfo:
     }
 
     def __init__(self, lib, indicator_name):
-        try: info = lib.ti_find_indicator(c_char_p(bytes(indicator_name, 'ascii'))).contents
-        except: raise NoSuchIndicator(indicator_name)
+        try:
+            info = lib.ti_find_indicator(c_char_p(bytes(indicator_name, 'ascii'))).contents
+        except:
+            raise NoSuchIndicator(indicator_name)
 
         self.name = indicator_name
         self.type = self.type_names[info.type]
@@ -63,6 +69,7 @@ class _IndicatorInfo:
         self.options = tuple(info.option_names[i].decode('ascii').replace(' ', '_').replace('%', '') for i in range(info.options))
 
         self.raw = info
+
 
 class _Indicator:
     def __init__(self, lib, name):
@@ -76,7 +83,7 @@ class _Indicator:
         return '\n'.join((
             f"Name:     \t{self.info.name}",
             f"Full Name:\t{self.info.full_name}",
-            #f"Type:     \t{self.info.type}",
+            # f"Type:     \t{self.info.type}",
             f"Inputs:   \t{' '.join(self.info.inputs)}",
             f"Options:  \t{' '.join(self.info.options)}",
             f"Outputs:  \t{' '.join(self.info.outputs)}"))
@@ -85,7 +92,7 @@ class _Indicator:
         inputs_lst = self.__parse(args, kwargs, 0, self.info.inputs)
         options_lst = self.__parse(args, kwargs, len(self.info.inputs), self.info.options)
 
-        options = (c_double * len(self.info.options))() # double options[]
+        options = (c_double * len(self.info.options))()  # double options[]
         for idx, option in enumerate(options_lst):
             options[idx] = option
 
@@ -93,14 +100,14 @@ class _Indicator:
         start_amount = self.__start(options)
         outsize = insize - start_amount
 
-        inputs = (POINTER(c_double * insize) * len(self.info.inputs))() # double *inputs[]
+        inputs = (POINTER(c_double * insize) * len(self.info.inputs))()  # double *inputs[]
         for idx in range(len(self.info.inputs)):
-            inp = (c_double * insize)(*inputs_lst[idx]) # ensures that the array is not temporary
+            inp = (c_double * insize)(*inputs_lst[idx])  # ensures that the array is not temporary
             inputs[idx] = pointer(inp)
 
-        outputs = (POINTER(c_double * outsize) * len(self.info.outputs))() # double *outputs[]
+        outputs = (POINTER(c_double * outsize) * len(self.info.outputs))()  # double *outputs[]
         for idx in range(len(self.info.outputs)):
-            out = (c_double * outsize)() # allocates memory
+            out = (c_double * outsize)()  # allocates memory
             outputs[idx] = pointer(out)
 
         elaborated_name = self.__construct_elaborated_name(self.info.name, options_lst)
@@ -130,7 +137,8 @@ class _Indicator:
         return result
 
     def pad(self, output, padsize, pad=np.nan):
-        return np.pad(output, (padsize, 0), 'constant', constant_values=(np.nan,))
+        return np.pad(output, (padsize, 0), 'constant', constant_values=(pad,))
+
 
 class TulipIndicators:
     def __init__(self, sharedlib_path=None):
@@ -143,7 +151,7 @@ class TulipIndicators:
             elif platform.system() == 'Darwin':
                 sharedlib_path = os.path.join(dir_path, 'libindicators.dylib')
             else:
-                printf(f'warning: platform {platform.system()} unknown, defaulting to sharedlib_path=libindicators.so')
+                print(f'warning: platform {platform.system()} unknown, defaulting to sharedlib_path=libindicators.so')
                 sharedlib_path = 'libindicators.so'
         self._lib = CDLL(sharedlib_path)
         self._lib.ti_find_indicator.restype = POINTER(ti_indicator_info)
@@ -165,5 +173,6 @@ class TulipIndicators:
             f'Tulip Indicators, version {self.version}',
             ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
         ])
+
 
 ti = TulipIndicators()
