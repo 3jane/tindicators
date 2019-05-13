@@ -15,8 +15,8 @@ int ti_frama_start(TI_REAL const *options) {
 
 // original author: @HelloCreepy
 int ti_frama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL *high = inputs[0];
-    TI_REAL *low = inputs[1];
+    TI_REAL const *high = inputs[0];
+    TI_REAL const *low = inputs[1];
     TI_REAL period = options[0];
     TI_REAL average_period = options[1];
     TI_REAL *frama = outputs[0];
@@ -157,8 +157,8 @@ void ti_frama_stream_free(ti_stream *stream) {
 }
 
 int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
-    TI_REAL *high = inputs[0];
-    TI_REAL *low = inputs[1];
+    TI_REAL const *high = inputs[0];
+    TI_REAL const *low = inputs[1];
     TI_REAL *frama = outputs[0];
     int progress = stream->progress;
     TI_REAL period = stream->options.period; // N in the paper
