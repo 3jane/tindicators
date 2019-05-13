@@ -31,12 +31,12 @@ int ti_frama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     TI_REAL filt;
 
     int i, j;
-    for (i = 0; i < size && i < period-1; ++i) {
+    for (i = 0; i < size && i < period; ++i) {
         /* our first data point just return (High + Low) / 2 */
         filt = (high[i] + low[i]) / 2;
         *frama++ = filt;
     }
-    for (i = period-1; i < size; ++i) {
+    for (i = period; i < size; ++i) {
         /* Index of rolling window center, start and end */
         int window_center = i - half_period + 1,
         window_start = i - period + 1;
@@ -217,7 +217,7 @@ int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         max1_idx = progress;
         min1_idx = progress;
     }
-    for (; i < size && progress < period-1; ++i, ++progress) {
+    for (; i < size && progress < period; ++i, ++progress) {
         high_store.push_front(high[i]);
         low_store.push_front(low[i]);
         filt = (high[i] + low[i]) / 2.;
@@ -233,6 +233,8 @@ int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         }
     }
     for (; i < size; ++i, ++progress) {
+        high_store.pop_back();
+        low_store.pop_back();
         high_store.push_front(high[i]);
         low_store.push_front(low[i]);
 
@@ -302,9 +304,6 @@ int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         alpha = MIN(alpha, 1.);
         filt = alpha * (high[i] + low[i]) / 2. + (1. - alpha) * filt;
         *frama++ = filt;
-
-        high_store.pop_back();
-        low_store.pop_back();
     }
 
     stream->progress = progress;
