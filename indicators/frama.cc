@@ -31,7 +31,7 @@ int ti_frama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     TI_REAL filt;
 
     int i, j;
-    for (i = 0; i < period-1; ++i) {
+    for (i = 0; i < size && i < period-1; ++i) {
         /* our first data point just return (High + Low) / 2 */
         filt = (high[i] + low[i]) / 2;
         *frama++ = filt;
