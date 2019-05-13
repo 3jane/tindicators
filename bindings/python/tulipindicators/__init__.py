@@ -148,9 +148,11 @@ class TulipIndicators:
         self._lib = CDLL(sharedlib_path)
         self._lib.ti_find_indicator.restype = POINTER(ti_indicator_info)
         self._lib.ti_build.restype = c_long
+        self._lib.ti_version.restype = c_char_p
 
         self._indicator_count = self._lib.ti_indicator_count()
         self._build = self._lib.ti_build()
+        self.version = self._lib.ti_version().decode('ascii')
         ti_indicators = (ti_indicator_info * self._indicator_count).in_dll(self._lib, "ti_indicators")
 
         self.available_indicators = [ti_indicators[idx].name.decode('ascii') for idx in range(self._indicator_count)]
@@ -160,7 +162,7 @@ class TulipIndicators:
 
     def __repr__(self):
         return '\n'.join([
-            f'Tulip Indicators, built {datetime.utcfromtimestamp(self._build).strftime("%d.%m.%Y")}',
+            f'Tulip Indicators, version {self.version}',
             ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
         ])
 
