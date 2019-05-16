@@ -100,9 +100,9 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
-    COMMAND ${Python3_EXECUTABLE} -m pip install -r requirements.txt
+    COMMAND ${Python3_EXECUTABLE} -m pip install -e .[dev]
     COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
-    COMMAND ${Python3_EXECUTABLE} setup.py install
+    COMMAND ${Python3_EXECUTABLE} -m tox
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bindings/python
     OUTPUT ${CMAKE_SOURCE_DIR}/bindings/python/dist/tulipindicators-${version}-py3-none-any.whl
 )
