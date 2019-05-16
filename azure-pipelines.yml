@@ -86,11 +86,11 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
-  - task: DownloadPipelineArtifact@0
+  - task: DownloadPipelineArtifact@1
     inputs:
       artifactName: 'linux_binary'
       targetPath: $(System.DefaultWorkingDirectory)
-  - task: DownloadPipelineArtifact@0
+  - task: DownloadPipelineArtifact@1
     inputs:
       artifactName: 'windows_binary'
       targetPath: $(System.DefaultWorkingDirectory)
