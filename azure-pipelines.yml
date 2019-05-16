@@ -86,6 +86,7 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
+
   - task: DownloadPipelineArtifact@1
     inputs:
       artifactName: 'linux_binary'
@@ -94,15 +95,13 @@ jobs:
     inputs:
       artifactName: 'windows_binary'
       targetPath: $(System.DefaultWorkingDirectory)
-  - task: TwineAuthenticate@0
-    inputs:
-      artifactFeeds: pypi-private
   - script: cmake . -DBINARIES=$(System.DefaultWorkingDirectory)
     displayName: 'CMake'
   - script: cmake --build . --config Release -j --target tulipindicators-python
     displayName: 'Python'
   - script: cmake --build . --config Release -j --target tulipindicators-lean
     displayName: 'Lean'
+
   - script: |
       cp bindings/python/dist/tulipindicators-*.whl '$(Build.ArtifactStagingDirectory)'
       cp bindings/lean/bin/Release/tulipindicators-lean.*.nupkg '$(Build.ArtifactStagingDirectory)'
