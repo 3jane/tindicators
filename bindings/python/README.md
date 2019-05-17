@@ -1,15 +1,16 @@
-## tulip-py
+# tulipindicators-python
 Python wrapper for [tulipindicators-private](https://github.com/hcmc-project/tulipindicators-private)
 
-### Installation
-1. Get ```tulipindicators-X.Y.zip``` from [releases](https://github.com/hcmc-project/tulip-py/releases)
-2. ```pip install tulipindicators-X.Y.zip```
+## Installation
+1. Copy the contents of [this file](pip.conf) to `~/.config/pip/pip.conf` (on Linux) or `%APPDATA%\pip\pip.ini` (on Windows)
+2. `pip install tulipindicators`
 
-### Usage
+## Usage
 ```python
 >>> from tulipindicators import ti
-Tulip Indicators, built 23.04.2019
-121 indicators are available: abands abs acos ad add adosc adx adxr ao apo aroon aroonosc asin atan atr avgprice bbands bop cci ce ceil cmf cmo copp cos cosh crossany crossover cvi dc decay dema di div dm dpo dx edecay ema emv exp fi fisher floor fosc frama hma kama kc kst kvo lag linreg linregintercept linregslope ln log10 macd mama marketfi mass max md medprice mfi min mom msw mul natr nvi obv pbands pc pfe posc ppo psar pvi qstick rmi rmta roc rocr round rsi rvi sin sinh sma sqrt stddev stderr stoch stochrsi sub sum tan tanh tema todeg torad tr trima trix trunc tsf typprice ultosc var vhf vidya volatility vosc vwma wad wcprice wilders willr wma zlema
+>>> ti
+Tulip Indicators, version 0.9.8
+123 indicators are available: abands abs acos ad add adosc adx adxr ao apo aroon aroonosc asin atan atr avgprice bbands bop cci ce ceil cmf cmo copp cos cosh crossany crossover cvi dc decay dema di div dm dpo dx edecay ema emv exp fi fisher floor fosc frama hma kama kc kst kvo lag linreg linregintercept linregslope ln log10 macd marketfi mass max md medprice mfi min mom msw mul natr nvi obv pbands pc pfe posc ppo psar pvi qstick rmi rmta roc rocr round rsi rvi sin sinh sma smi sqrt stddev stderr stoch stochrsi sub sum tan tanh tema todeg torad tr trima trix trunc tsf tsi typprice ultosc var vhf vidya volatility vosc vwap vwma wad wcprice wilders willr wma zlema
 >>> ti.pbands
 Name:           pbands
 Full Name:      Projection Bands

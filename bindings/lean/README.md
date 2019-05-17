@@ -2,13 +2,18 @@
 
 This is a binding to our [base lib of TA indicators](https://github.com/hcmc-project/tulipindicators-private) that can be used with [Lean](https://www.quantconnect.com/lean/), our core backtesting and trading engine.
 
-## Installation and Usage
+## Installation
 
-1. download `tulipindicators-X.Y.zip` from [here](https://github.com/hcmc-project/tulipindicators-python/releases)
-2. run `pip install` on it
-3. run `generate-bindings.py`
+### Add the nuget source
+1. Go to [the feed](https://dev.azure.com/rcdb/tulipindicators/_packaging?_a=feed&feed=nuget-private)
+2. Follow this [short instruction](https://docs.microsoft.com/en-us/azure/devops/artifacts/nuget/nuget-exe?view=azure-devops#add-a-feed-to-nuget-2)
 
-Interop file `tulipindicators.cs` will be generated. Copy it together with the library binaries to where needed. (We have yet to setup packaging.)
+### Reference in your .csproj
+1. Simply do `<PackageReference Include="tulipindicators-lean" Version="0.9.7" />`
+
+## Usage
+
+It's obvious!
 
 ## Support
 

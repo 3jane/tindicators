@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using QuantConnect.Indicators;
 using QuantConnect.Data.Market;
-using Rcdb;
+using QuantConnect.Rcdb;
 
 namespace Test {
     public class Test {
@@ -12,7 +12,7 @@ namespace Test {
 
             {
                 var data = new[] {1,2,3,4,5,6,7,8,9,10};
-                var sma = new Rcdb.TulipIndicators.Streaming.sma(4);
+                var sma = new QuantConnect.Rcdb.TulipIndicators.Streaming.sma(4);
                 var sma_baseline = new QuantConnect.Indicators.SimpleMovingAverage(4);
                 for (int i = 0; i < data.Length; i++) {
                     sma.Update(new IndicatorDataPoint(DateTime.Now.AddSeconds(i), data[i]));
@@ -29,7 +29,7 @@ namespace Test {
 
             {
                 var data = new[] {1,2,3,4,5,6,7,8,9,10};
-                var sma = new Rcdb.TulipIndicators.Default.sma(4);
+                var sma = new QuantConnect.Rcdb.TulipIndicators.Default.sma(4);
                 var sma_baseline = new QuantConnect.Indicators.SimpleMovingAverage(4);
                 for (int i = 0; i < data.Length; i++) {
                     sma.Update(new IndicatorDataPoint(DateTime.Now.AddSeconds(i), data[i]));
@@ -55,7 +55,7 @@ namespace Test {
                     data[i] = new TradeBar(new DateTime(0), null, 0, (decimal)high[i], (decimal)low[i], (decimal)close[i], 0);
                 }
 
-                var kc = new Rcdb.TulipIndicators.Streaming.kc(20, 0.77);
+                var kc = new QuantConnect.Rcdb.TulipIndicators.Streaming.kc(20, 0.77);
                 var kc_baseline = new QuantConnect.Indicators.KeltnerChannels(20, (decimal)0.77);
                 for (int i = 0; i < data.Length; i++) {
                     try {
@@ -87,7 +87,7 @@ namespace Test {
                     data[i] = new TradeBar(new DateTime(0), null, 0, (decimal)high[i], (decimal)low[i], (decimal)close[i], 0);
                 }
 
-                var kc = new Rcdb.TulipIndicators.Default.kc(20, 0.77, size);
+                var kc = new QuantConnect.Rcdb.TulipIndicators.Default.kc(20, 0.77, size);
                 var kc_baseline = new QuantConnect.Indicators.KeltnerChannels(20, (decimal)0.77);
                 for (int i = 0; i < data.Length; i++) {
                     try {

@@ -1,5 +1,12 @@
-cmake_minimum_required(VERSION 3.13.4)
-project(tulipindicators VERSION 0.9 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.12.4)
+find_package(Python3 COMPONENTS Interpreter)
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} -c "import version; print(version.version, end='')"
+    OUTPUT_VARIABLE version
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
+project(tulipindicators VERSION "${version}" LANGUAGES C CXX)
 
 ## Library
 file(GLOB src indicators/*)
@@ -7,7 +14,6 @@ file(GLOB utils utils/*)
 add_library(indicators SHARED ${src} ${utils} indicators.h indicators_index.c)
 target_link_libraries(indicators PUBLIC
     "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
-target_link_options(indicators PUBLIC $<$<C_COMPILER_ID:MSVC>:/PROFILE:linker /STACK:10000000>)
 
 set_target_properties(indicators PROPERTIES PUBLIC_HEADER "indicators.h")
 install(TARGETS indicators
@@ -34,9 +40,12 @@ target_compile_options(indicators
         /DBUILDING>
 )
 
-
 execute_process(
-    COMMAND python codegen.py
+    COMMAND ${Python3_EXECUTABLE} -m pip install -r requirements.txt
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} codegen.py
     OUTPUT indicators.h indicators_index.c
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
@@ -83,3 +92,30 @@ target_link_libraries(benchmark2 indicators)
 add_test(NAME benchmark2 COMMAND benchmark2)
 
 add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
+
+## Bindings
+add_custom_command(
+    COMMAND echo 'dir=${BINARIES}'
+    COMMAND ls -lah ${BINARIES}
+    COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${Python3_EXECUTABLE} -m pip install -r requirements.txt
+    COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
+    COMMAND ${Python3_EXECUTABLE} setup.py install
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bindings/python
+    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/python/dist/tulipindicators-${version}-py3-none-any.whl
+)
+add_custom_target(tulipindicators-python DEPENDS ${CMAKE_SOURCE_DIR}/bindings/python/dist/tulipindicators-${version}-py3-none-any.whl)
+set_target_properties(tulipindicators-python PROPERTIES EXCLUDE_FROM_ALL 1)
+
+add_custom_command(
+    COMMAND ${Python3_EXECUTABLE} generate-bindings.py
+    #COMMAND dotnet format
+    COMMAND msbuild /t:restore
+    COMMAND msbuild /t:pack /p:PackageVersion=${version} /p:Configuration=Release
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bindings/lean
+    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tulipindicators-lean.${version}.nupkg
+)
+add_custom_target(tulipindicators-lean DEPENDS tulipindicators-python ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tulipindicators-lean.${version}.nupkg)
+set_target_properties(tulipindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)

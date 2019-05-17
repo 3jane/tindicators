@@ -230,7 +230,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "copp") == 0) { options_setter = copp_option_setter; }
     if (strcmp(info->name, "posc") == 0) { options_setter = posc_option_setter; }
 
-    TI_REAL *inputs[TI_MAXINDPARAMS];
+    static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
         if (strcmp(info->input_names[i], "open") == 0) { inputs[i] = open; }
         else if (strcmp(info->input_names[i], "high") == 0) { inputs[i] = high; }
@@ -249,13 +249,13 @@ void bench(const ti_indicator_info *info) {
 
     for (int i = 0; i < LOOPS; ++i) {
         for (int period = MIN_PERIOD; period <= MAX_PERIOD; ++period) {
-            TI_REAL outputs_mem[4][TI_MAXINDPARAMS][INSIZE];
-            TI_REAL options[TI_MAXINDPARAMS];
+            static TI_REAL outputs_mem[4][TI_MAXINDPARAMS][INSIZE];
+            static TI_REAL options[TI_MAXINDPARAMS];
 
-            TI_REAL *outputs[TI_MAXINDPARAMS];
-            TI_REAL *outputs_ref[TI_MAXINDPARAMS];
-            TI_REAL *outputs_stream_all[TI_MAXINDPARAMS];
-            TI_REAL *outputs_stream_1[TI_MAXINDPARAMS];
+            static TI_REAL *outputs[TI_MAXINDPARAMS];
+            static TI_REAL *outputs_ref[TI_MAXINDPARAMS];
+            static TI_REAL *outputs_stream_all[TI_MAXINDPARAMS];
+            static TI_REAL *outputs_stream_1[TI_MAXINDPARAMS];
             for (int i = 0; i < info->outputs; ++i) {
                 outputs[i] = outputs_mem[0][i];
                 outputs_ref[i] = outputs_mem[1][i];
@@ -349,6 +349,8 @@ void bench(const ti_indicator_info *info) {
     if (info->indicator_ref) { printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name, "_ref       ", MS(elapsed_ref), PERFORMANCE(elapsed_ref)); }
     if (info->stream_new) { printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name,    "_stream_all", MS(elapsed_stream_all), PERFORMANCE(elapsed_stream_all)); }
     if (info->stream_new) { printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name,    "_stream_1  ", MS(elapsed_stream_1), PERFORMANCE(elapsed_stream_1)); }
+
+	fflush(stdout);
 }
 
 int main(int argc, char** argv) {

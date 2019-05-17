@@ -1,4 +1,4 @@
-name: $(date:yyyy-MM-dd)-rev$(rev:.r)-$(Build.SourceVersion)
+name: $(Build.SourceVersion)-$(date:yyyyMMdd)-rev$(rev:.r)
 trigger:
 - 0.9-dev
 
@@ -9,93 +9,104 @@ jobs:
   steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.x'
-  - script: |
-      copy C:\hostedtoolcache\windows\Python\3.7.2\x64\python.exe C:\hostedtoolcache\windows\Python\3.7.2\x64\python3.exe
-      pip install -r requirements.txt
-    displayName: 'InstallPythonRequirements'
-  - task: CMake@1
-    inputs:
-     cmakeArgs: '-G "Visual Studio 16 2019" -A x64 ..'
-  - task: CMake@1
-    inputs:
-     cmakeArgs: '--build . --config Release -j'
+      versionSpec: '3.6'
+  - script: mkdir build
+    displayName: mkdirbuild
+  - script: cmake -G "Visual Studio 16 2019" -A x64 ..
+    displayName: 'CMake'
+    workingDirectory: build
+  - script: cmake --build . --config Release -j
     displayName: 'Build'
-  - script: |
-      cd build
-      setx CTEST_OUTPUT_ON_FAILURE 1
-      ctest -C Release
-    displayName: 'Tests'
-
-  - task: CopyFiles@2
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R smoke
+    displayName: 'smoke'
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R fuzzer
+    displayName: 'fuzzer'
+    workingDirectory: build
+  - script: ctest -C Release -V -R benchmark2
+    displayName: 'benchmark2'
+    workingDirectory: build
+  - task: PublishPipelineArtifact@0
     inputs:
-      sourceFolder: '$(Build.SourcesDirectory)\build\Release\'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-      contents: 'indicators.dll'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: windows_artifacts
-
+      artifactName: 'windows_binary'
+      targetPath: '$(Build.SourcesDirectory)\build\Release\indicators.dll'
 
 - job: 'Linux'
+  # Even though this is the only vmImage available (as declared),
+  # we get different images by enabling/disabling this option, which is weird
+  # pool:
+  #   vmImage: 'ubuntu-16.04'
   steps:
-  - task: Docker@2
+  - script: |
+      sudo apt-get install -y lsb-release
+      lsb_release -a
+      uname -a
+      gcc --version
+    displayName: uname
+  - script: sudo apt-get install -y libasan5
+    displayName: 'Dependencies'
+  - task: UsePythonVersion@0
     inputs:
-      command: build
-      arguments: -t ti_image
-      Dockerfile: .packaging/Dockerfile
-      buildContext: .
-    displayName: 'BuildDockerContainer'
-  - script: |
-      docker run --cap-add SYS_PTRACE ti_image
-    displayName: 'RunDockerContainerTests'
+      versionSpec: '3.6'
+  - script: mkdir build
+    displayName: mkdirbuild
+  - script: cmake ..
+    displayName: 'CMake'
+    workingDirectory: build
+  - script: cmake --build . --config Debug -j
+    displayName: 'DebugBuild'
+    workingDirectory: build
+  - script: LD_PRELOAD=libasan.so.5 ctest -C Debug --output-on-failure
+    displayName: 'DebugTest'
+    workingDirectory: build
+  - script: cmake --build . --config Release -j
+    displayName: 'ReleaseBuild'
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R smoke
+    displayName: 'smoke'
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R fuzzer
+    displayName: 'fuzzer'
+    workingDirectory: build
+  - script: ctest -C Release -V -R benchmark2
+    displayName: 'benchmark2'
+    workingDirectory: build
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'linux_binary'
+      targetPath: 'build/libindicators.so'
 
+- job: 'Bindings'
+  dependsOn:
+    - Linux
+    - Windows
+  condition: succeeded()
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'linux_binary'
+      targetPath: $(System.DefaultWorkingDirectory)
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'windows_binary'
+      targetPath: $(System.DefaultWorkingDirectory)
+  - task: TwineAuthenticate@0
+    inputs:
+      artifactFeeds: pypi-private
+  - script: cmake . -DBINARIES=$(System.DefaultWorkingDirectory)
+    displayName: 'CMake'
+  - script: cmake --build . --config Release -j --target tulipindicators-python
+    displayName: 'Python'
+  - script: cmake --build . --config Release -j --target tulipindicators-lean
+    displayName: 'Lean'
   - script: |
-      docker cp $(docker ps --latest -q):/tulipindicators/build_release/libindicators.so $(Build.ArtifactStagingDirectory)/libindicators.so
-    displayName: 'CopyBuildArtifactsFromDockerContainer'
+      cp bindings/python/dist/tulipindicators-*.whl '$(Build.ArtifactStagingDirectory)'
+      cp bindings/lean/bin/Release/tulipindicators-lean.*.nupkg '$(Build.ArtifactStagingDirectory)'
+    displayName: 'ExtractArtifacts'
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: linux_artifacts
-
-
-## DownloadBuildArtifacts can be replaced with DownloadPipelineArtifact and also with PublishPipelineArtifacts in the task above
-## Difference between 'build artifact' and 'pipeline artifact'
-## https://github.com/MicrosoftDocs/vsts-docs/issues/2341#issuecomment-439483135
-#- job: 'GithubRelease'
-#  dependsOn:
-#  - 'Windows'
-#  - 'Linux'
-#  condition: succeeded()
-##  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-#  steps:
-#  - checkout: none
-#  - task: DownloadBuildArtifacts@0
-#    inputs:
-#      buildType: 'current'
-#      artifactName: windows_artifacts
-#      downloadPath: '$(System.ArtifactsDirectory)'
-#  - task: DownloadBuildArtifacts@0
-#    inputs:
-#      buildType: 'current'
-#      downloadType: 'specific'
-#      itemPattern: '**'
-#      downloadPath: '$(System.ArtifactsDirectory)'
-#  - task: GitHubRelease@0
-#    inputs:
-#      gitHubConnection: 'Github'
-#      repositoryName: '$(Build.Repository.Name)'
-#      action: 'create' # Options: create, edit, delete
-#      target: '$(Build.SourceVersion)'
-#      tagSource: 'manual' # Options: auto, manual
-#      tag: 'test-release-tag'
-#      #title: # Optional
-#      #releaseNotesSource: 'file' # Optional. Options: file, input
-#      #releaseNotesFile: # Optional
-#      #releaseNotes: # Optional
-#      #addChangeLog: true # Optional
-#      isDraft: true
-#      isPreRelease: true
-#      assetUploadMode: 'replace' # Optional. Options: delete, replace
-#      assets: '$(System.ArtifactsDirectory)/**/?(*.dll|*.so)'
+      artifactName: 'packages'
