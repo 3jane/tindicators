@@ -95,6 +95,7 @@ jobs:
     inputs:
       artifactName: 'windows_binary'
       targetPath: $(System.DefaultWorkingDirectory)
+
   - script: cmake . -DBINARIES=$(System.DefaultWorkingDirectory)
     displayName: 'CMake'
   - script: cmake --build . --config Release -j --target tulipindicators-python
