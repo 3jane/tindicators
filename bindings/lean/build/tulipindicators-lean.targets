@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)..\content\libindicators.so" CopyToOutputDirectory="Always" />
+    <Content Include="$(MSBuildThisFileDirectory)..\content\indicators.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+</Project>
