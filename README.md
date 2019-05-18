@@ -60,8 +60,8 @@ Build as a regular CMake project:
 
 ```bash
 mkdir build && cd build
-cmake ..
-cmake --build . --config Release -j
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j
 ```
 
 You should get a shared library `libindicators.so` as a result (the exact name depends on the platform) and the test binaries. You may want to run `./benchmark2` to see the performance of the indicators of your interest.

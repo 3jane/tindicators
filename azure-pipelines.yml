@@ -51,16 +51,13 @@ jobs:
       versionSpec: '3.6'
   - script: mkdir build
     displayName: mkdirbuild
-  - script: cmake ..
-    displayName: 'CMake'
-    workingDirectory: build
-  - script: cmake --build . --config Debug -j
+  - script: cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build . -j
     displayName: 'DebugBuild'
     workingDirectory: build
   - script: LD_PRELOAD=libasan.so.5 ctest -C Debug --output-on-failure
     displayName: 'DebugTest'
     workingDirectory: build
-  - script: cmake --build . --config Release -j
+  - script: cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build . -j
     displayName: 'ReleaseBuild'
     workingDirectory: build
   - script: ctest -C Release --output-on-failure -R smoke
