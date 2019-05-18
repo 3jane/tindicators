@@ -85,3 +85,14 @@ def test_bop():
 def test_exceptions():
     with pytest.raises(InvalidOption):
         ti.sma([], -1)
+
+
+if __name__ == "__main__":
+    def test_all():
+        tests = [test_sma, test_sma_accept_series, test_pad_left, test_indicator_info, test_convert_to_dataframe,
+                 test_vidya, test_bop, test_exceptions]
+        for test in tests:
+            test()
+        print('ALL TESTS PASSED')
+
+    test_all()
