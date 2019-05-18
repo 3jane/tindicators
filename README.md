@@ -17,7 +17,7 @@ The testing process consists of three stages:
 2. **`fuzzer`**: let's try to find options that would trigger a segfault, memleak, of something alike.
 3. **`smoke`**: we match the behavior of the indicator against precomputed values.
 
-Built on Linux in Release configuration, these are run under sanitizers, namely `-fsanitize=undefined`, `-fsanitize=address`, `-fsanitize=leak`.
+Built on Linux in Debug configuration, these are run under sanitizers, namely `-fsanitize=undefined`, `-fsanitize=address`, `-fsanitize=leak`.
 
 ## Overview
 
