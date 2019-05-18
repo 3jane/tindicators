@@ -51,12 +51,15 @@ jobs:
       versionSpec: '3.6'
   - script: mkdir build
     displayName: mkdirbuild
+  # Disabled because Azure VMs apparently don't have enough RAM to manage the sanitizers load
   - script: cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build . -j
     displayName: 'DebugBuild'
     workingDirectory: build
-  - script: LD_PRELOAD=libasan.so.5 ctest -C Debug --output-on-failure
+    enabled: false
+  - script: LD_PRELOAD=libasan.so.5 ctest -V
     displayName: 'DebugTest'
     workingDirectory: build
+    enabled: false
   - script: cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build . -j
     displayName: 'ReleaseBuild'
     workingDirectory: build
