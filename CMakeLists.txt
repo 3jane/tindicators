@@ -24,7 +24,7 @@ install(TARGETS indicators
 target_compile_options(indicators
     PUBLIC
     $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
-        -Wall -Wextra -Wshadow -Wconversion -g3 -ggdb -O2
+        -Wall -Wextra -Wshadow -Wconversion -g3 -ggdb -O2 -Werror=sequence-point
         $<$<COMPILE_LANGUAGE:CXX>:-fpermissive -std=c++17>
         $<$<COMPILE_LANGUAGE:C>:-std=c99 -pedantic>
         $<$<CONFIG:DEBUG>:
