@@ -204,7 +204,7 @@ void tsi_option_setter(double period, double* options) {
 }
 
 void bench(const ti_indicator_info *info) {
-    printf("Running: %s", info->name);
+    printf("Running: %s ", info->name);
     fflush(stdout);
 
     void (*options_setter)(double period, double *options) = simple_option_setter;
