@@ -203,8 +203,8 @@ for indicator in indicators.items():
     file_path_cc = os.path.join(path_prefix+'indicators', f'{name}.cc')
     if not os.path.exists(file_path_c) and not os.path.exists(file_path_cc):
         nl = '\n'
-        unpack_options = '\n    '.join(f'TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
-        unpack_inputs = '\n    '.join(f'TI_REAL *{inp} = inputs[{i}];' for i, inp in enumerate(inputs))
+        unpack_options = '\n    '.join(f'const TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
+        unpack_inputs = '\n    '.join(f'TI_REAL const *const {inp} = inputs[{i}];' for i, inp in enumerate(inputs))
         unpack_outputs = '\n    '.join(f'TI_REAL *{outp} = outputs[{i}];' for i, outp in enumerate(outputs))
         result = '\n'.join([
             '#include "../indicators.h"',
