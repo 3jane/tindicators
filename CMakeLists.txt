@@ -34,7 +34,7 @@ target_compile_options(indicators
     $<$<C_COMPILER_ID:MSVC>:
         /std:c++17
         $<$<CONFIG:RELEASE>:
-            /pf:fast>>
+            /fp:fast>>
     PRIVATE
     $<$<C_COMPILER_ID:MSVC>:
         /DBUILDING>
