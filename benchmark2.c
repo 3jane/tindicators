@@ -204,6 +204,9 @@ void tsi_option_setter(double period, double* options) {
 }
 
 void bench(const ti_indicator_info *info) {
+    printf("Running: %s", info->name);
+    fflush(stdout);
+
     void (*options_setter)(double period, double *options) = simple_option_setter;
     if (strcmp(info->name, "apo") == 0) { options_setter = ppo_option_setter; }
     if (strcmp(info->name, "ce") == 0) { options_setter = ce_option_setter; }
@@ -345,6 +348,7 @@ void bench(const ti_indicator_info *info) {
     #define PERFORMANCE(elapsed) (int)(0 ? 0 : (iterations * INSIZE) / MS(elapsed) / 1000.)
 
     // mfps = million floats per second
+    printf("\r");
     printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name, "           ", MS(elapsed_plain), PERFORMANCE(elapsed_plain));
     if (info->indicator_ref) { printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name, "_ref       ", MS(elapsed_ref), PERFORMANCE(elapsed_ref)); }
     if (info->stream_new) { printf("Benchmark %15s%s\t%5dms\t%5dmfps\n", info->name,    "_stream_all", MS(elapsed_stream_all), PERFORMANCE(elapsed_stream_all)); }
