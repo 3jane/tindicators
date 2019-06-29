@@ -50,6 +50,40 @@ execute_process(
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
+
+# Only test the newly added indicator, based on the branch name
+
+if ("${branch_name}" STREQUAL "")
+    execute_process(
+        COMMAND git rev-parse --abbrev-ref HEAD
+        OUTPUT_VARIABLE branch_name
+    )
+endif()
+string(STRIP ${branch_name} branch_name)
+
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E echo ${branch_name}
+    COMMAND ${Python3_EXECUTABLE} -c "pass; \
+        import re; \
+        m = re.match('[^/]*/[^/]*/([a-zA-Z0-9]+)(-.*)?', input()); \
+        import yaml, os.path; \
+        indicators = yaml.safe_load(open(os.path.join('${CMAKE_CURRENT_SOURCE_DIR}','indicators.yaml'))); \
+        print(m[1], end='') if m and m[1] in indicators else ''; \
+    "
+    OUTPUT_VARIABLE indicator_name
+)
+
+if (${disable_single_testing})
+    set(indicator_name "")
+endif()
+
+if ("${indicator_name}" STREQUAL "")
+    message("no specific indicator")
+else()
+    message("current indicator: ${indicator_name}")
+endif()
+
+
 # Samples
 # failed to build on MSVC:
 # add_executable(example1 example1.c)
@@ -76,20 +110,20 @@ enable_testing()
 
 add_executable(smoke smoke.c ${utils})
 target_link_libraries(smoke indicators)
-add_test(NAME smoke COMMAND smoke WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_test(NAME smoke COMMAND smoke ${indicator_name} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_executable(fuzzer fuzzer.c)
 target_link_libraries(fuzzer indicators)
-add_test(NAME fuzzer COMMAND fuzzer)
+add_test(NAME fuzzer COMMAND fuzzer ${indicator_name})
 
 add_executable(benchmark benchmark.c)
 set_target_properties(benchmark PROPERTIES EXCLUDE_FROM_ALL 1)
 target_link_libraries(benchmark indicators ta_lib)
-#add_test(NAME benchmark COMMAND benchmark)
+#add_test(NAME benchmark COMMAND benchmark ${indicator_name})
 
 add_executable(benchmark2 benchmark2.c ${utils})
 target_link_libraries(benchmark2 indicators)
-add_test(NAME benchmark2 COMMAND benchmark2)
+add_test(NAME benchmark2 COMMAND benchmark2 ${indicator_name})
 
 add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
 
