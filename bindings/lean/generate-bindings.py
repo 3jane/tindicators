@@ -1,6 +1,7 @@
 from tulipindicators import ti
 import os
 import shutil
+import re
 
 toplevel = '''
 using System;
@@ -39,6 +40,8 @@ def streaming(indicator):
     inputs = indicator.inputs
     outputs = indicator.outputs
     name = indicator.name
+    full_name = indicator.full_name
+    lean_name = re.sub('[^0-9a-zA-Z]', '', full_name)
     options = indicator.options
 
     n = '\n'
@@ -52,10 +55,10 @@ def streaming(indicator):
     input_type = ['TradeBar', 'IndicatorDataPoint'][real]
 
     result = f'''
-    public class {name} : IndicatorBase<{input_type}> {{
+    public class {lean_name} : IndicatorBase<{input_type}> {{
         IntPtr state;
         {f'{n}'.join(f'public Identity {output.upper()};' for output in outputs)}
-        public {name}({', '.join(map('double {}'.format, options))}) : base("{name}") {{
+        public {lean_name}({', '.join(map('double {}'.format, options))}) : base("{lean_name}") {{
             int ret = ti_{name}_stream_new(new double[]{{{', '.join(options)}}}, ref state);
             util.DispatchError(ret);
             {f'{n}'.join(f'{output.upper()} = new Identity("{output}");' for output in outputs)}
@@ -79,7 +82,7 @@ def streaming(indicator):
         public override bool IsReady {{
             get {{ return ti_stream_get_progress(state) > 0; }}
         }}
-        ~{name}() {{ ti_{name}_stream_free(state); }}
+        ~{lean_name}() {{ ti_{name}_stream_free(state); }}
         {dllimport.format(fun=f'ti_{name}_stream_free', ret='void', args='IntPtr state')}
         {dllimport.format(fun='ti_stream_get_progress', ret='int', args='IntPtr state')}
         {dllimport.format(fun=f'ti_{name}_stream_new', ret='int', args='double[] options, ref IntPtr state')}
@@ -92,6 +95,8 @@ def default(indicator):
     inputs = indicator.inputs
     outputs = indicator.outputs
     name = indicator.name
+    full_name = indicator.full_name
+    lean_name = re.sub('[^0-9a-zA-Z]', '', full_name)
     options = indicator.options
 
     n = '\n'
@@ -103,13 +108,13 @@ def default(indicator):
     input_type = ['TradeBar', 'IndicatorDataPoint'][real]
 
     result = f'''
-    public class {name} : WindowIndicator<{input_type}> {{
+    public class {lean_name} : WindowIndicator<{input_type}> {{
         double[] options;
         int start;
         bool ready;
         {f'{n}'.join(f'public Identity {output.upper()};' for output in outputs)}
-        public {name}({', '.join(list(map('double {}'.format, options)) + ['int windowsize=0'])})
-            : base("{name}", Math.Max(windowsize, ti_{name}_start(new double[]{{{', '.join(options)}}}) + 1)) {{
+        public {lean_name}({', '.join(list(map('double {}'.format, options)) + ['int windowsize=0'])})
+            : base("{lean_name}", Math.Max(windowsize, ti_{name}_start(new double[]{{{', '.join(options)}}}) + 1)) {{
             options = new double[]{{{', '.join(options)}}};
             start = ti_{name}_start(options);
             ready = false;
