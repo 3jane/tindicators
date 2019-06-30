@@ -44,8 +44,10 @@ jobs:
       uname -a
       gcc --version
     displayName: uname
+    enabled: false # reason: not needed anymore
   - script: sudo apt-get install -y libasan5
     displayName: 'Dependencies'
+    enabled: false # reason: sanitizers are disabled
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
