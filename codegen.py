@@ -15,7 +15,7 @@ def declaration_start(name):
 def declaration_plain(name):
     return f'int ti_{name}(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
 def declaration_ref(name):
-    return f'int ti_{name}_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
+    return f'int DONTOPTIMIZE ti_{name}_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
 def declaration_stream_new(name):
     return f'int ti_{name}_stream_new(TI_REAL const *options, ti_stream **stream)'
 def declaration_stream_run(name):
@@ -71,6 +71,12 @@ with open(path_prefix+'indicators.h', 'w') as f:
         '    #endif',
         '#else',
         '    #define DLLEXPORT',
+        '#endif',
+        '',
+        '#ifndef _WIN32',
+        '    #define DONTOPTIMIZE __attribute__((optimize("O3")))',
+        '#else',
+        '    #define DONTOPTIMIZE __pragma("", off)',
         '#endif',
         '',
         'DLLEXPORT extern const char* ti_version();',
