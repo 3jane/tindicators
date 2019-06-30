@@ -63,10 +63,10 @@ def streaming(indicator):
             util.DispatchError(ret);
             {f'{n}'.join(f'{output.upper()} = new Identity("{output}");' for output in outputs)}
         }}
+        private IntPtr[] inputs = new IntPtr[{len(inputs)}];
+        private IntPtr[] outputs = new IntPtr[{len(outputs)}];
+        private double[] tmp = new double[{max(len(inputs), len(outputs))}];
         protected override decimal ComputeNextValue({input_type} data) {{
-            IntPtr[] inputs = new IntPtr[{len(inputs)}];
-            IntPtr[] outputs = new IntPtr[{len(outputs)}];
-            double[] tmp = new double[{max(len(inputs), len(outputs))}];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
             {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, {i}, inputs[{i}], 1);' for i, input in enumerate(inputs))}
@@ -120,11 +120,11 @@ def default(indicator):
             ready = false;
             {f'{n}'.join(f'{output.upper()} = new Identity("{output}");' for output in outputs)}
         }}
+        private IntPtr[] inputs = new IntPtr[{len(inputs)}];
+        private IntPtr[] outputs = new IntPtr[{len(outputs)}];
         protected override decimal ComputeNextValue(IReadOnlyWindow<{input_type}> window, {input_type} data) {{
             ready = window.Count > start;
             if (!ready) {{ return 0; }}
-            IntPtr[] inputs = new IntPtr[{len(inputs)}];
-            IntPtr[] outputs = new IntPtr[{len(outputs)}];
             double[] tmp = new double[window.Count];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * window.Count);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[window.Count-i-1] = (double)value.{input.capitalize() if not real else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
