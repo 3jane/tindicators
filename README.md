@@ -1,13 +1,13 @@
 # Tulip Indicators
 
-Tulip Indicators is a library of technical analysis indicators. It powers our [Python](./bindings/python) and [Lean](./bindings/lean) libraries of indicators. It was [originally](https://github.com/TulipCharts/tulipindicators) written in C89 and later extended in C++17 at RCDB.
+Tulip Indicators is a library of technical analysis indicators. It powers our [Python](./bindings/python) and [Lean](./bindings/lean) libraries of indicators. It was [originally](https://github.com/TulipCharts/tulipindicators) written in C89 and later extended in C++17 here at RCDB.
 
 Please refer to [indicators.yaml](./indicators.yaml) for the comprehensive list of the available indicators. Some extra info regarding formulae sources and future plans is available in the [doc](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31Tgy6z-pR9rOv1Nr3dxLn5g/edit#gid=444645194).
 
 ## Contributing
 
 1. find a reliable source like a book or a publication at [traders.com](https://traders.com)
-1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md) (e.g. feature/DEV-230/sma)
+1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md) (e.g. `feature/DEV-230/sma`)
 1. add an entry to `indicators.yaml` and run `codegen.py`
 2. go to `indicators/xxx.cc` and implement the indicator
 3. you may want to look at the recently added indicators for some idiomatic constructs
