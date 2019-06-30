@@ -1,14 +1,40 @@
 # Tulip Indicators
 
-Tulip Indicators is a library of technical analysis indicators.
-
-It was [originally](https://github.com/TulipCharts/tulipindicators) written in C89 and extended in C++17 by us later.
+Tulip Indicators is a library of technical analysis indicators. It powers our [Python](./bindings/python) and [Lean](./bindings/lean) libraries of indicators. It was [originally](https://github.com/TulipCharts/tulipindicators) written in C89 and later extended in C++17 at RCDB.
 
 Please refer to [indicators.yaml](./indicators.yaml) for the comprehensive list of the available indicators. Some extra info regarding formulae sources and future plans is available in the [doc](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31Tgy6z-pR9rOv1Nr3dxLn5g/edit#gid=444645194).
 
-## Bindings
+## Contributing
 
-There are some nice bindings available, for use in [Python](./bindings/python) and [Lean](./bindings/lean).
+1. find a reliable source like a book or a publication at [traders.com](https://traders.com)
+1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md) (e.g. feature/DEV-230/sma)
+1. add an entry to `indicators.yaml` and run `codegen.py`
+2. go to `indicators/xxx.cc` and implement the indicator
+3. you may want to look at the recently added indicators for some idiomatic constructs
+4. consider adding a precomputed testcase to `tests/extra.txt` if the author provides one
+4. make sure your implementation passes `ctest` in debug mode
+5. squash your commits into one
+5. create a PR, specify the source, and attach a screenshot of the definition - see older [PRs](https://github.com/hcmc-project/tulipindicators-private/pull/6) for the reference
+
+## Building
+
+Install the dependencies:
+
+```
+- python3, pyyaml
+- cmake
+- some reasonably modern C++ compiler
+```
+
+Build as a regular CMake project:
+
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j
+```
+
+You should get a shared library `libindicators.so` as a result (the exact name depends on the platform) and the test binaries. You may want to run `./benchmark2` to see the performance of the indicators of your interest.
 
 ## Testing
 
@@ -45,35 +71,3 @@ Built on Linux in Debug configuration, these are run under sanitizers, namely `-
     + `untest.txt`: regression tests
 4. **indicators.h**: the ultimate library header file.
 5. **indicators_index.c**: the runtime table of the indicators.
-
-## Building
-
-Install the dependencies:
-
-```
-- python3, pyyaml
-- cmake
-- some reasonably modern C++ compiler
-```
-
-Build as a regular CMake project:
-
-```bash
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j
-```
-
-You should get a shared library `libindicators.so` as a result (the exact name depends on the platform) and the test binaries. You may want to run `./benchmark2` to see the performance of the indicators of your interest.
-
-## Contributing
-
-1. find a reliable source like a book or a publication at [traders.com](https://traders.com)
-1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md)
-1. add an entry to `indicators.yaml` and run `codegen.py`
-2. go to `indicators/xxx.cc` and implement the indicator
-3. for the idiomatic constructs, you may want to look at some recently added indicators
-4. consider adding a precomputed testcase to `tests/extra.txt` if the author provides one
-4. make sure your implementation passes `ctest` in debug mode
-5. squash your commits into one
-5. create a PR, specify the source, and attach a screenshot of the definition - see older [PRs](https://github.com/hcmc-project/tulipindicators-private/pull/6) for an example
