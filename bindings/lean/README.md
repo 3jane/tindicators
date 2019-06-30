@@ -13,7 +13,11 @@ This is a binding to our [base lib of TA indicators](https://github.com/hcmc-pro
 
 ## Usage
 
-It's obvious!
+TBD
+
+## Testing
+
+The testing process is fairly primitive as of now and is described [here](https://gist.github.com/rdbuf/6c2ba15d5238c0473535d0972f2d1ef7).
 
 ## Support
 
