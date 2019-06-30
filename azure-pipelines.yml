@@ -45,22 +45,23 @@ jobs:
       gcc --version
     displayName: uname
     enabled: false # reason: not needed anymore
-  - script: sudo apt-get install -y libasan5
+  - script: sudo apt-get install -y libasan5 valgrind
     displayName: 'Dependencies'
-    enabled: false # reason: sanitizers are disabled
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
   - script: mkdir build
     displayName: mkdirbuild
-  # Disabled because Azure VMs apparently don't have enough RAM to manage the sanitizers load
   - script: cmake .. -DCMAKE_BUILD_TYPE=Debug -Dbranch_name="$(System.PullRequest.SourceBranch)" && cmake --build . -j
     displayName: 'DebugBuild'
     workingDirectory: build
+    # segfault for some reason, possibly libasan can't run in the given container because of insufficient privileges
+    #condition: eq(variables['Build.Reason'], 'PullRequest')
     enabled: false
-  - script: LD_PRELOAD=libasan.so.5 ctest -V
+  - script: LD_PRELOAD=libasan.so.5 ctest -VV --output-on-failure
     displayName: 'DebugTest'
     workingDirectory: build
+    #condition: eq(variables['Build.Reason'], 'PullRequest')
     enabled: false
   - script: cmake .. -DCMAKE_BUILD_TYPE=Release -Dbranch_name="$(System.PullRequest.SourceBranch)" && cmake --build . -j
     displayName: 'ReleaseBuild'
@@ -83,7 +84,7 @@ jobs:
   dependsOn:
     - Linux
     - Windows
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   steps:
   - task: UsePythonVersion@0
     inputs:
