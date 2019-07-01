@@ -275,8 +275,8 @@ for indicator in indicators.items():
         '    struct {',
         '',
         '    } constants;',
-        '',
     ] + ([
+        '',
         '    BUFFERS(',
         '',
         '    )',
