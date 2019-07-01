@@ -46,7 +46,6 @@ execute_process(
 )
 execute_process(
     COMMAND ${Python3_EXECUTABLE} codegen.py
-    OUTPUT indicators.h indicators_index.c
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
