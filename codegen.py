@@ -2,6 +2,12 @@ import yaml
 import os.path
 import time
 from version import version
+import argparse
+
+
+parser = argparse.ArgumentParser(description='Generate the boilerplate for Tulip Indicators')
+parser.add_argument('--old', help='use old defaults', action='store_true')
+args = parser.parse_args()
 
 build = int(time.time())
 
@@ -207,109 +213,132 @@ for indicator in indicators.items():
     name, (elab_name, type, inputs, options, outputs, features) = indicator
     file_path_c = os.path.join(path_prefix+'indicators', f'{name}.c')
     file_path_cc = os.path.join(path_prefix+'indicators', f'{name}.cc')
-    if not os.path.exists(file_path_c) and not os.path.exists(file_path_cc):
-        nl = '\n'
-        unpack_options = '\n    '.join(f'const TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
-        unpack_inputs = '\n    '.join(f'TI_REAL const *const {inp} = inputs[{i}];' for i, inp in enumerate(inputs))
-        unpack_outputs = '\n    '.join(f'TI_REAL *{outp} = outputs[{i}];' for i, outp in enumerate(outputs))
-        result = '\n'.join([
-            '#include "../indicators.h"',
-            '#include "../utils/localbuffer.h"',
-            '#include "../utils/log.h"',
-            '',
-            f'{declaration_start(name)} {{',
-            f'    {unpack_options}',
-            '',
-            '    #error "return how shorter will the output be than the input"',
-            '}',
-            '',
-            f'{declaration_plain(name)} {{',
-            f'    {unpack_inputs}',
-            f'    {unpack_options}',
-            f'    {unpack_outputs}',
-            '',
-            '    #error "don\'t forget to validate options"',
-            '',
-            '    #error "vectorized implementation goes here"',
-            '',
-            '    return TI_OKAY;',
-            '}',
-            '',
-            f'{declaration_ref(name)} {{',
-            f'    {unpack_inputs}',
-            f'    {unpack_options}',
-            f'    {unpack_outputs}',
-            '',
-            '    #error "don\'t forget to validate options"',
-            '',
-            '    #error "obviously correct implementation goes here"',
-            '',
-            '    return TI_OKAY;',
-            '}',
-            '',
-            'struct ti_stream {',
-            '    int index;',
-            '    int progress;',
-            '',
-            '    struct {',
-            f'        {(nl+" "*8).join(map("TI_REAL {};".format, options))}',
-            '    } options;',
-            '',
-            '    struct {',
-            '',
-            '    } state;',
-            '',
-            '    struct {',
-            '',
-            '    } constants;',
-            '',
-            '    BUFFERS(',
-            '',
-            '    )',
-            '};',
-            '',
-            f'{declaration_stream_new(name)} {{',
-            f'    {unpack_options}',
-            '',
-            '    #error "don\'t forget to validate options"',
-            '',
-            '    *stream = calloc(1, sizeof(**stream));',
-            '    if (!stream) { return TI_OUT_OF_MEMORY; }',
-            '',
-            f'    (*stream)->index = TI_INDICATOR_{name.upper()}_INDEX;',
-            f'    (*stream)->progress = -ti_{name}_start(options);',
-            '',
-            '\n'.join(map("    (*stream)->options.{0} = {0};".format, options)),
-            '',
-            '    #error "don\'t forget to initialize buffers"',
-            '',
-            '    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));',
-            '    if (!stream) { return TI_OUT_OF_MEMORY; }',
-            '',
-            '    return TI_OKAY;',
-            '}',
-            '',
-            f'{declaration_stream_free(name)} {{',
-            '    free(stream);',
-            '}',
-            '',
-            f'{declaration_stream_run(name)} {{',
-            f'    {unpack_inputs}',
-            f'    {unpack_outputs}',
-            '    int progress = stream->progress;',
-            '\n'.join(map("    TI_REAL {0} = stream->options.{0};".format, options)),
-            '',
-            '    int i = 0;',
-            '    #error "streaming implementation goes here"',
-            '',
-            '    stream->progress = progress;',
-            '    #error "be sure to save all the state"',
-            '',
-            '    return TI_OKAY;',
-            '}',
+    if os.path.exists(file_path_c) or os.path.exists(file_path_cc):
+        continue
 
-        ])
-        with open(file_path_cc, 'w') as f:
-            print(f'codegen.py: indicators/{name}.cc')
-            f.write(result)
-            os.system(f'git add -N {file_path_cc}')
+    nl = '\n'
+    unpack_options = '\n    '.join(f'const TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
+    unpack_inputs = '\n    '.join(f'TI_REAL const *const {inp} = inputs[{i}];' for i, inp in enumerate(inputs))
+    unpack_outputs = '\n    '.join(f'TI_REAL *{outp} = outputs[{i}];' for i, outp in enumerate(outputs))
+    result = '\n'.join([
+        '#include "../indicators.h"',
+        '#include "../utils/log.h"',
+        '#include "../utils/minmax.h"',
+    ] + ([
+        '#include "../utils/localbuffer.h"',
+    ] if args.old else [
+        '#include "../utils/ringbuf.hh"',
+    ]) + [
+        '',
+        f'{declaration_start(name)} {{',
+        f'    {unpack_options}',
+        '',
+        '    #error "return how shorter will the output be than the input"',
+        '}',
+        '',
+        f'{declaration_plain(name)} {{',
+        f'    {unpack_inputs}',
+        f'    {unpack_options}',
+        f'    {unpack_outputs}',
+        '',
+        '    #error "don\'t forget to validate options"',
+        '',
+        '    #error "vectorized implementation goes here"',
+        '',
+        '    return TI_OKAY;',
+        '}',
+        '',
+        f'{declaration_ref(name)} {{',
+        f'    {unpack_inputs}',
+        f'    {unpack_options}',
+        f'    {unpack_outputs}',
+        '',
+        '    #error "don\'t forget to validate options"',
+        '',
+        '    #error "obviously correct implementation goes here"',
+        '',
+        '    return TI_OKAY;',
+        '}',
+        '',
+        'struct ti_stream {',
+        '    int index;',
+        '    int progress;',
+        '',
+        '    struct {',
+        f'        {(nl+" "*8).join(map("TI_REAL {};".format, options))}',
+        '    } options;',
+        '',
+        '    struct {',
+        '',
+        '    } state;',
+        '',
+        '    struct {',
+        '',
+        '    } constants;',
+        '',
+    ] + ([
+        '    BUFFERS(',
+        '',
+        '    )',
+    ] if args.old else [
+    ]) + [
+        '};',
+        '',
+        f'{declaration_stream_new(name)} {{',
+        f'    {unpack_options}',
+        '',
+        '    #error "don\'t forget to validate options"',
+        '',
+    ] + ([
+        '    *stream = calloc(1, sizeof(**stream));',
+    ] if args.old else [
+        '    *stream = new(std::nothrow) ti_stream();',
+    ]) + [
+        '    if (!*stream) { return TI_OUT_OF_MEMORY; }',
+        '',
+        f'    (*stream)->index = TI_INDICATOR_{name.upper()}_INDEX;',
+        f'    (*stream)->progress = -ti_{name}_start(options);',
+        '',
+        '\n'.join(map("    (*stream)->options.{0} = {0};".format, options)),
+        '',
+    ] + ([
+        '    #error "don\'t forget to initialize buffers"',
+    ] if args.old else [
+    ]) + [
+        '',
+        '    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));',
+        '    if (!stream) { return TI_OUT_OF_MEMORY; }',
+        '',
+        '    return TI_OKAY;',
+        '}',
+        '',
+        f'{declaration_stream_free(name)} {{',
+    ] + ([
+        '    free(stream);',
+    ] if args.old else [
+        '    delete stream;',
+    ]) + [
+        '}',
+        '',
+        f'{declaration_stream_run(name)} {{',
+        f'    {unpack_inputs}',
+        f'    {unpack_outputs}',
+        '    int progress = stream->progress;',
+        '\n'.join(map("    TI_REAL {0} = stream->options.{0};".format, options)),
+        '',
+        '    int i = 0;',
+        '    #error "streaming implementation goes here"',
+        '',
+        '    stream->progress = progress;',
+        '    #error "be sure to save all the state"',
+        '',
+        '    return TI_OKAY;',
+        '}',
+
+    ])
+    path = file_path_c if args.old else file_path_cc
+    with open(path, 'w') as f:
+        print(f'codegen.py: indicators/{os.path.basename(path)}')
+        f.write(result)
+        os.system(f'git add -N {path}')
+
