@@ -32,6 +32,7 @@
 
 #include "indicators.h"
 #include "utils/testing.h"
+#include "utils/minmax.h"
 
 #define INSIZE 4000
 #define MIN_PERIOD 4
