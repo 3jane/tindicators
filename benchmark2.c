@@ -229,6 +229,11 @@ void edcf_option_setter(double period, double* options) {
     options[0] = (1 + (int)period % 5); // known to be slow for its algorithmic complexity
 }
 
+void mesastoch_option_setter(double period, double* options) {
+    options[0] = period;
+    options[1] = 48;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -263,6 +268,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "rema") == 0) { options_setter = rema_option_setter; }
     if (strcmp(info->name, "lf") == 0) { options_setter = lf_option_setter; }
     if (strcmp(info->name, "edcf") == 0) { options_setter = edcf_option_setter; }
+    if (strcmp(info->name, "mesastoch") == 0) { options_setter = mesastoch_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
