@@ -300,14 +300,14 @@ for indicator in indicators.items():
         f'    (*stream)->progress = -ti_{name}_start(options);',
         '',
         '\n'.join(map("    (*stream)->options.{0} = {0};".format, options)),
-        '',
     ] + ([
+        '',
         '    #error "don\'t forget to initialize buffers"',
-    ] if args.old else [
-    ]) + [
         '',
         '    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));',
         '    if (!stream) { return TI_OUT_OF_MEMORY; }',
+    ] if args.old else [
+    ]) + [
         '',
         '    return TI_OKAY;',
         '}',
