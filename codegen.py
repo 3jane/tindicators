@@ -36,15 +36,15 @@ with open(path_prefix+'indicators.h', 'w') as f:
             f'/* Outputs: [{", ".join(outputs)}] */',
             f'DLLEXPORT extern {declaration_start(name)};',
             f'DLLEXPORT extern {declaration_plain(name)};',
-        ])
-        if 'ref' in features: result += ('\n'.join([
+        ] + ([
             f'DLLEXPORT extern {declaration_ref(name)};',
-        ]))
-        if 'stream' in features: result += ('\n'.join([
+        ] if 'ref' in features else []) + ([
             f'DLLEXPORT extern {declaration_stream_new(name)};',
             f'DLLEXPORT extern {declaration_stream_run(name)};',
             f'DLLEXPORT extern {declaration_stream_free(name)};',
-        ]))
+        ] if 'stream' in features else []) + [
+            ''
+        ])
         return result
 
     result = '\n'.join([
