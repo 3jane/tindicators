@@ -324,7 +324,7 @@ for indicator in indicators.items():
         f'    {unpack_inputs}',
         f'    {unpack_outputs}',
         '    int progress = stream->progress;',
-        '\n'.join(map("    TI_REAL {0} = stream->options.{0};".format, options)),
+        '\n'.join(map("    const TI_REAL {0} = stream->options.{0};".format, options)),
         '',
         '    int i = 0;',
         '    #error "streaming implementation goes here"',
