@@ -33,6 +33,7 @@ wma: ["Weighted Moving Average", overlay, [real], [period], [wma], []]
 zlema: ["Zero-Lag Exponential Moving Average", overlay, [real], [period], [zlema], []]
 rmta: ["Recursive Moving Trend Average", overlay, [real], [period, beta], [rmta], []]
 gf1: ["Gaussian Filter - 1 Pole", overlay, [real], [period], [gf1], [stream, ref]]
+gf2: ["Gaussian Filter - 2 Poles", overlay, [real], [period], [gf2], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
