@@ -293,7 +293,15 @@ void bench(const ti_indicator_info *info) {
                     exit(2);
                 }
                 int ok = !compare_answers(info, outputs, outputs_ref, OUTSIZE, OUTSIZE);
-                if (!ok) { printf("%s_ref mismatched, exiting\n", info->name); exit(1); }
+                if (!ok) {
+                    printf("%s_ref mismatched, exiting\n", info->name);
+                    printf("options were: ");
+                    for (int k = 0; k < info->options; ++k) {
+                        printf("%s=%f ", info->option_names[k], options[k]);
+                    }
+                    printf("\n");
+                    exit(1);
+                }
             }
 
             if (info->stream_new) {
@@ -309,7 +317,15 @@ void bench(const ti_indicator_info *info) {
                     exit(2);
                 }
                 int ok = !compare_answers(info, outputs, outputs_stream_all, OUTSIZE, OUTSIZE);
-                if (!ok) { printf("%s_stream_all mismatched, exiting\n", info->name); exit(1); }
+                if (!ok) {
+                    printf("%s_stream_all mismatched, exiting\n", info->name);
+                    printf("options were: ");
+                    for (int k = 0; k < info->options; ++k) {
+                        printf("%s=%f ", info->option_names[k], options[k]);
+                    }
+                    printf("\n");
+                    exit(1);
+                }
             }
 
             if (info->stream_new) {
@@ -338,7 +354,15 @@ void bench(const ti_indicator_info *info) {
                 for (int j = 0; j < info->inputs; ++j) { free(inputs_[j]); }
                 elapsed_stream_1 += end_ts - start_ts;
                 int ok = !compare_answers(info, outputs, outputs_stream_1, OUTSIZE, OUTSIZE);
-                if (!ok) { printf("%s_stream_1 mismatched, exiting\n", info->name); exit(1); }
+                if (!ok) {
+                    printf("%s_stream_1 mismatched, exiting\n", info->name);
+                    printf("options were: ");
+                    for (int k = 0; k < info->options; ++k) {
+                        printf("%s=%f ", info->option_names[k], options[k]);
+                    }
+                    printf("\n");
+                    exit(1);
+                }
                 ti_stream_free(stream);
             }
         }
