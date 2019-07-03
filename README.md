@@ -8,15 +8,7 @@ For any questions please reach out **@ilya.p** on Slack.
 
 ## Contributing
 
-1. find a reliable source like a book or a publication at [traders.com](https://traders.com)
-1. create a branch according to our [conventions](https://github.com/hcmc-project/docs/blob/master/git.md) (e.g. `feature/DEV-230/sma`)
-1. add an entry to `indicators.yaml` and run `codegen.py`
-2. go to `indicators/xxx.cc` and implement the indicator
-3. you may want to look at the recently added indicators for some idiomatic constructs
-4. consider adding a precomputed testcase to `tests/extra.txt` if the author provides one
-4. make sure your implementation passes `ctest` in debug mode
-5. squash your commits into one
-5. create a PR, specify the source, and attach a screenshot of the definition - see older [PRs](https://github.com/hcmc-project/tulipindicators-private/pull/6) for the reference
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Building
 
@@ -37,39 +29,3 @@ cmake --build . -j
 ```
 
 You should get a shared library `libindicators.so` as a result (the exact name depends on the platform) and the test binaries. You may want to run `./benchmark2` to see the performance of the indicators of your interest.
-
-## Testing
-
-The testing process consists of three stages:
-1. **`benchmark2`**: a series of 4000 bars is randomly generated, then the behavior of different implementations (plain, `ref`, `stream`) is matched against each other, and also benchmarked.
-2. **`fuzzer`**: let's try to find options that would trigger a segfault, memleak, of something alike.
-3. **`smoke`**: we match the behavior of the indicator against precomputed values.
-
-Built on Linux in Debug configuration, these are run under sanitizers, namely `-fsanitize=undefined`, `-fsanitize=address`, `-fsanitize=leak`.
-
-## Overview
-
-1. **indicators.yaml**: the comprehensive index of the indicators present in the library.
-1. **codegen.py**: generates, based on `indicators.yaml`,
-    + the boilerplate under `indicators/` for further indicator implementation
-    + `indicators.h`
-    + `indicators_index.c`
-2. **indicators/\***: `xxx.c` contains code implementing xxx, namely:
-    + `int xxx(int size, double **inputs, double *options, double **outputs)`
-    + `int xxx_start(double *options)`  
-    + `int xxx_stream_new(double *options, ti_stream **stream)`
-    + `int xxx_stream_run(ti_stream *stream, int size, double **inputs, double **outputs)`
-    + `void xxx_stream_free(ti_stream *stream)`   
-    + `int xxx_ref(int size, double **inputs, double *options, double **outputs)`  
-3. **utils/\***: some data structures and macros that come up frequently, namely
-    + `buffer.h`: simple ringbuffer
-    + `localbuffer.h`: ringbuffer allocated locally to the rest of the data
-    + `log.h`: contains `LOG()` macro, useful for debugging
-    + `minmax.h`: contains `MIN()`, `MAX()` macros
-    + `testing.h`: some code shared by testing utilities, like `compare_answers()`
-4. **tests/\***: contains precomputed tests, namely
-    + `atoz.txt`: cases from *Technical Analysis from A to Z*
-    + `extra.txt`: cases from other sources
-    + `untest.txt`: regression tests
-4. **indicators.h**: the ultimate library header file.
-5. **indicators_index.c**: the runtime table of the indicators.

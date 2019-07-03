@@ -1,7 +1,18 @@
+#pragma once
+
 #include "../indicators.h"
 
 #include <memory>
 #include <cstring>
+
+/*
+    Ring buffer: https://en.wikipedia.org/wiki/Circular_buffer
+
+    operator[](): indexing in the reverse order, that is, buffer[1] is the equivalent to "give me the previous value"
+    step(): make the current value the previous, i.e. change the pointer to the current last value
+    phbegin(), phend(): used to iterate over the underlying array (get the physical begin and end)
+    iterator_to_age(): given a pointer to a buffer element, returns the distance from the current value
+*/
 
 /* Constexpr-sized, flat array */
 template<int N>
