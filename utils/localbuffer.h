@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../indicators.h"
 
 /* IMPORTANT USAGE NOTICE:
@@ -36,6 +38,12 @@
  * >
  * >     int size = BUFFERS_SIZE(*stream);
  * >     *stream = realloc(*stream, sizeof(ti_stream) + sizeof(TI_REAL[size]));
+ * > }
+ * > 
+ * > int ti_xxx_stream_run(ti_stream *stream, ...) {
+ * >    ...
+ * >    TI_REAL a = BUFFER_AT1(stream, buffername, idx);
+ * >    ...
  * > }
  */
 
