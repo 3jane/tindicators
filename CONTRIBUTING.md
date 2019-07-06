@@ -146,9 +146,9 @@ Update the [sheet](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31
 
 ## 11. Checklist for a review
 
-- [ ] Tests are green
-- [ ] Reference implementation complies with the specification
-- [ ] Vectorized implementation goes in one pass and performs no unnecessary allocations
-- [ ] Both vectorized and streaming implementations use the optimal data structures and algorithms
-- [ ] Naming conventions are respected in `indicators.yaml`
-- [ ] Commit history is cleaned up
+- [x] Tests are green
+- [x] Reference implementation complies with the spec
+- [x] Vectorized implementation goes in one pass and performs no unnecessary allocations
+- [x] Optimal data structures and algorithms used in both vectorized and streaming implementations
+- [x] Naming conventions are respected in `indicators.yaml`
+- [x] Commit history is cleaned up
