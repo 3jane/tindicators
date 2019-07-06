@@ -49,23 +49,23 @@ The rest of the layout is unspecified and is up to the implementator to decide. 
 
 (Actually, the older indicators are not equipped with the reference and streaming implementations, but our goal is to equip them all.)
 
-Additionally, there is the function `ti_xxx_start` associated with each indicator, which tells the caller how many bars the indicator will consume on the start without producting output.
+Additionally, there is the function `ti_xxx_start` associated with each indicator, which tells the caller how many bars the indicator will consume on the start without producing output.
 
-All the implementations of the indicator named xxx are put in `indicators/xxx.c` or `indicators/xxx.cc`, depending on the language, C or C++, respectively.
+All the implementations of the indicator xxx are put in `indicators/xxx.c` or `indicators/xxx.cc`, depending on the language, C or C++, respectively.
 
-The ultimate list of the indicators present in the library is contained in `indicators.yaml`. Each entry describes the following properties of an indicator:
+The ultimate list of the indicators present in the library is contained in `indicators.yaml`. Each entry describes the following properties of the indicator:
 - short name, elaborated name
 - type (meaningless classification, put here whatever you want)
 - inputs, options, outputs: their names
 - extra features: if there are *ref* or *stream* implementations provided
 
-Based on this list, the script called `codegen.py` generates the header file of all of the library, named `indicators.h`, and the runtime table of indicators, named `indicators_index.c`. This table fully replicates the data from `indicators.yaml` and adds the ability to query&run the indicator by name at runtime, feature that is heavily used in e.g. the Python binding.
+Based on this list, the script called `codegen.py` generates the header file of all of the library, named `indicators.h`, and the runtime table of indicators, named `indicators_index.c`. This table fully replicates the data from `indicators.yaml` and adds the ability to query&run the indicator by name at runtime, a feature which is heavily used in e.g. the Python binding.
 
-Another highly useful thing `codegen.py` does is the template generation for future indicator implementation: once it processes and entry and is unable to find neither of C and C++ corresponding implementation files, it generates a template. By default, it does so for a C++ implementation, but you may opt-in C with the `--old` switch.
+Another highly useful thing `codegen.py` does is the template generation for future indicator implementation: once it processes an entry and is unable to find neither of C and C++ corresponding implementation files, it generates a template. By default, it does so for a C++ implementation, but you may opt-in C with the `--old` switch.
 
 Implementing an indicator, it's important to handle basic errors, those which lead to a segfault or incorrect behavior. There are three constants defined: `TI_OK`, `TI_INVALID_OPTION`, `TI_OUT_OF_MEMORY`. Every function except of `ti_xxx_start` must return one of the three.
 
-As this is the heart of our technology, it's crucial to perform proper testing. There are the following test stages currently employed:
+As this library is the heart of our technology, it's crucial to perform proper testing. There are the following test stages currently employed:
 - benchmark2: verifies that all of the implementations produce the same results on a given series, and benchmarks the code
 - fuzzer: verifies the robustness by feeding in various options and trying to crash the indicator
 - smoke: verifies that the indicator produces the same result as the precomuted values in `tests/`
@@ -81,7 +81,7 @@ When naming inputs, options, and outputs, please stick to the following conventi
 - option names should generally be taken from the definition, with one exception: the lookback period is always named 'period', not 'length' or whatever
 - output names should start with the short name of the indicator
 
-Also, neither of them can start with a digit or contain spaces.
+Also, neither of them can start with a digit nor contain spaces.
 
 ## 5. Implement the indicator
 
@@ -99,11 +99,11 @@ There are several macros and data structures you might find useful:
 
 ## 6. Add a precomputed test
 
-Consider adding a precomputed testcase to `tests/extra.txt` if the author provides one. It's often not the case, and we currently don't do anything about it, but ultimately, we will need to resolve this one way or the other.
+Consider adding a precomputed testcase to `tests/extra.txt` if the author provides one. It's often not the case, and we currently don't do anything about it, but ultimately, we will need to resolve this in one way or another.
 
 ## 7. Test your implementation
 
-Make sure your implementation passes tests in debug mode. Unfortunately, our CI/CD server doesn't support libasan, so it's up to you to build and test this configuration.
+Make sure your implementation passes tests in debug mode. Unfortunately, our CI/CD server doesn't support libasan, so it's up to you to build and test this configuration. It will produce a readable error in case the sanitizers detect something.
 
 Build:
 
@@ -133,7 +133,7 @@ See older [PRs](https://github.com/hcmc-project/tulipindicators-private/pull/7) 
 
 ## 9. Wait for tests
 
-Wait for the tests to finish. By the way, our CI/CD server is configured in such a way that when testing a PR, it runs only the relevant tests from the test suite, based on the branch name: if the first word in the dash-separated third slash-separated part of the branch name is the name of an indicator, it is considered the current indicator and is the only one being tested. For example:
+Wait for the tests to finish. By the way, our CI/CD server is configured in such a way that when testing a PR, it runs only the relevant tests from the test suite, based on the branch name: if the first word in the dash-separated third slash-separated part of the branch name is the name of an indicator, it is considered the current indicator and is the only one being tested, for example:
 - `feature/DEV-230/sma` will run only tests for the sma indicator
 - `feature/DEV-230/sma-fix` will do so as well
 - `feature/DEV-230/fix-sma` won't do (until we've got an indicator named 'fix')
@@ -149,6 +149,6 @@ Update the [sheet](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31
 - [x] Tests are green
 - [x] Reference implementation complies with the spec
 - [x] Vectorized implementation goes in one pass and performs no unnecessary allocations
-- [x] Optimal data structures and algorithms used in both vectorized and streaming implementations
+- [x] Optimal data structures and algorithms are used in both vectorized and streaming implementations
 - [x] Naming conventions are respected in `indicators.yaml`
 - [x] Commit history is cleaned up
