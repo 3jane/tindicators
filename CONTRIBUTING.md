@@ -143,3 +143,12 @@ Therefore, you're encouraged to name the branches properly.
 ## 10. Wait for a review
 
 Update the [sheet](https://docs.google.com/spreadsheets/d/1WhdTc_AN-_KF_tgcG8B31Tgy6z-pR9rOv1Nr3dxLn5g/edit#gid=444645194) and ping **@ilya.p**.
+
+## 11. Checklist for a review
+
+- [ ] Tests are green
+- [ ] Reference implementation complies with the specification
+- [ ] Vectorized implementation goes in one pass and performs no unnecessary allocations
+- [ ] Both vectorized and streaming implementations use the optimal data structures and algorithms
+- [ ] Naming conventions are respected in `indicators.yaml`
+- [ ] Commit history is cleaned up
