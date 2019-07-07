@@ -71,3 +71,11 @@ struct ringbuf<0> {
         return ((it - buf.get()) + (M - pos)) % M;
     }
 };
+
+void step() {}
+
+template<class T, class... Ts>
+void step(T& arg, Ts&... args) {
+    arg.step();
+    step(args...);
+}
