@@ -20,8 +20,16 @@ struct ringbuf {
     TI_REAL buf[N+1] = {0};
     int pos = 1;
     operator TI_REAL() const { return buf[pos]; }
-    TI_REAL& operator[](int i) { return buf[(pos+i)%N]; }
-    TI_REAL operator[](int i) const { return buf[(pos+i)%N]; }
+    TI_REAL& operator[](int i) {
+        assert(i < N);
+        assert(i > -1);
+        return buf[(pos+i)%N];
+    }
+    TI_REAL operator[](int i) const {
+        assert(i < N);
+        assert(i > -1);
+        return buf[(pos+i)%N];
+    }
     void step() { pos = (N+pos-1) % N; }
 
     TI_REAL* phbegin() { return buf; }
@@ -45,8 +53,16 @@ struct ringbuf<0> {
         std::memset(buf.get(), 0, M*sizeof(TI_REAL));
     }
     operator TI_REAL() const { return buf[pos]; }
-    TI_REAL& operator[](int i) { return buf[(pos+i)%M]; }
-    TI_REAL operator[](int i) const { return buf[(pos+i)%M]; }
+    TI_REAL& operator[](int i) {
+        assert(i < M);
+        assert(i > -1);
+        return buf[(pos+i)%M];
+    }
+    TI_REAL operator[](int i) const {
+        assert(i < M);
+        assert(i > -1);
+        return buf[(pos+i)%M];
+    }
     void step() { pos = (M+pos-1) % M; }
 
     TI_REAL* phbegin() { return buf.get(); }
