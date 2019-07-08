@@ -23,12 +23,16 @@ struct ringbuf {
     TI_REAL& operator[](int i) {
         assert(i < N);
         assert(i > -1);
-        return buf[(pos+i)%N];
+        int pos_ = pos + i;
+        if (pos_ >= N) { pos_ -= N; }
+        return buf[pos_];
     }
     TI_REAL operator[](int i) const {
         assert(i < N);
         assert(i > -1);
-        return buf[(pos+i)%N];
+        int pos_ = pos + i;
+        if (pos_ >= N) { pos_ -= N; }
+        return buf[pos_];
     }
     void step() { pos = (N+pos-1) % N; }
 
@@ -56,12 +60,16 @@ struct ringbuf<0> {
     TI_REAL& operator[](int i) {
         assert(i < M);
         assert(i > -1);
-        return buf[(pos+i)%M];
+        int pos_ = pos + i;
+        if (pos_ >= M) { pos_ -= M; }
+        return buf[pos_];
     }
     TI_REAL operator[](int i) const {
         assert(i < M);
         assert(i > -1);
-        return buf[(pos+i)%M];
+        int pos_ = pos + i;
+        if (pos_ >= M) { pos_ -= M; }
+        return buf[pos_];
     }
     void step() { pos = (M+pos-1) % M; }
 
