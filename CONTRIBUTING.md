@@ -97,6 +97,8 @@ There are several macros and data structures you might find useful:
 - [localbuffer.h](./utils/localbuffer.h)
 - [buffer.h](./utils/buffer.h)
 
+Add a custom option setter in `benchmark2.c` if needed.
+
 ## 6. Add a precomputed test
 
 Consider adding a precomputed testcase to `tests/extra.txt` if the author provides one. It's often not the case, and we currently don't do anything about it, but ultimately, we will need to resolve this in one way or another.
