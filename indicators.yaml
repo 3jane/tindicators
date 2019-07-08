@@ -39,6 +39,7 @@ gf4: ["Gaussian Filter - 4 Poles", overlay, [real], [period], [gf4], [stream, re
 ehma: ["Exponential Hull Moving Average", overlay, [real], [period], [ehma], [stream, ref]]
 evwma: ["Elastic Volume Weighted Moving Average", overlay, [close, volume], [period, gamma], [evwma], [stream, ref]]
 lma: ["Leo Moving Average", overlay, [close], [period], [lma], [stream, ref]]
+pwma: ["Power Weighted Moving Average", overlay, [real], [period, power], [pwma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
