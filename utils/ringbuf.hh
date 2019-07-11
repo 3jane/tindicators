@@ -35,6 +35,7 @@ struct ringbuf {
         return buf[pos_];
     }
     void step() { pos = (N+pos-1) % N; }
+    ringbuf& operator=(TI_REAL x) { (*this)[0] = x; return *this; }
 
     TI_REAL* phbegin() { return buf; }
     TI_REAL* phend() { return buf + N; }
@@ -72,6 +73,7 @@ struct ringbuf<0> {
         return buf[pos_];
     }
     void step() { pos = (M+pos-1) % M; }
+    ringbuf& operator=(TI_REAL x) { (*this)[0] = x; return *this; }
 
     TI_REAL* phbegin() { return buf.get(); }
     TI_REAL* phend() { return buf.get() + M; }
