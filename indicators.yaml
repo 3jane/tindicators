@@ -43,6 +43,7 @@ pwma: ["Power Weighted Moving Average", overlay, [real], [period, power], [pwma]
 swma: ["Sine Weighted Moving Average", overlay, [real], [period], [swma], [stream, ref]]
 dwma: ["Double Weighted Moving Average", overlay, [real], [period], [dwma], [ref, stream]]
 shmma: ["Sharp Modified Moving Average", overlay, [real], [period], [shmma], [stream, ref]]
+ahma: ["Ahrens Moving Average", overlay, [real], [period], [ahma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
