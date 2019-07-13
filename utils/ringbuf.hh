@@ -18,7 +18,7 @@
 template<int N>
 struct ringbuf {
     TI_REAL buf[N] = {0};
-    int pos = 1;
+    int pos = 0;
     operator TI_REAL() const { return buf[pos]; }
     TI_REAL& operator[](int i) {
         assert(i < N);
