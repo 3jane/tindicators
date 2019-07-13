@@ -51,6 +51,7 @@ idwma: ["Inverse Distance Weighted Moving Average", overlay, [real], [period, ex
 emsd: ["Exponential Moving Standard Deviation", overlay, [real], [period, ma_period], [emsd], [stream, ref]]
 hwma: ["Henderson asymmetric filter", overlay, [real], [period], [hwma], [stream, ref]]
 hd: ["Homodyne Discriminator", indicator, [real], [], [hd], [stream, ref]]
+mgdyn: ["McGinley Dynamic", overlay, [real], [N], [mgdyn], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
