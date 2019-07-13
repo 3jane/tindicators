@@ -69,6 +69,7 @@ edcf: ["Ehlers Distance Coefficient Filter", overlay, [real], [length], [edcf], 
 frama: ["Fractal Adaptive Moving Average", overlay, [high, low], [period, average_period], [frama], [stream]]
 roof: ["The Roofing Filter", overlay, [real], [], [roof], [stream]]
 ssmooth: ["SuperSmoother Filter", overlay, [real], [], [ssmooth], [stream]]
+hf: ["Hampel Filter", overlay, [real], [period, threshold], [hf], [ref, stream]]
 
 # Momentum
 ad: ["Accumulation/Distribution Line", indicator, [high, low, close, volume], [], [ad], []]

@@ -300,6 +300,11 @@ void idwma_option_setter(double period, double* options) {
     options[1] = 2;
 }
 
+void hf_option_setter(double period, double* options) {
+    options[0] = 4 + (int)period/20;
+    options[1] = 0.5;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -350,6 +355,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "mhlma") == 0) { options_setter = mhlma_option_setter; }
     if (strcmp(info->name, "t3") == 0) { options_setter = t3_option_setter; }
     if (strcmp(info->name, "idwma") == 0) { options_setter = idwma_option_setter; }
+    if (strcmp(info->name, "hf") == 0) { options_setter = hf_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
