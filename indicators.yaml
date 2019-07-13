@@ -47,6 +47,7 @@ ahma: ["Ahrens Moving Average", overlay, [real], [period], [ahma], [stream, ref]
 t3: ["T3 Moving Average", overlay, [real], [period, v], [t3], [stream, ref]]
 mhlma: ["Middle-High-Low Moving Average", overlay, [real], [period, ma_period], [mhlsma, mhlema], [stream, ref]]
 cmi: ["Choppy Market Indicator", indicator, [high, low, close], [period], [cmi], [stream, ref]]
+idwma: ["Inverse Distance Weighted Moving Average", overlay, [real], [period, exponent], [idwma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
