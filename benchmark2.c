@@ -290,6 +290,11 @@ void mhlma_option_setter(double period, double* options) {
     options[1] = 10 + period / 4;
 }
 
+void emsd_option_setter(double period, double* options) {
+    options[0] = period;
+    options[1] = 10 + period / 4;
+}
+
 void t3_option_setter(double period, double* options) {
     options[0] = MIN(period, 10);
     options[1] = 1;
@@ -356,6 +361,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "t3") == 0) { options_setter = t3_option_setter; }
     if (strcmp(info->name, "idwma") == 0) { options_setter = idwma_option_setter; }
     if (strcmp(info->name, "hf") == 0) { options_setter = hf_option_setter; }
+    if (strcmp(info->name, "emsd") == 0) { options_setter = emsd_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
