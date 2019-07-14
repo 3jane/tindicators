@@ -32,8 +32,17 @@ typedef struct {
 } ti_buffer;
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern ti_buffer *ti_buffer_new(int size);
 extern void ti_buffer_free(ti_buffer *buffer);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 /* Pushes a new value, plus updates sum. */
 #define ti_buffer_push(BUFFER, VAL) \
