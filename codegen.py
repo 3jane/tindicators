@@ -3,6 +3,7 @@ import os.path
 import time
 from version import version
 import argparse
+import re
 
 
 parser = argparse.ArgumentParser(description='Generate the boilerplate for Tulip Indicators')
@@ -213,14 +214,13 @@ for indicator in indicators.items():
     name, (elab_name, type, inputs, options, outputs, features) = indicator
     file_path_c = os.path.join(path_prefix+'indicators', f'{name}.c')
     file_path_cc = os.path.join(path_prefix+'indicators', f'{name}.cc')
-    if os.path.exists(file_path_c) or os.path.exists(file_path_cc):
-        continue
 
     nl = '\n'
     unpack_options = '\n    '.join(f'const TI_REAL {opt} = options[{i}];' for i, opt in enumerate(options))
     unpack_inputs = '\n    '.join(f'TI_REAL const *const {inp} = inputs[{i}];' for i, inp in enumerate(inputs))
     unpack_outputs = '\n    '.join(f'TI_REAL *{outp} = outputs[{i}];' for i, outp in enumerate(outputs))
-    result = '\n'.join([
+
+    includes = [
         '#include "../indicators.h"',
         '#include "../utils/log.h"',
         '#include "../utils/minmax.h"',
@@ -228,7 +228,12 @@ for indicator in indicators.items():
         '#include "../utils/localbuffer.h"',
     ] if args.old else [
         '#include "../utils/ringbuf.hh"',
-    ]) + [
+        '',
+        '#include "<new>"',
+        '#include "<exception>"',
+    ])
+
+    base = [
         '',
         f'{declaration_start(name)} {{',
         f'    {unpack_options}',
@@ -236,7 +241,7 @@ for indicator in indicators.items():
         '    #error "return how shorter will the output be than the input"',
         '}',
         '',
-        f'{declaration_plain(name)} {{',
+        f'{declaration_plain(name)} try {{',
         f'    {unpack_inputs}',
         f'    {unpack_options}',
         f'    {unpack_outputs}',
@@ -246,7 +251,12 @@ for indicator in indicators.items():
         '    #error "vectorized implementation goes here"',
         '',
         '    return TI_OKAY;',
-        '}',
+        '} catch (std::bad_alloc& e) {',
+        '    return TI_OUT_OF_MEMORY;',
+        '}'
+    ]
+
+    ref = [
         '',
         f'{declaration_ref(name)} {{',
         f'    {unpack_inputs}',
@@ -259,6 +269,9 @@ for indicator in indicators.items():
         '',
         '    return TI_OKAY;',
         '}',
+    ]
+
+    stream = [
         '',
         'struct ti_stream {',
         '    int index;',
@@ -307,6 +320,13 @@ for indicator in indicators.items():
         '    *stream = realloc(*stream, sizeof(**stream) + sizeof(TI_REAL) * BUFFERS_SIZE(*stream));',
         '    if (!stream) { return TI_OUT_OF_MEMORY; }',
     ] if args.old else [
+        '',
+        '    try {',
+        '        #error "don\'t forget to initialize ringbuffers and any other storage"',
+        '    } catch (std::bad_alloc& e) {',
+        '        delete *stream;',
+        '        return TI_OUT_OF_MEMORY;',
+        '    }',
     ]) + [
         '',
         '    return TI_OKAY;',
@@ -334,11 +354,37 @@ for indicator in indicators.items():
         '',
         '    return TI_OKAY;',
         '}',
+    ]
 
-    ])
     path = file_path_c if args.old else file_path_cc
-    with open(path, 'w') as f:
-        print(f'codegen.py: indicators/{os.path.basename(path)}')
-        f.write(result)
-        os.system(f'git add -N {path}')
+    if not os.path.exists(file_path_c) and not os.path.exists(file_path_cc):
+        with open(path, 'w') as f:
+            print(f'codegen.py: indicators/{os.path.basename(path)}')
+            parts = includes + base + (ref if 'ref' in features else []) + (stream if 'stream' in features else [])
+            f.write('\n'.join(parts))
+            os.system(f'git add -N {path}')
+    else:
+        if os.path.exists(file_path_c):
+            with open(file_path_c) as f:
+                contents = f.read()
+        elif os.path.exists(file_path_cc):
+            with open(file_path_cc) as f:
+                contents = f.read()
 
+        should_add_ref = 'ref' in features and not re.search(f'ti_{name}_ref', contents)
+        should_add_stream = 'stream' in features and not re.search(f'ti_{name}_stream', contents)
+        tbd = (
+            (ref if should_add_ref else []) +
+            (stream if should_add_stream else [])
+        )
+
+    if tbd:
+        if os.path.exists(file_path_c) and not args.old:
+            print(f'codegen.py: renaming indicators/{os.path.basename(file_path_c)} -> indicators/{os.path.basename(path)}')
+            os.system(f'git mv "{file_path_c}" "{path}"')
+        with open(path, 'r') as f:
+            lines = f.readlines()
+        with open(path, 'a') as f:
+            print(f'codegen.py: adding{" ref" if should_add_ref else ""}{" stream" if should_add_stream else ""} to indicators/{os.path.basename(path)}')
+            f.write('\n'.join(['']+tbd))
+            os.system(f'git add {path}')
