@@ -229,8 +229,8 @@ for indicator in indicators.items():
     ] if args.old else [
         '#include "../utils/ringbuf.hh"',
         '',
-        '#include "<new>"',
-        '#include "<exception>"',
+        '#include <new>',
+        '#include <exception>',
     ])
 
     base = [
