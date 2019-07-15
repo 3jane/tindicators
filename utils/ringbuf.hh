@@ -44,6 +44,30 @@ struct ringbuf {
     }
 };
 
+template<>
+struct ringbuf<2> {
+    TI_REAL a1, a2;
+    operator TI_REAL() const { return a1; }
+    TI_REAL& operator[](int i) {
+        assert(i < N);
+        assert(i > -1);
+        return i == 0 ? a1 : a2;
+    }
+    TI_REAL operator[](int i) const {
+        assert(i < N);
+        assert(i > -1);
+        return i == 0 ? a1 : a2;
+    }
+    void step() { std::swap(a1, a2); }
+    ringbuf& operator=(TI_REAL x) { a1 = x; return *this; }
+
+    TI_REAL* phbegin() { return &a1; }
+    TI_REAL* phend() { return &a1 + 2; }
+    int iterator_to_age(TI_REAL* it) {
+        return it == &a2;
+    }
+};
+
 /* Runtime-sized, alloc'd at the heap */
 template<>
 struct ringbuf<0> {
