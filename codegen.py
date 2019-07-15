@@ -382,6 +382,36 @@ for indicator in indicators.items():
         if os.path.exists(file_path_c) and not args.old:
             print(f'codegen.py: renaming indicators/{os.path.basename(file_path_c)} -> indicators/{os.path.basename(path)}')
             os.system(f'git mv "{file_path_c}" "{path}"')
+            
+            with open(path, 'r') as f:
+                lines = f.readlines()
+
+            found_first_include = False
+            index_next_include = 0
+            for i in range(len(lines)):
+                if "#include" in lines[i]:
+                    found_first_include = True                            
+                elif found_first_include:
+                    index_next_include = i
+                    break
+            head_files = ['#include "../utils/log.h"\n',
+                          '#include "../utils/minmax.h"\n',
+                          '#include "../utils/ringbuf.hh"\n',
+                          '\n',
+                          '#include <new>\n',
+                          '#include <algorithm>\n']
+            first_part = lines[:index_next_include]
+            second_part = lines[index_next_include:]
+            for head_file in head_files:
+                if head_file is '\n':
+                    first_part += [head_file]
+                elif head_file not in lines:
+                    first_part += [head_file]
+            lines = first_part + second_part
+
+            with open(path, 'w') as f:
+                f.writelines(lines)              
+ 
         with open(path, 'r') as f:
             lines = f.readlines()
         with open(path, 'a') as f:
