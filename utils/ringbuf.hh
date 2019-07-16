@@ -34,13 +34,43 @@ struct ringbuf {
         if (pos_ >= N) { pos_ -= N; }
         return buf[pos_];
     }
-    void step() { pos = (N+pos-1) % N; }
-    ringbuf& operator=(TI_REAL x) { (*this)[0] = x; return *this; }
+    void step() {
+        pos -= 1;
+        if (pos == -1) { pos += N; }
+    }
+    void operator=(TI_REAL x) {
+        buf[pos] = x;
+    }
 
     TI_REAL* phbegin() { return buf; }
     TI_REAL* phend() { return buf + N; }
     int iterator_to_age(TI_REAL* it) {
+        assert(buf <= it && it < buf + N);
         return ((it - buf) + (N - pos)) % N;
+    }
+};
+
+template<>
+struct ringbuf<2> {
+    TI_REAL a1, a2;
+    operator TI_REAL() const { return a1; }
+    TI_REAL& operator[](int i) {
+        assert(i < N);
+        assert(i > -1);
+        return i == 0 ? a1 : a2;
+    }
+    TI_REAL operator[](int i) const {
+        assert(i < N);
+        assert(i > -1);
+        return i == 0 ? a1 : a2;
+    }
+    void step() { std::swap(a1, a2); }
+    void operator=(TI_REAL x) { a1 = x; }
+
+    TI_REAL* phbegin() { return &a1; }
+    TI_REAL* phend() { return &a1 + 2; }
+    int iterator_to_age(TI_REAL* it) {
+        return it == &a2;
     }
 };
 
@@ -58,13 +88,6 @@ struct ringbuf<0> {
         std::memset(buf.get(), 0, M*sizeof(TI_REAL));
     }
     operator TI_REAL() const { return buf[pos]; }
-    TI_REAL& operator[](int i) {
-        assert(i < M);
-        assert(i > -1);
-        int pos_ = pos + i;
-        if (pos_ >= M) { pos_ -= M; }
-        return buf[pos_];
-    }
     TI_REAL operator[](int i) const {
         assert(i < M);
         assert(i > -1);
@@ -72,12 +95,18 @@ struct ringbuf<0> {
         if (pos_ >= M) { pos_ -= M; }
         return buf[pos_];
     }
-    void step() { pos = (M+pos-1) % M; }
-    ringbuf& operator=(TI_REAL x) { (*this)[0] = x; return *this; }
+    void step() {
+        pos -= 1;
+        if (pos == -1) { pos += M; }
+    }
+    void operator=(TI_REAL x) {
+        buf[pos] = x;
+    }
 
     TI_REAL* phbegin() { return buf.get(); }
     TI_REAL* phend() { return buf.get() + M; }
     int iterator_to_age(TI_REAL* it) {
+        assert(buf.get() <= it && it < buf.get() + M);
         return ((it - buf.get()) + (M - pos)) % M;
     }
 };
