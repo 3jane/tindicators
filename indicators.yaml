@@ -158,6 +158,7 @@ atr: ["Average True Range", indicator, [high, low, close], [period], [atr], [str
 ce: ["Chandelier Exit", indicator, [high, low, close], [period, coef], [ce_high, ce_low], [stream, ref]]
 natr: ["Normalized Average True Range", indicator, [high, low, close], [period], [natr], []]
 tr: ["True Range", indicator, [high, low, close], [], [tr], []]
+ichi: ["Ichimoku", indicator, [high, low], [period9, period26, period52], [ichi_tenkan_sen, ichi_kijun_sen, ichi_senkou_span_A, ichi_senkou_span_B], [stream, ref]]
 
 # Volatility
 volatility: ["Annualized Historical Volatility", indicator, [real], [period], [volatility], []]
