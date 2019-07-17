@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <cstring>
+#include <algorithm>
+#include <iterator>
 
 /*
     Ring buffer: https://en.wikipedia.org/wiki/Circular_buffer
@@ -42,6 +44,33 @@ struct ringbuf {
         buf[pos] = x;
     }
 
+    template<class Cmp = std::less<TI_REAL>>
+    TI_REAL* find_max(int period) {
+        assert(period <= N);
+        assert(period > 0);
+
+        Cmp cmp;
+        using reverse = std::reverse_iterator<TI_REAL*>;
+
+        if (pos + period > N) {
+            const int size_part1 = N - pos;
+            const int size_part2 = period - size_part1;
+
+
+            auto it1 = std::max_element(reverse(buf + pos + size_part1), reverse(buf + pos), cmp);
+            auto it2 = std::max_element(reverse(buf + size_part2), reverse(buf), cmp);
+
+            if (!cmp(*it1, *it2)) { return it1.base()-1; }
+            else { return it2.base()-1; }
+        } else {
+            auto it = std::max_element(reverse(buf + pos + period), reverse(buf + pos), cmp);
+            return it.base()-1;
+        }
+    }
+    TI_REAL* find_min(int period) {
+        return find_max<std::greater<TI_REAL>>(period);
+    }
+
     TI_REAL* phbegin() { return buf; }
     TI_REAL* phend() { return buf + N; }
     int iterator_to_age(TI_REAL* it) {
@@ -55,17 +84,27 @@ struct ringbuf<2> {
     TI_REAL a1, a2;
     operator TI_REAL() const { return a1; }
     TI_REAL& operator[](int i) {
-        assert(i < N);
+        assert(i < 2);
         assert(i > -1);
         return i == 0 ? a1 : a2;
     }
     TI_REAL operator[](int i) const {
-        assert(i < N);
+        assert(i < 2);
         assert(i > -1);
         return i == 0 ? a1 : a2;
     }
     void step() { std::swap(a1, a2); }
     void operator=(TI_REAL x) { a1 = x; }
+
+    template<class Cmp = std::less<TI_REAL>>
+    TI_REAL* find_max(int period) {
+        if (a1 >= a2) { return &a1; }
+        else { return &a2; }
+    }
+    TI_REAL* find_min(int period) {
+        if (a1 <= a2) { return &a1; }
+        else { return &a2; }
+    }
 
     TI_REAL* phbegin() { return &a1; }
     TI_REAL* phend() { return &a1 + 2; }
@@ -105,6 +144,34 @@ struct ringbuf<0> {
 
     TI_REAL* phbegin() { return buf.get(); }
     TI_REAL* phend() { return buf.get() + M; }
+
+    template<class Cmp = std::less<TI_REAL>>
+    TI_REAL* find_max(int period) {
+        assert(period <= M);
+        assert(period > 0);
+
+        Cmp cmp;
+        using reverse = std::reverse_iterator<TI_REAL*>;
+
+        if (pos + period > M) {
+            const int size_part1 = M - pos;
+            const int size_part2 = period - size_part1;
+
+
+            auto it1 = std::max_element(reverse(buf.get() + pos + size_part1), reverse(buf.get() + pos), cmp);
+            auto it2 = std::max_element(reverse(buf.get() + size_part2), reverse(buf.get()), cmp);
+
+            if (!cmp(*it1, *it2)) { return it1.base()-1; }
+            else { return it2.base()-1; }
+        } else {
+            auto it = std::max_element(reverse(buf.get() + pos + period), reverse(buf.get() + pos), cmp);
+            return it.base()-1;
+        }
+    }
+    TI_REAL* find_min(int period) {
+        return find_max<std::greater<TI_REAL>>(period);
+    }
+
     int iterator_to_age(TI_REAL* it) {
         assert(buf.get() <= it && it < buf.get() + M);
         return ((it - buf.get()) + (M - pos)) % M;
