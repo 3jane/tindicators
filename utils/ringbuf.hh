@@ -119,7 +119,8 @@ struct ringbuf<0> {
     int M;
     int pos = 0;
     std::unique_ptr<TI_REAL[]> buf;
-    explicit ringbuf(int M_ = 0) { resize(M_); }
+    explicit ringbuf() = default;
+    explicit ringbuf(int M_) { resize(M_); }
     void resize(int M_) {
         assert(M_ > 0);
         M = M_;
