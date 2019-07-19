@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <signal.h>
 
 
 double optionsd[] = {-20,-1,0,.7,100}; // 5 options are the maximum computable amount given TI_MAXINDPARAMS = 10
@@ -194,9 +195,16 @@ void stress(const ti_indicator_info *info) {
 }
 
 
+void flush_stdout() {
+    printf("Segmentation fault\n");
+    fflush(stdout);
+    exit(1);
+}
+
 int main(int argc, char *argv[])
 {
     banner();
+    signal(SIGSEGV, flush_stdout);
 
     if (argc > 1) {
         const ti_indicator_info *info = ti_find_indicator(argv[1]);
