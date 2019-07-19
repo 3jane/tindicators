@@ -16,6 +16,7 @@
 # Moving averages
 dema: ["Double Exponential Moving Average", overlay, [real], [period], [dema], []]
 ema: ["Exponential Moving Average", overlay, [real], [period], [ema], []]
+hfsma: ["Hampel Filter on Simple Moving Average", overlay, [real], [sma_period, k, threshold], [hfsma], [ref, stream]]
 hma: ["Hull Moving Average", overlay, [real], [period], [hma], []]
 hfema: ["Hampel Filter on Exponential Moving Average", overlay, [real], [ema_period, k, threshold], [hfema], [ref, stream]]
 sma: ["Simple Moving Average", overlay, [real], [period], [sma], [stream]]
