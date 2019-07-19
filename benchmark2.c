@@ -204,6 +204,12 @@ void tsi_option_setter(double period, double* options) {
     options[1] = 3;
 }
 
+void hfema_option_setter(double period, double* options) {
+    options[0] = period;
+    options[1] = (int)period/2;
+    options[2] = 1;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -233,6 +239,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "kc") == 0) { options_setter = kc_option_setter; }
     if (strcmp(info->name, "copp") == 0) { options_setter = copp_option_setter; }
     if (strcmp(info->name, "posc") == 0) { options_setter = posc_option_setter; }
+    if (strcmp(info->name, "hfema") == 0) { options_setter = hfema_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
