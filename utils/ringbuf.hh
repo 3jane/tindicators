@@ -121,6 +121,7 @@ struct ringbuf<0> {
     std::unique_ptr<TI_REAL[]> buf;
     explicit ringbuf(int M_ = 0) { resize(M_); }
     void resize(int M_) {
+        assert(M_ > 0);
         M = M_;
         pos = 0;
         buf = std::make_unique<TI_REAL[]>(M);
