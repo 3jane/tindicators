@@ -180,7 +180,11 @@ struct ringbuf<0> {
     }
 };
 
-void step() {}
+
+template<class T>
+void step(T& arg) {
+    arg.step();
+}
 
 template<class T, class... Ts>
 void step(T& arg, Ts&... args) {
