@@ -125,7 +125,7 @@ target_link_libraries(smoke indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/smoke" path)
 add_test(NAME smoke COMMAND ${VALGRIND_CMD} ${path} ${indicator_name} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(fuzzer fuzzer.c)
+add_executable(fuzzer fuzzer.cc)
 target_link_libraries(fuzzer indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/fuzzer" path)
 add_test(NAME fuzzer COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
