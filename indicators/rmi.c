@@ -54,12 +54,12 @@ int ti_rmi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         ++i;
     }
     {
-        *rmi++ = gains_ema / (gains_ema + losses_ema) * 100.;
+        *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
     for (; i < size; ++i) {
         gains_ema = (MAX(0, real[i] - real[i-(int)lookback_period]) - gains_ema) * 2. / (1 + period) + gains_ema;
         losses_ema = (MAX(0, real[i-(int)lookback_period] - real[i]) - losses_ema) * 2. / (1 + period) + losses_ema;
-        *rmi++ = gains_ema / (gains_ema + losses_ema) * 100.;
+        *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
 
     return TI_OKAY;
@@ -167,7 +167,7 @@ int ti_rmi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         gains_ema = MAX(0, real[i] - var1);
         losses_ema = MAX(0, var1 - real[i]);
 
-        *rmi++ = gains_ema / (gains_ema + losses_ema) * 100.;
+        *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
         ++i, ++progress;
     }
     for (; i < size; ++i, ++progress) {
@@ -176,7 +176,7 @@ int ti_rmi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         gains_ema = (MAX(0, real[i] - var1) - gains_ema) * 2. / (period + 1) + gains_ema;
         losses_ema = (MAX(0, var1 - real[i]) - losses_ema) * 2. / (period + 1) + losses_ema;
 
-        *rmi++ = gains_ema / (gains_ema + losses_ema) * 100.;
+        *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
 
     stream->progress = progress;

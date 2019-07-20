@@ -49,7 +49,7 @@ int ti_emv(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         TI_REAL hl = (high[i] + low[i]) * 0.5;
         TI_REAL br = volume[i] / 10000.0 / (high[i] - low[i]);
 
-        *output++ = (hl - last) / br;
+        *output++ = hl - last ? (hl - last) / br : 0;
         last = hl;
     }
 

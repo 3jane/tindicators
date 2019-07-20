@@ -67,7 +67,7 @@ int ti_mass(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
             ema2 = ema2 * per1 + ema * per;
 
             if (i >= 16) {
-                ti_buffer_push(sum, ema/ema2);
+                ti_buffer_push(sum, ema ? ema/ema2 : 0);
                 if (i >= 16 + period - 1) {
                     *output++ = sum->sum;
                 }

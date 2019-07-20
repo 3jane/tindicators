@@ -52,7 +52,7 @@ int ti_stochrsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
 
     smooth_up /= period;
     smooth_down /= period;
-    TI_REAL r = 100.0 * (smooth_up / (smooth_up + smooth_down));
+    TI_REAL r = smooth_up ? 100.0 * (smooth_up / (smooth_up + smooth_down)) : 0;
     ti_buffer_push(rsi, r);
 
     TI_REAL min = r;
@@ -67,7 +67,7 @@ int ti_stochrsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
         smooth_up = (upward-smooth_up) * per + smooth_up;
         smooth_down = (downward-smooth_down) * per + smooth_down;
 
-        r = 100.0 * (smooth_up / (smooth_up + smooth_down));
+        r = smooth_up ? 100.0 * (smooth_up / (smooth_up + smooth_down)) : 0;
 
         if (r > max) {
             max = r;

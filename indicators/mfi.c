@@ -68,7 +68,7 @@ int ti_mfi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         ytyp = typ;
 
         if (i >= period) {
-            *output++ = up->sum / (up->sum + down->sum) * 100.0;
+            *output++ = up->sum ? up->sum / (up->sum + down->sum) * 100.0 : 0;
         }
     }
 

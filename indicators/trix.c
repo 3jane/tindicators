@@ -68,7 +68,7 @@ int ti_trix(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         ema2 = (ema1-ema2) * per + ema2;
         const TI_REAL last = ema3;
         ema3 = (ema2-ema3) * per + ema3;
-        *output++ = (ema3-last)/ema3 * 100.0;
+        *output++ = ema3 ? (ema3-last)/ema3 * 100.0 : 0;
     }
 
 

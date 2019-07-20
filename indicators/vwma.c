@@ -50,7 +50,7 @@ int ti_vwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         vsum += volume[i];
     }
 
-    *output++ = sum / vsum;
+    *output++ = sum ? sum / vsum : 0;
 
     for (i = period; i < size; ++i) {
         sum += input[i] * volume[i];
@@ -58,7 +58,7 @@ int ti_vwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         vsum += volume[i];
         vsum -= volume[i-period];
 
-        *output++ = sum / vsum;
+        *output++ = sum ? sum / vsum : 0;
     }
 
     assert(output - outputs[0] == size - ti_vwma_start(options));

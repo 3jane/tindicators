@@ -57,12 +57,12 @@ int ti_natr(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
 
     TI_REAL val = sum / period;
-    *output++ = 100 * (val) / close[period-1];
+    *output++ = val ? 100 * (val) / close[period-1] : 0;
 
     for (i = period; i < size; ++i) {
         CALC_TRUERANGE();
         val = (truerange-val) * per + val;
-        *output++ = 100 * (val) / close[i];
+        *output++ = val ? 100 * (val) / close[i] : 0;
     }
 
 

@@ -55,7 +55,7 @@ int ti_ppo(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     for (i = 1; i < size; ++i) {
         short_ema = (input[i]-short_ema) * short_per + short_ema;
         long_ema = (input[i]-long_ema) * long_per + long_ema;
-        const TI_REAL out = 100.0 * (short_ema - long_ema) / long_ema;
+        const TI_REAL out = short_ema - long_ema ? 100.0 * (short_ema - long_ema) / long_ema : 0;
 
         *ppo++ = out;
     }

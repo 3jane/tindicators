@@ -22,6 +22,7 @@ int ti_frama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     TI_REAL *frama = outputs[0];
 
     if (period < 1) { return TI_INVALID_OPTION; }
+    if (average_period < 2) { return TI_INVALID_OPTION; }
     if ((int)period % 2 != 0) { return TI_INVALID_OPTION; }
     if (size <= ti_frama_start(options)) { return TI_OKAY; }
 

@@ -51,7 +51,7 @@ int ti_rsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     smooth_up /= period;
     smooth_down /= period;
-    *output++ = 100.0 * (smooth_up / (smooth_up + smooth_down));
+    *output++ = smooth_up ? 100.0 * (smooth_up / (smooth_up + smooth_down)) : 0;
 
     for (i = period+1; i < size; ++i) {
         const TI_REAL upward = input[i] > input[i-1] ? input[i] - input[i-1] : 0;
@@ -60,7 +60,7 @@ int ti_rsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         smooth_up = (upward-smooth_up) * per + smooth_up;
         smooth_down = (downward-smooth_down) * per + smooth_down;
 
-        *output++ = 100.0 * (smooth_up / (smooth_up + smooth_down));
+        *output++ = smooth_up ? 100.0 * (smooth_up / (smooth_up + smooth_down)) : 0;
     }
 
     assert(output - outputs[0] == size - ti_rsi_start(options));

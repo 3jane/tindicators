@@ -50,7 +50,7 @@ int ti_di(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     TI_REAL dmdown = 0;
 
     int i;
-    for (i = 1; i < period; ++i) {
+    for (i = 1; i < period && i < size; ++i) {
         TI_REAL truerange;
         CALC_TRUERANGE();
         atr += truerange;
@@ -63,9 +63,10 @@ int ti_di(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     }
 
 
-    *plus_di++  = 100.0 * dmup / atr;
-    *minus_di++ = 100.0 * dmdown / atr;
-
+    if (i == period) {
+        *plus_di++  = dmup ? 100.0 * dmup / atr : 0;
+        *minus_di++ = dmdown ? 100.0 * dmdown / atr : 0;
+    }
 
     for (i = period; i < size; ++i) {
         TI_REAL truerange;
@@ -80,8 +81,8 @@ int ti_di(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
         dmup = dmup * per + dp;
         dmdown = dmdown * per + dm;
 
-        *plus_di++  = 100.0 * dmup / atr;
-        *minus_di++ = 100.0 * dmdown / atr;
+        *plus_di++  = dmup ? 100.0 * dmup / atr : 0;
+        *minus_di++ = dmdown ? 100.0 * dmdown / atr : 0;
     }
 
 

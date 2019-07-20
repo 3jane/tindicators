@@ -63,7 +63,7 @@ int ti_cci(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
             TI_REAL cci = acc * scale;
             cci *= .015;
-            cci = (today-avg)/cci;
+            if (cci) { cci = (today-avg)/cci; }
             *output++ = cci;
         }
     }

@@ -57,7 +57,7 @@ int ti_cvi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     for (i = period*2-1; i < size; ++i) {
         val = ((high[i]-low[i])-val) * per + val;
         const TI_REAL old = lag->vals[lag->index];
-        *output++ = 100.0 * (val - old) / old;
+        *output++ = val - old ? 100.0 * (val - old) / old : 0;
         ti_buffer_qpush(lag, val);
     }
 

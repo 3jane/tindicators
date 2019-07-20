@@ -44,7 +44,7 @@ int ti_marketfi(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
 
     int i;
     for (i = 0; i < size; ++i) {
-        *output++ = (high[i] - low[i]) / volume[i];
+        *output++ = volume[i] ? (high[i] - low[i]) / volume[i] : 0;
     }
 
     assert(output - outputs[0] == size - ti_marketfi_start(options));

@@ -58,7 +58,7 @@ int ti_cmf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         period_ad_sum += CHAIKIN_AD(i);
         period_volume += volume[i];
 
-        *output++ = period_ad_sum / period_volume;
+        *output++ = (period_volume ? period_ad_sum / period_volume : 0);
 
         period_ad_sum -= CHAIKIN_AD(i-period+1);
         period_volume -= volume[i-period+1];

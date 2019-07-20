@@ -24,6 +24,7 @@
 #include "../indicators.h"
 #include "../utils/localbuffer.h"
 #include "truerange.h"
+#include "../utils/log.h"
 
 
 int ti_kc_start(TI_REAL const *options) {

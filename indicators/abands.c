@@ -48,7 +48,7 @@ int ti_abands(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI
     if (period < 1) { return TI_INVALID_OPTION; }
     if (size <= ti_abands_start(options)) return TI_OKAY;
 
-    #define MULT(i) (4. * (high[i] - low[i]) / (high[i] + low[i]))
+    #define MULT(i) (high[i] + low[i] > 0 ? 4. * (high[i] - low[i]) / (high[i] + low[i]) : 0)
 
     TI_REAL per = 1. / period;
 

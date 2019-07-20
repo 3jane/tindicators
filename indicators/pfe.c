@@ -23,6 +23,7 @@
 
 #include "../indicators.h"
 #include "../utils/buffer.h"
+#include "../utils/log.h"
 
 int ti_pfe_start(TI_REAL const *options) {
     const TI_REAL period = options[0];
@@ -42,6 +43,7 @@ int ti_pfe(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     TI_REAL *pfe = outputs[0];
 
     if (period < 1) { return TI_INVALID_OPTION; }
+    if (ema_period < 1) { return TI_INVALID_OPTION; }
     if (size <= ti_pfe_start(options)) { return TI_OKAY; }
 
     #define SIGN(expr) ((expr) > 0 ? 1. : -1.)
@@ -126,6 +128,7 @@ int ti_pfe_stream_new(TI_REAL const *options, ti_stream **stream) {
     const TI_REAL ema_period = options[1];
 
     if (period < 1) { return TI_INVALID_OPTION; }
+    if (ema_period < 1) { return TI_INVALID_OPTION; }
 
     *stream = malloc(sizeof(ti_stream) + sizeof(TI_REAL) * (int)period * 2);
 

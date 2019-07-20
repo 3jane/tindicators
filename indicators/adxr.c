@@ -66,6 +66,7 @@ int ti_adxr(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         TI_REAL dm_diff = fabs(di_up - di_down);
         TI_REAL dm_sum = di_up + di_down;
         TI_REAL dx = dm_diff / dm_sum * 100;
+        if (dm_sum == 0) { dx = 0; }
 
         adx += dx;
     }
@@ -88,6 +89,7 @@ int ti_adxr(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         TI_REAL dm_diff = fabs(di_up - di_down);
         TI_REAL dm_sum = di_up + di_down;
         TI_REAL dx = dm_diff / dm_sum * 100;
+        if (dm_sum == 0) { dx = 0; }
 
 
         if (i-period < period-2) {

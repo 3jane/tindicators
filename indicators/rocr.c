@@ -40,7 +40,7 @@ int ti_rocr(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i;
     for (i = period; i < size; ++i) {
-        *output++ = input[i] / input[i-period];
+        *output++ = input[i-period] ? input[i] / input[i-period] : 0;
     }
 
     assert(output - outputs[0] == size - ti_rocr_start(options));

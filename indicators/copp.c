@@ -23,6 +23,7 @@
 
 #include "../indicators.h"
 #include "../utils/localbuffer.h"
+#include "../utils/log.h"
 
 #include <stdio.h>
 
@@ -75,7 +76,7 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         BUFFER_AT(var1, buffers, price, -roc_shorter_period);
         BUFFER_AT(var2, buffers, price, -roc_longer_period);
         BUFFER_AT(var3, buffers, price, 0);
-        BUFFER_PUSH(buffers, rocs, ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100.);
+        BUFFER_PUSH(buffers, rocs, var1 && var2 ? ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100. : 0.);
 
         BUFFER_AT(var1, buffers, rocs, 0);
         flat_rocs_sum += var1;
@@ -90,7 +91,7 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         BUFFER_AT(var1, buffers, price, -roc_shorter_period);
         BUFFER_AT(var2, buffers, price, -roc_longer_period);
         BUFFER_AT(var3, buffers, price, 0);
-        BUFFER_PUSH(buffers, rocs, ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100.);
+        BUFFER_PUSH(buffers, rocs, var1 && var2 ? ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100. : 0.);
 
         BUFFER_AT(var1, buffers, rocs, 0);
         BUFFER_AT(var2, buffers, rocs, -wma_period);
@@ -190,7 +191,7 @@ int ti_copp_stream_new(TI_REAL const *options, ti_stream **stream) {
     (*stream)->index = TI_INDICATOR_COPP_INDEX;
     (*stream)->progress = -ti_copp_start(options);
 
-    memcpy(&(*stream)->options, options, sizeof(TI_REAL[4]));
+    memcpy(&(*stream)->options, options, sizeof(TI_REAL[3]));
 
     (*stream)->state.denominator = 1. / (wma_period * (wma_period + 1) / 2);
     (*stream)->state.rocs_per = 100. / 2.;
@@ -230,7 +231,7 @@ int ti_copp_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         BUFFER_AT(var1, stream, price, -roc_shorter_period);
         BUFFER_AT(var2, stream, price, -roc_longer_period);
         BUFFER_AT(var3, stream, price, 0);
-        BUFFER_PUSH(stream, rocs, ((var3 / var1 - 1) + (var3 / var2 - 1)) * rocs_per);
+        BUFFER_PUSH(stream, rocs, var1 && var2 ? ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100. : 0.);
 
         BUFFER_AT(var1, stream, rocs, 0);
         flat_rocs_sum += var1;
@@ -245,7 +246,7 @@ int ti_copp_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         BUFFER_AT(var1, stream, price, -roc_shorter_period);
         BUFFER_AT(var2, stream, price, -roc_longer_period);
         BUFFER_AT(var3, stream, price, 0);
-        BUFFER_PUSH(stream, rocs, ((var3 / var1 - 1) + (var3 / var2 - 1)) * rocs_per);
+        BUFFER_PUSH(stream, rocs, var1 && var2 ? ((var3 / var1 - 1) + (var3 / var2 - 1)) / 2. * 100. : 0.);
 
         BUFFER_AT(var1, stream, rocs, 0);
         BUFFER_AT(var2, stream, rocs, -wma_period);
