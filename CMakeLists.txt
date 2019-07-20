@@ -24,13 +24,14 @@ install(TARGETS indicators
 target_compile_options(indicators
     PUBLIC
     $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
-        -Wall -Wextra -Wshadow -Wconversion -g3 -ggdb -O2 -Werror=sequence-point -Werror=vla
+        -Wall -Wextra -Wshadow -g3 -ggdb -O2 -Werror=sequence-point -Werror=vla
+        -Wno-unused-variable -Wno-float-conversion -Wno-maybe-uninitialized -Wno-unused-value -Wno-unused-parameter
         $<$<COMPILE_LANGUAGE:CXX>:-std=c++17 -pedantic>
         $<$<COMPILE_LANGUAGE:C>:-std=c99 -pedantic>
         $<$<CONFIG:DEBUG>:
             -fsanitize=undefined -fsanitize=address -fsanitize=leak>
         $<$<CONFIG:RELEASE>:
-            -ffast-math>>
+            -ffast-math -fno-finite-math-only>>
     $<$<C_COMPILER_ID:MSVC>:
         /std:c++17
         $<$<CONFIG:RELEASE>:
