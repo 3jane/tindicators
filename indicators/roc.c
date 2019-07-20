@@ -40,7 +40,7 @@ int ti_roc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i;
     for (i = period; i < size; ++i) {
-        *output++ = (input[i] - input[i-period]) / input[i-period];
+        *output++ = input[i-period] ? (input[i] - input[i-period]) / input[i-period] : 0;
     }
 
     assert(output - outputs[0] == size - ti_roc_start(options));

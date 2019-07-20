@@ -88,9 +88,9 @@ int ti_ultosc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI
         }
 
         if (i >= long_period) {
-            const TI_REAL first = 4 * bp_short_sum / r_short_sum;
-            const TI_REAL second = 2 * bp_medium_sum / r_medium_sum;
-            const TI_REAL third = 1 * bp_buf->sum / r_buf->sum;
+            const TI_REAL first = bp_short_sum ? 4 * bp_short_sum / r_short_sum : 0;
+            const TI_REAL second = bp_medium_sum ? 2 * bp_medium_sum / r_medium_sum : 0;
+            const TI_REAL third = bp_buf->sum ? 1 * bp_buf->sum / r_buf->sum : 0;
             const TI_REAL ult = (first + second + third) * 100.0 / 7.0;
             *output++ = ult;
         }

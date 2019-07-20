@@ -58,7 +58,7 @@ int ti_vosc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     {
         const TI_REAL savg = short_sum * short_div;
         const TI_REAL lavg = long_sum * long_div;
-        *output++ = 100.0 * (savg - lavg) / lavg;
+        *output++ = (savg - lavg) ? 100.0 * (savg - lavg) / lavg : 0;
     }
 
     for (i = long_period; i < size; ++i) {
@@ -70,7 +70,7 @@ int ti_vosc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
         const TI_REAL savg = short_sum * short_div;
         const TI_REAL lavg = long_sum * long_div;
-        *output++ = 100.0 * (savg - lavg) / lavg;
+        *output++ = (savg - lavg) ? 100.0 * (savg - lavg) / lavg : 0;
     }
 
     assert(output - outputs[0] == size - ti_vosc_start(options));

@@ -45,13 +45,11 @@ int START(TI_REAL const *options) { \
  \
 int FUN(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) { \
     const TI_REAL *in1 = inputs[0]; \
+    TI_REAL *output = outputs[0]; \
  \
     (void)options; \
  \
-    TI_REAL *output = outputs[0]; \
- \
-    int i; \
-    for (i = 0; i < size; ++i) { \
+    for (int i = 0; i < size; ++i) { \
         output[i] = (OP); \
     } \
  \

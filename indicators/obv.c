@@ -38,12 +38,16 @@ int ti_obv(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     (void)options;
 
     TI_REAL *output = outputs[0];
-    TI_REAL sum = 0;
-    *output++ = sum;
 
-    TI_REAL prev = close[0];
-    int i;
-    for (i = 1; i < size; ++i) {
+    TI_REAL sum = 0;
+    TI_REAL prev;
+
+    int i = 0;
+    for (; i < 1 && i < size; ++i) {
+        prev = close[i];
+        *output++ = sum;
+    }
+    for (; i < size; ++i) {
         if (close[i] > prev) {
             sum += volume[i];
         } else if (close[i] < prev) {

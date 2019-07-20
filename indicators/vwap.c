@@ -50,14 +50,14 @@ int ti_vwap(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         den += volume[i];
     }
     if (i > 0 && progress == 1) {
-        *vwap++ = num / den;
+        *vwap++ = num ? num / den : 0;
     }
     for (; i < size; ++i, ++progress) {
         num += (high[i] + low[i] + close[i]) / 3. * volume[i]
             - (high[i-(int)period] + low[i-(int)period] + close[i-(int)period]) / 3. * volume[i-(int)period];
         den += volume[i] - volume[i-(int)period];
 
-        *vwap++ = num / den;
+        *vwap++ = num ? num / den : 0;
     }
 
     return TI_OKAY;
@@ -180,7 +180,7 @@ int ti_vwap_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         den += volume[i];
     }
     if (i > 0 && progress == 1) {
-        *vwap++ = num / den;
+        *vwap++ = num ? num / den : 0;
     }
     for (; i < size; ++i, ++progress) {
         BUFFER_PUSH(stream, high, high[i]);
@@ -196,7 +196,7 @@ int ti_vwap_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         num += (high[i] + low[i] + close[i]) / 3. * volume[i] - (var1 + var2 + var3) / 3. * var4;
         den += volume[i] - var4;
 
-        *vwap++ = num / den;
+        *vwap++ = num ? num / den : 0;
     }
 
     stream->progress = progress;

@@ -21,7 +21,7 @@
  *
  */
 
-
+#include "../utils/log.h"
 
 
 #ifndef POSTPROC

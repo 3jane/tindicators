@@ -100,7 +100,7 @@ int ti_vhf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         }
 
         /* Calculate it. */
-        *output++ = fabs(max - min) / sum;
+        *output++ = fabs(max - min) ? fabs(max - min) / sum : 0;
     }
 
     assert(output - outputs[0] == size - ti_vhf_start(options));

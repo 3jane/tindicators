@@ -43,22 +43,19 @@ int ti_cmo(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     TI_REAL up_sum = 0, down_sum = 0;
 
-    int i;
-    for (i = 1; i <= period; ++i) {
+    int i = 1;
+    for (; i < period && i < size; ++i) {
         up_sum += UPWARD(i);
         down_sum += DOWNWARD(i);
     }
-
-    *output++ = 100 * (up_sum - down_sum) / (up_sum + down_sum);
-
-    for (i = period+1; i < size; ++i) {
-        up_sum -= UPWARD(i-period);
-        down_sum -= DOWNWARD(i-period);
-
+    for (; i < size; ++i) {
         up_sum += UPWARD(i);
         down_sum += DOWNWARD(i);
 
-        *output++ = 100 * (up_sum - down_sum) / (up_sum + down_sum);
+        *output++ = up_sum + down_sum ? 100 * (up_sum - down_sum) / (up_sum + down_sum) : 0;
+
+        up_sum -= UPWARD(i-period+1);
+        down_sum -= DOWNWARD(i-period+1);
     }
 
     assert(output - outputs[0] == size - ti_cmo_start(options));

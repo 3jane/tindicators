@@ -86,7 +86,7 @@ int ti_smi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         ema_r_num = ema_s_num = close[i] - 0.5 * (hh + ll);
         ema_r_den = ema_s_den = hh - ll;
 
-        *smi++ = 100 * ema_s_num / (0.5 * ema_s_den);
+        *smi++ = ema_s_den ? 100 * ema_s_num / (0.5 * ema_s_den) : 0;
     }
     for (; i < size; ++i, ++progress) {
         if (hh_idx == progress - q_period) {
@@ -124,7 +124,7 @@ int ti_smi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         ema_r_den = ((hh - ll) - ema_r_den) * (2. / (1. + r_period)) + ema_r_den;
         ema_s_den = (ema_r_den - ema_s_den) * (2. / (1. + s_period)) + ema_s_den;
 
-        *smi++ = 100. * ema_s_num / (0.5 * ema_s_den);
+        *smi++ = ema_s_den ? 100 * ema_s_num / (0.5 * ema_s_den) : 0;
     }
 
     return TI_OKAY;
@@ -295,7 +295,7 @@ int ti_smi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         ema_r_num = ema_s_num = close[i] - 0.5 * (hh + ll);
         ema_r_den = ema_s_den = hh - ll;
 
-        *smi++ = 100 * ema_s_num / (0.5 * ema_s_den);
+        *smi++ = ema_s_den ? 100 * ema_s_num / (0.5 * ema_s_den) : 0;
     }
     for (; i < size; ++i, ++progress) {
         BUFFER_PUSH(stream, low, low[i]);
@@ -336,7 +336,7 @@ int ti_smi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         ema_r_den = ((hh - ll) - ema_r_den) * (2. / (1. + r_period)) + ema_r_den;
         ema_s_den = (ema_r_den - ema_s_den) * (2. / (1. + s_period)) + ema_s_den;
 
-        *smi++ = 100. * ema_s_num / (0.5 * ema_s_den);
+        *smi++ = ema_s_den ? 100. * ema_s_num / (0.5 * ema_s_den) : 0;
     }
 
 

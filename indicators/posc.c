@@ -75,7 +75,7 @@ int ti_posc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
             }
         }
 
-        ema = (close[i] - the_min) / (the_max - the_min) * 100.;
+        ema = (close[i] - the_min) ? (close[i] - the_min) / (the_max - the_min) * 100. : 0;
         *posc++ = ema;
 
         ++i;
@@ -100,7 +100,7 @@ int ti_posc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
             }
         }
 
-        TI_REAL osc = (close[i] - the_min) / (the_max - the_min) * 100.;
+        TI_REAL osc = (close[i] - the_min) ? (close[i] - the_min) / (the_max - the_min) * 100. : 0;
         ema = (osc - ema) * 2. / (1 + ema_period) + ema;
         *posc++ = ema;
     }
@@ -256,7 +256,7 @@ int ti_posc_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
                 the_min = var1 + j * b;
             }
         }
-        ema = (close[i] - the_min) / (the_max - the_min) * 100.;
+        ema = (close[i] - the_min) ? (close[i] - the_min) / (the_max - the_min) * 100. : 0;
         *posc++ = ema;
 
         ++i;
@@ -288,7 +288,7 @@ int ti_posc_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
                 the_min = var1 + j * b;
             }
         }
-        TI_REAL osc = (close[i] - the_min) / (the_max - the_min) * 100.;
+        TI_REAL osc = (close[i] - the_min) ? (close[i] - the_min) / (the_max - the_min) * 100. : 0;
         ema = (osc - ema) * 2. / (1 + ema_period) + ema;
         *posc++ = ema;
 

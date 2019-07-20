@@ -81,7 +81,7 @@ with open(path_prefix+'indicators.h', 'w') as f:
         '#endif',
         '',
         '#ifndef _WIN32',
-        '    #define DONTOPTIMIZE __attribute__((optimize("O3")))',
+        '    #define DONTOPTIMIZE __attribute__((optimize("-fno-fast-math")))',
         '#else',
         '    #define DONTOPTIMIZE __pragma("", off)',
         '#endif',

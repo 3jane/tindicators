@@ -22,6 +22,7 @@
  */
 
 #include "../indicators.h"
+#include "../utils/log.h"
 
 
 
@@ -47,7 +48,7 @@ int ti_pvi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     int i;
     for (i = 1; i < size; ++i) {
 
-        if (volume[i] > volume[i-1]) {
+        if (volume[i] > volume[i-1] && volume[i-1] > 0) {
             pvi += ((close[i] - close[i-1])/close[i-1]) * pvi;
         }
         *output++ = pvi;

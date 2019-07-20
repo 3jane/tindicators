@@ -70,7 +70,7 @@ int ti_vidya(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     if (long_period - 1 < size) {
         TI_REAL short_stddev = sqrt(short_sum2 * short_div - (short_sum * short_div) * (short_sum * short_div));
         TI_REAL long_stddev = sqrt(long_sum2 * long_div - (long_sum * long_div) * (long_sum * long_div));
-        TI_REAL k = short_stddev / long_stddev;
+        TI_REAL k = short_stddev ? short_stddev / long_stddev : 0;
         if (k != k) k = 0; /* In some conditions it works out that we take the sqrt(-0.0), which gives NaN.
                               That implies that k should be zero. */
         k *= alpha;
@@ -94,7 +94,7 @@ int ti_vidya(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
         {
             TI_REAL short_stddev = sqrt(short_sum2 * short_div - (short_sum * short_div) * (short_sum * short_div));
             TI_REAL long_stddev = sqrt(long_sum2 * long_div - (long_sum * long_div) * (long_sum * long_div));
-            TI_REAL k = short_stddev / long_stddev;
+            TI_REAL k = short_stddev ? short_stddev / long_stddev : 0;
             if (k != k) k = 0;
             k *= alpha;
             val = (input[i]-val) * k + val;

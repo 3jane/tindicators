@@ -24,13 +24,14 @@ install(TARGETS indicators
 target_compile_options(indicators
     PUBLIC
     $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
-        -Wall -Wextra -Wshadow -Wconversion -g3 -ggdb -O2 -Werror=sequence-point -Werror=vla
+        -Wall -Wextra -Wshadow -g3 -ggdb -O2 -Werror=sequence-point -Werror=vla
+        -Wno-unused-variable -Wno-float-conversion -Wno-maybe-uninitialized -Wno-unused-value -Wno-unused-parameter
         $<$<COMPILE_LANGUAGE:CXX>:-std=c++17 -pedantic>
         $<$<COMPILE_LANGUAGE:C>:-std=c99 -pedantic>
         $<$<CONFIG:DEBUG>:
             -fsanitize=undefined -fsanitize=address -fsanitize=leak>
         $<$<CONFIG:RELEASE>:
-            -ffast-math>>
+            -ffast-math -fno-finite-math-only>>
     $<$<C_COMPILER_ID:MSVC>:
         /std:c++17
         $<$<CONFIG:RELEASE>:
@@ -82,13 +83,11 @@ else()
 endif()
 
 
-if (NOT "${indicator_name}" STREQUAL "")
-    find_program(VALGRIND_CMD valgrind)
-    if (NOT "${VALGRIND_CMD}" STREQUAL "VALGRIND_CMD-NOTFOUND")
-        set(VALGRIND_CMD ${VALGRIND_CMD} --error-exitcode=1)
-    else()
-        set(VALGRIND_CMD "")
-    endif()
+find_program(VALGRIND_CMD valgrind)
+if (NOT "${VALGRIND_CMD}" STREQUAL "VALGRIND_CMD-NOTFOUND")
+    set(VALGRIND_CMD ${VALGRIND_CMD} --error-exitcode=1)
+else()
+    set(VALGRIND_CMD "")
 endif()
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(VALGRIND_CMD "")
@@ -125,7 +124,7 @@ target_link_libraries(smoke indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/smoke" path)
 add_test(NAME smoke COMMAND ${VALGRIND_CMD} ${path} ${indicator_name} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(fuzzer fuzzer.c)
+add_executable(fuzzer fuzzer.cc)
 target_link_libraries(fuzzer indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/fuzzer" path)
 add_test(NAME fuzzer COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
@@ -139,7 +138,11 @@ file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/benchmark" path)
 add_executable(benchmark2 benchmark2.c ${utils})
 target_link_libraries(benchmark2 indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/benchmark2" path)
-add_test(NAME benchmark2 COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
+if (NOT "${indicator_name}" STREQUAL "")
+    add_test(NAME benchmark2 COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
+else()
+    add_test(NAME benchmark2 COMMAND                 ${path} ${indicator_name})
+endif()
 
 add_custom_target(check COMMAND ${VALGRIND_CMD} CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND})
 

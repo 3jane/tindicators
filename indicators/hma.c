@@ -28,7 +28,7 @@
 int ti_hma_start(TI_REAL const *options) {
     const int period = (int)options[0];
     const int periodsqrt = (int)(sqrt(period));
-    return period + periodsqrt - 2;
+    return period >= 0 ? period + periodsqrt - 2 : -1;
 }
 
 

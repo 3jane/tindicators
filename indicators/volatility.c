@@ -23,7 +23,7 @@
 
 #include "../indicators.h"
 
-#define CHANGE(i) (input[i]/input[i-1]-1.0)
+#define CHANGE(i) (input[i-1] ? input[i]/input[i-1]-1.0 : 0)
 
 
 

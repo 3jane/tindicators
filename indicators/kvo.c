@@ -70,7 +70,7 @@ int ti_kvo(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
         cm += dm;
 
-        const TI_REAL vf = volume[i] * fabs(dm / cm * 2 - 1) * 100 * (trend ? 1.0 : -1.0);
+        const TI_REAL vf = dm ? volume[i] * fabs(dm / cm * 2 - 1) * 100 * (trend ? 1.0 : -1.0) : 0;
 
         if (i == 1) {
             short_ema = vf;

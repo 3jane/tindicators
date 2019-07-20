@@ -315,7 +315,7 @@ int ti_ce_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
     TI_REAL HP;
 
     int i = 0;
-    if (progress == -period+1) { // initialize
+    if (progress == -period+1 && i < size) { // initialize
         atr = high[0] - low[0];
 
         PUSH(*LP_HP, low[0], high[0]);
