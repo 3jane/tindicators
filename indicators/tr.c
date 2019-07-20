@@ -42,10 +42,12 @@ int ti_tr(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     TI_REAL *output = outputs[0];
     TI_REAL truerange;
 
-    output[0] = high[0] - low[0];
 
-    int i;
-    for (i = 1; i < size; ++i) {
+    int i = 0;
+    for (; i < 1 && i < size; ++i) {
+        output[i] = high[i] - low[i];
+    }
+    for (; i < size; ++i) {
         CALC_TRUERANGE();
         output[i] = truerange;
     }
