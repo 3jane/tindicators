@@ -48,24 +48,25 @@ int ti_kc(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     // moving average - multiple * atr
     // where atr is ema of trueranges
 
-    if (period < 1) {
-        return TI_INVALID_OPTION;
-    }
-    if (multiple < 0) {
-        return TI_INVALID_OPTION;
-    }
+    if (period < 1) { return TI_INVALID_OPTION; }
+    if (multiple < 0) { return TI_INVALID_OPTION; }
 
     const TI_REAL per = 2 / ((TI_REAL)period + 1);
 
-    TI_REAL price_ema = close[0];
-    TI_REAL tr_ema = high[0] - low[0];
-
-    *kc_lower++ = price_ema - multiple * tr_ema;
-    *kc_middle++ = price_ema;
-    *kc_upper++ = price_ema + multiple * tr_ema;
-
     TI_REAL truerange;
-    for (int i = 1; i < size; ++i) {
+    TI_REAL price_ema;
+    TI_REAL tr_ema;
+
+    int i = 0;
+    for (; i < 1 && i < size; ++i) {
+        price_ema = close[i];
+        tr_ema = high[i] - low[i];
+
+        *kc_lower++ = price_ema - multiple * tr_ema;
+        *kc_middle++ = price_ema;
+        *kc_upper++ = price_ema + multiple * tr_ema;
+    }
+    for (; i < size; ++i) {
         price_ema = (close[i] - price_ema) * per + price_ema;
 
         CALC_TRUERANGE();
