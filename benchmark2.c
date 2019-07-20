@@ -215,6 +215,10 @@ void rema_option_setter(double period, double* options) {
     options[1] = 0.5;
 }
 
+void lf_option_setter(double period, double* options) {
+    options[0] = 0.8;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -246,6 +250,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "posc") == 0) { options_setter = posc_option_setter; }
     if (strcmp(info->name, "hfema") == 0) { options_setter = hfema_option_setter; }
     if (strcmp(info->name, "rema") == 0) { options_setter = rema_option_setter; }
+    if (strcmp(info->name, "lf") == 0) { options_setter = lf_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
