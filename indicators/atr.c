@@ -158,7 +158,7 @@ int ti_atr_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
 
     if (stream->progress < 1) {
-        if (stream->progress == start) {
+        if (stream->progress == start && i < size) {
             /* first bar of input */
             stream->sum = high[0] - low[0];
             stream->last_close = close[0];
