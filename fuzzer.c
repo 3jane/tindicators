@@ -66,40 +66,13 @@ do { \
 int errors_cnt = 0;
 
 void check_output(const ti_indicator_info *info, int size, TI_REAL const *const *inputs, TI_REAL const * options, TI_REAL *const *outputs) {
-
-    int s;
-    s = info->start(options);
-
-    int o;
-    for (o = 0; o < info->outputs; ++o) {
-
-        TI_REAL max = 0;
-        TI_REAL min = 0;
-
-        int i;
-        for (i = 0; i < size - s; ++i) {
-            const TI_REAL op = outputs[o][i];
-            const TI_REAL in = inputs[0][i+s];
-
-            max = in > max ? in : max;
-            min = in < min ? in : min;
-
-            switch (info->type) {
-
-                default:
-                    break;
-
-                    // It doesn't make any sense: for instance, in Keltner Channels,
-                    // if we don't restrict the user with the range of allowed multipler values,
-                    // given multiplier=100, the lower and upper bands will easily exceed these bounds
-                // case TI_TYPE_OVERLAY:
-                    if (op > max * 1.5 + 2 || op < min * 0.5 - 2) {
-                        DUMP_STATE();
-                        printf("\nERROR Output is out of range for input: input: %f output: %f\n", in, op);
-                        errors_cnt += 1;
-                        exit(1);
-                    }
-                    break;
+    int start = info->start(options);
+    for (int out_idx = 0; out_idx < info->outputs; ++out_idx) {
+        for (int i = 0; i < size - start; ++i) {
+            const TI_REAL op = outputs[out_idx][i];
+            if (!isfinite(op)) {
+                printf(" isfinite assertion failed\n");
+                return 1;
             }
         }
 
