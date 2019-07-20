@@ -188,7 +188,7 @@ int ti_pfe_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
     int progress = stream->progress;
 
     int i = 0;
-    if (progress == -period) {
+    if (progress == -period && i < size) {
         PUSH_NONFULL(buffer, real[i], 0);
         ++i, ++progress;
     } else {}
