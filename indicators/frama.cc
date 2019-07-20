@@ -296,7 +296,7 @@ int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         TI_REAL N1 = (max1 - min1) / (period / 2);
         TI_REAL N2 = (max2 - min2) / (period / 2);
 
-        TI_REAL dimen;
+        TI_REAL dimen = 0;
         if (N1 > 0 && N2 > 0 && N3 > 0) { dimen = (log(N1 + N2) - log(N3)) / log(2.); }
 
         TI_REAL alpha = exp(w * (dimen - 1));
