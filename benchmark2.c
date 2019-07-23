@@ -34,7 +34,7 @@
 #include "utils/testing.h"
 #include "utils/minmax.h"
 
-#define INSIZE 4000
+#define INSIZE 400
 #define MIN_PERIOD 4
 #define MAX_PERIOD 150
 #define LOOPS 10
