@@ -1,4 +1,5 @@
 #include "../indicators.h"
+#include <new>
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 
@@ -102,9 +103,7 @@ int ti_frama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     return TI_OKAY;
 }
 
-struct ti_stream {
-    int index;
-    int progress;
+struct ti_frama_stream : ti_stream {
 
     struct {
         TI_REAL period;
@@ -139,46 +138,48 @@ int ti_frama_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (period < 1) { return TI_INVALID_OPTION; }
     if ((int)period % 2 != 0) { return TI_INVALID_OPTION; }
 
-    *stream = new(std::nothrow) ti_stream;
-    if (!stream) { return TI_OUT_OF_MEMORY; }
+    ti_frama_stream *ptr = new(std::nothrow) ti_frama_stream();
+    if (!ptr) { return TI_OUT_OF_MEMORY; }
+    *stream = ptr;
 
-    (*stream)->index = TI_INDICATOR_FRAMA_INDEX;
-    (*stream)->progress = -ti_frama_start(options);
+    ptr->index = TI_INDICATOR_FRAMA_INDEX;
+    ptr->progress = -ti_frama_start(options);
 
-    (*stream)->options.period = period;
-    (*stream)->options.average_period = average_period;
+    ptr->options.period = period;
+    ptr->options.average_period = average_period;
 
-    (*stream)->constants.w = log(2.0 / (1.0 + average_period));
+    ptr->constants.w = log(2.0 / (1.0 + average_period));
 
     return TI_OKAY;
 }
 
 void ti_frama_stream_free(ti_stream *stream) {
-    delete stream;
+    delete static_cast<ti_frama_stream*>(stream);
 }
 
 int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
+    ti_frama_stream *ptr = static_cast<ti_frama_stream*>(stream);
     TI_REAL const *high = inputs[0];
     TI_REAL const *low = inputs[1];
     TI_REAL *frama = outputs[0];
-    int progress = stream->progress;
-    TI_REAL period = stream->options.period; // N in the paper
-    TI_REAL average_period = stream->options.average_period;
+    int progress = ptr->progress;
+    TI_REAL period = ptr->options.period; // N in the paper
+    TI_REAL average_period = ptr->options.average_period;
 
-    std::deque<TI_REAL> &high_store = stream->high_store;
-    std::deque<TI_REAL> &low_store = stream->low_store;
+    std::deque<TI_REAL> &high_store = ptr->high_store;
+    std::deque<TI_REAL> &low_store = ptr->low_store;
 
-    TI_REAL w = stream->constants.w;
-    TI_REAL filt = stream->state.filt;
+    TI_REAL w = ptr->constants.w;
+    TI_REAL filt = ptr->state.filt;
 
-    TI_REAL max1 = stream->state.max1;
-    TI_REAL max2 = stream->state.max2;
-    TI_REAL min1 = stream->state.min1;
-    TI_REAL min2 = stream->state.min2;
-    int max1_idx = stream->state.max1_idx;
-    int max2_idx = stream->state.max2_idx;
-    int min1_idx = stream->state.min1_idx;
-    int min2_idx = stream->state.min2_idx;
+    TI_REAL max1 = ptr->state.max1;
+    TI_REAL max2 = ptr->state.max2;
+    TI_REAL min1 = ptr->state.min1;
+    TI_REAL min2 = ptr->state.min2;
+    int max1_idx = ptr->state.max1_idx;
+    int max2_idx = ptr->state.max2_idx;
+    int min1_idx = ptr->state.min1_idx;
+    int min2_idx = ptr->state.min2_idx;
 
     int i = 0;
     for (; i < size && progress == 0; ++i, ++progress) {
@@ -307,17 +308,17 @@ int ti_frama_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         *frama++ = filt;
     }
 
-    stream->progress = progress;
-    stream->state.filt = filt;
+    ptr->progress = progress;
+    ptr->state.filt = filt;
 
-    stream->state.max1 = max1;
-    stream->state.max2 = max2;
-    stream->state.min1 = min1;
-    stream->state.min2 = min2;
-    stream->state.max1_idx = max1_idx;
-    stream->state.max2_idx = max2_idx;
-    stream->state.min1_idx = min1_idx;
-    stream->state.min2_idx = min2_idx;
+    ptr->state.max1 = max1;
+    ptr->state.max2 = max2;
+    ptr->state.min1 = min1;
+    ptr->state.min2 = min2;
+    ptr->state.max1_idx = max1_idx;
+    ptr->state.max2_idx = max2_idx;
+    ptr->state.min1_idx = min1_idx;
+    ptr->state.min2_idx = min2_idx;
 
     return TI_OKAY;
 }

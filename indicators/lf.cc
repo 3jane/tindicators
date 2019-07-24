@@ -1,4 +1,5 @@
 #include "../indicators.h"
+#include <new>
 #include "../utils/localbuffer.h"
 #include "../utils/log.h"
 
@@ -40,9 +41,7 @@ int ti_lf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     return TI_OKAY;
 }
 
-struct ti_stream {
-    int index;
-    int progress;
+struct ti_lf_stream : ti_stream {
 
     struct {
         TI_REAL gamma;
@@ -65,31 +64,33 @@ int ti_lf_stream_new(TI_REAL const *options, ti_stream **stream) {
 
     if (gamma < 0) { return TI_INVALID_OPTION; }
 
-    *stream = new(std::nothrow) ti_stream();
-    if (!*stream) { return TI_OUT_OF_MEMORY; }
+    ti_lf_stream *ptr = new(std::nothrow) ti_lf_stream();
+    if (!ptr) { return TI_OUT_OF_MEMORY; }
+    *stream = ptr;
 
-    (*stream)->index = TI_INDICATOR_LF_INDEX;
-    (*stream)->progress = -ti_lf_start(options);
+    ptr->index = TI_INDICATOR_LF_INDEX;
+    ptr->progress = -ti_lf_start(options);
 
-    (*stream)->options.gamma = gamma;
+    ptr->options.gamma = gamma;
 
     return TI_OKAY;
 }
 
 void ti_lf_stream_free(ti_stream *stream) {
-    delete stream;
+    delete static_cast<ti_lf_stream*>(stream);
 }
 
 int ti_lf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
+    ti_lf_stream *ptr = static_cast<ti_lf_stream*>(stream);
     TI_REAL const *const real = inputs[0];
     TI_REAL *lf = outputs[0];
-    int progress = stream->progress;
-    TI_REAL gamma = stream->options.gamma;
+    int progress = ptr->progress;
+    TI_REAL gamma = ptr->options.gamma;
 
-    TI_REAL L0 = stream->state.L0;
-    TI_REAL L1 = stream->state.L1;
-    TI_REAL L2 = stream->state.L2;
-    TI_REAL L3 = stream->state.L3;
+    TI_REAL L0 = ptr->state.L0;
+    TI_REAL L1 = ptr->state.L1;
+    TI_REAL L2 = ptr->state.L2;
+    TI_REAL L3 = ptr->state.L3;
 
     int i = 0;
     for (; i < size; ++i, ++progress) {
@@ -106,11 +107,11 @@ int ti_lf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
         *lf++ = (L0 + 2.*L1 + 2.*L2 + L3) / 6.;
     }
 
-    stream->progress = progress;
-    stream->state.L0 = L0;
-    stream->state.L1 = L1;
-    stream->state.L2 = L2;
-    stream->state.L3 = L3;
+    ptr->progress = progress;
+    ptr->state.L0 = L0;
+    ptr->state.L1 = L1;
+    ptr->state.L2 = L2;
+    ptr->state.L3 = L3;
 
     return TI_OKAY;
 }
