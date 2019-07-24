@@ -158,7 +158,7 @@ void run_one(FILE *fp, const char* target_name, int is_regression_test) {
 
 
     if (info->indicator_ref) {
-        printf("running \t%s%-*s... ", info->name, 16-strlen(info->name), "_ref");
+        printf("running \t%s%-*s... ", info->name, (int)(16-strlen(info->name)), "_ref");
         const clock_t ts_start = clock();
         const int ret = info->indicator_ref(input_size, (const double * const*)inputs, options, outputs_ref);
         const clock_t ts_end = clock();
@@ -180,7 +180,7 @@ void run_one(FILE *fp, const char* target_name, int is_regression_test) {
 
 
     if (info->stream_new) {
-        printf("running \t%s%-*s... ", info->name, 16-strlen(info->name), "_stream_1");
+        printf("running \t%s%-*s... ", info->name, (int)(16-strlen(info->name)), "_stream_1");
         const clock_t ts_start = clock();
 
         ti_stream *stream = 0;
@@ -226,7 +226,7 @@ void run_one(FILE *fp, const char* target_name, int is_regression_test) {
 
 
     if (info->stream_new) {
-        printf("running \t%s%-*s... ", info->name, 16-strlen(info->name), "_stream_all");
+        printf("running \t%s%-*s... ", info->name, (int)(16-strlen(info->name)), "_stream_all");
         const clock_t ts_start = clock();
 
         ti_stream *stream = 0;

@@ -278,11 +278,11 @@ void bench(const ti_indicator_info *info) {
             static TI_REAL *outputs_ref[TI_MAXINDPARAMS];
             static TI_REAL *outputs_stream_all[TI_MAXINDPARAMS];
             static TI_REAL *outputs_stream_1[TI_MAXINDPARAMS];
-            for (int i = 0; i < info->outputs; ++i) {
-                outputs[i] = outputs_mem[0][i];
-                outputs_ref[i] = outputs_mem[1][i];
-                outputs_stream_all[i] = outputs_mem[2][i];
-                outputs_stream_1[i] = outputs_mem[3][i];
+            for (int j = 0; j < info->outputs; ++j) {
+                outputs[j] = outputs_mem[0][j];
+                outputs_ref[j] = outputs_mem[1][j];
+                outputs_stream_all[j] = outputs_mem[2][j];
+                outputs_stream_1[j] = outputs_mem[3][j];
             }
             options_setter(period, options);
 
@@ -292,7 +292,7 @@ void bench(const ti_indicator_info *info) {
 
             {
                 start_ts = clock();
-                const int ret = info->indicator(INSIZE, inputs, options, outputs);
+                const int ret = info->indicator(INSIZE, (const TI_REAL * const*)inputs, options, outputs);
                 end_ts = clock();
                 elapsed_plain += end_ts - start_ts;
                 if (ret != TI_OKAY) {
@@ -303,7 +303,7 @@ void bench(const ti_indicator_info *info) {
 
             if (info->indicator_ref) {
                 start_ts = clock();
-                const int ret = info->indicator_ref(INSIZE, inputs, options, outputs_ref);
+                const int ret = info->indicator_ref(INSIZE, (const TI_REAL * const*)inputs, options, outputs_ref);
                 end_ts = clock();
                 elapsed_ref += end_ts - start_ts;
                 if (ret != TI_OKAY) {
@@ -326,7 +326,7 @@ void bench(const ti_indicator_info *info) {
                 ti_stream *stream;
                 const int ret = info->stream_new(options, &stream);
                 start_ts = clock();
-                ti_stream_run(stream, INSIZE, inputs, outputs_stream_all);
+                ti_stream_run(stream, INSIZE, (const TI_REAL * const*)inputs, outputs_stream_all);
                 end_ts = clock();
                 ti_stream_free(stream);
                 elapsed_stream_all += end_ts - start_ts;
@@ -348,7 +348,7 @@ void bench(const ti_indicator_info *info) {
 
             if (info->stream_new) {
                 ti_stream *stream;
-                const int ret = info->stream_new(options, &stream);
+                int ret = info->stream_new(options, &stream);
                 TI_REAL *inputs_[TI_MAXINDPARAMS] = {0};
                 TI_REAL *outputs_[TI_MAXINDPARAMS] = {0};
                 for (int j = 0; j < info->inputs; ++j) {
@@ -362,9 +362,9 @@ void bench(const ti_indicator_info *info) {
                     for (int j = 0; j < info->outputs; ++j) {
                         outputs_[j] = outputs_stream_1[j] + ti_stream_get_progress(stream);
                     }
-                    const int ret = ti_stream_run(stream, 1, inputs_, outputs_);
+                    ret = ti_stream_run(stream, 1, (const TI_REAL * const*)inputs_, outputs_);
                     if (ret != TI_OKAY) {
-                        printf("%s_stream_new returned %i, exiting\n", info->name);
+                        printf("%s_stream_new returned %i, exiting\n", info->name, ret);
                         exit(2);
                     }
                 }
@@ -405,7 +405,7 @@ int main(int argc, char** argv) {
 
     if (argc > 1) {
         for (int i = 1; i < argc; ++i) {
-            ti_indicator_info *info = ti_find_indicator(argv[i]);
+            const ti_indicator_info *info = ti_find_indicator(argv[i]);
             if (!info) {
                 printf("indicator %s not found\n", argv[i]);
                 exit(3);
