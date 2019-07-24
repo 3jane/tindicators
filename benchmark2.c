@@ -388,7 +388,7 @@ void bench(const ti_indicator_info *info) {
 
     #define MS(elapsed) (int)(elapsed * 1000. / CLOCKS_PER_SEC)
     const int iterations = LOOPS * (MAX_PERIOD - MIN_PERIOD + 1);
-    #define PERFORMANCE(elapsed) (int)(0 ? 0 : (iterations * INSIZE) / MS(elapsed) / 1000.)
+    #define PERFORMANCE(elapsed) (int)(MS(elapsed) ? (iterations * INSIZE) / MS(elapsed) / 1000. : 0)
 
     // mfps = million floats per second
     printf("\r");
