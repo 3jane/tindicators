@@ -59,7 +59,7 @@ int ti_hfema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
         TI_REAL candidate = price[k];
         *hfema++ = fabs(candidate - median_price) <= threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(price[2*k]);
+        rankedprice.erase(rankedprice.find(price[2*k]));
     }
 
     return TI_OKAY;
@@ -204,7 +204,7 @@ int ti_hfema_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         TI_REAL candidate = price[k];
         *hfema++ = fabs(candidate - median_price) <= threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(price[2*k]);
+        rankedprice.erase(rankedprice.find(price[2*k]));
     }
 
     ptr->progress = progress;
