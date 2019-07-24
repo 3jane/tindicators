@@ -1,4 +1,5 @@
 #include "../indicators.h"
+#include <new>
 #include "../utils/ringbuf.hh"
 #include "../utils/log.h"
 
@@ -58,7 +59,7 @@ int ti_hfema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
         TI_REAL candidate = price[k];
         *hfema++ = fabs(candidate - median_price) <= threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(price[2*k]);
+        rankedprice.erase(rankedprice.find(price[2*k]));
     }
 
     return TI_OKAY;
@@ -109,9 +110,7 @@ int ti_hfema_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options,
     return TI_OKAY;
 }
 
-struct ti_stream {
-    int index;
-    int progress;
+struct ti_hfema_stream : ti_stream {
 
     struct {
         int ema_period;
@@ -140,19 +139,20 @@ int ti_hfema_stream_new(TI_REAL const *options, ti_stream **stream) {
     if (k < 1) { return TI_INVALID_OPTION; }
     if (threshold < 0) { return TI_INVALID_OPTION; }
 
-    *stream = new(std::nothrow) ti_stream();
-    if (!*stream) { return TI_OUT_OF_MEMORY; }
+    ti_hfema_stream *ptr = new(std::nothrow) ti_hfema_stream();
+    if (!ptr) { return TI_OUT_OF_MEMORY; }
+    *stream = ptr;
 
-    (*stream)->index = TI_INDICATOR_HFEMA_INDEX;
-    (*stream)->progress = -ti_hfema_start(options);
+    ptr->index = TI_INDICATOR_HFEMA_INDEX;
+    ptr->progress = -ti_hfema_start(options);
 
-    (*stream)->options.ema_period = ema_period;
-    (*stream)->options.k = k;
-    (*stream)->options.threshold = threshold;
+    ptr->options.ema_period = ema_period;
+    ptr->options.k = k;
+    ptr->options.threshold = threshold;
 
     try {
-        (*stream)->state.a.resize(2*k+1);
-        (*stream)->state.price.resize(2*k+1);
+        ptr->state.a.resize(2*k+1);
+        ptr->state.price.resize(2*k+1);
     } catch (std::bad_alloc& e) {
         delete *stream;
         return TI_OUT_OF_MEMORY;
@@ -162,21 +162,22 @@ int ti_hfema_stream_new(TI_REAL const *options, ti_stream **stream) {
 }
 
 void ti_hfema_stream_free(ti_stream *stream) {
-    delete stream;
+    delete static_cast<ti_hfema_stream*>(stream);
 }
 
 int ti_hfema_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
+    ti_hfema_stream *ptr = static_cast<ti_hfema_stream*>(stream);
     TI_REAL const *const real = inputs[0];
     TI_REAL *hfema = outputs[0];
-    int progress = stream->progress;
-    int ema_period = stream->options.ema_period;
-    int k = stream->options.k;
-    TI_REAL threshold = stream->options.threshold;
+    int progress = ptr->progress;
+    int ema_period = ptr->options.ema_period;
+    int k = ptr->options.k;
+    TI_REAL threshold = ptr->options.threshold;
 
-    TI_REAL ema = stream->state.ema;
-    auto &price = stream->state.price;
-    auto &rankedprice = stream->state.rankedprice;
-    auto &a = stream->state.a;
+    TI_REAL ema = ptr->state.ema;
+    auto &price = ptr->state.price;
+    auto &rankedprice = ptr->state.rankedprice;
+    auto &a = ptr->state.a;
 
     int i = 0;
     for (; progress < -2*k+1 && i < size; ++i, ++progress, step(price)) {
@@ -203,11 +204,11 @@ int ti_hfema_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
         TI_REAL candidate = price[k];
         *hfema++ = fabs(candidate - median_price) <= threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(price[2*k]);
+        rankedprice.erase(rankedprice.find(price[2*k]));
     }
 
-    stream->progress = progress;
-    stream->state.ema = ema;
+    ptr->progress = progress;
+    ptr->state.ema = ema;
 
     return TI_OKAY;
 }

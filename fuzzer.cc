@@ -8,8 +8,8 @@
 #include <vector>
 #include "utils/log.h"
 
-#define M 5
-double g_options[5] = {-20, -1, 0, .7, 20};
+double g_options[] = {-20, 0, .7, 5};
+#define M (sizeof(g_options) / sizeof(g_options[0]))
 
 #define N 210
 TI_REAL g_input[TI_MAXINDPARAMS][N];
