@@ -81,7 +81,7 @@ struct ringbuf {
 
 template<>
 struct ringbuf<2> {
-    TI_REAL a1, a2;
+    TI_REAL a1 = 0, a2 = 0;
     operator TI_REAL() const { return a1; }
     TI_REAL& operator[](int i) {
         assert(i < 2);
