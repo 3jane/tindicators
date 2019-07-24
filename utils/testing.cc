@@ -21,8 +21,11 @@
  *
  */
 
-
 #include "testing.h"
+#include "log.h"
+
+#include <algorithm>
+#include <vector>
 
 /*********** FUNCTIONS **********/
 
@@ -51,15 +54,37 @@ void print_array(const TI_REAL *a, int size) {
 }
 
 int compare_answers(const ti_indicator_info *info, TI_REAL *answers[], TI_REAL *outputs[], int answer_size, int output_size) {
-    int i;
     int failures = 0;
-    for (i = 0; i < info->outputs; ++i) {
-        if (!equal_arrays(answers[i], outputs[i], answer_size, output_size)) {
-            ++failures;
-            printf("output '%s' mismatch\n", info->output_names[i]);
-            printf("> expected: "); print_array(answers[i], answer_size); printf("\n");
-            printf("> got:      "); print_array(outputs[i], output_size); printf("\n");
+    for (int i = 0; i < info->outputs; ++i) {
+        // if (!equal_arrays(answers[i], outputs[i], answer_size, output_size)) {
+        //     ++failures;
+        //     printf("output '%s' mismatch\n", info->output_names[i]);
+        //     printf("> expected: "); print_array(answers[i], answer_size); printf("\n");
+        //     printf("> got:      "); print_array(outputs[i], output_size); printf("\n");
+        // }
+        const int maxsz = std::max(answer_size, output_size);
+        std::vector<int> good(maxsz);
+        int any_bad = 0;
+        for (int j = 0; j < maxsz; ++j) {
+            good[j] = (j < answer_size && j < output_size && equal_reals(answers[i][j], outputs[i][j]));
+            any_bad += !good[j];
         }
+        if (any_bad) {
+            printf("output '%s' mismatch\n", info->output_names[i]);
+            printf("> expected: [%i] = {", answer_size);
+            for (int j = 0; j < answer_size; ++j) {
+                if (good[j]) { printf("\033[22;37m%.3f\033[0m%s", answers[i][j], (j < answer_size-1 ? "," : "")); }
+                else { printf("\033[1;31m%.3f\033[0m%s", answers[i][j], (j < answer_size-1 ? "," : "")); }
+            }
+            printf("}\n");
+            printf("> got:      [%i] = {", output_size);
+            for (int j = 0; j < output_size; ++j) {
+                if (good[j]) { printf("\033[22;37m%.3f\033[0m%s", outputs[i][j], (j < output_size-1 ? "," : "")); }
+                else { printf("\033[1;31m%.3f\033[0m%s", outputs[i][j], (j < output_size-1 ? "," : "")); }
+            }
+            printf("}\n");
+        }
+        failures += bool(any_bad);
     }
     return failures;
 }
