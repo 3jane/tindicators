@@ -6,6 +6,7 @@
 #include <cstring>
 #include <algorithm>
 #include <iterator>
+#include <functional>
 
 /*
     Ring buffer: https://en.wikipedia.org/wiki/Circular_buffer
