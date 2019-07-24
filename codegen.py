@@ -83,7 +83,7 @@ with open(path_prefix+'indicators.h', 'w') as f:
         '#ifndef _WIN32',
         '    #define DONTOPTIMIZE __attribute__((optimize("-fno-fast-math")))',
         '#else',
-        '    #define DONTOPTIMIZE __pragma("", off)',
+        '    #define DONTOPTIMIZE __pragma(optimize("", off))',
         '#endif',
         '',
         'DLLEXPORT extern const char* ti_version();',
