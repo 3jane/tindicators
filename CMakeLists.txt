@@ -58,7 +58,7 @@ if ("${branch_name}" STREQUAL "")
         OUTPUT_VARIABLE branch_name
     )
 endif()
-string(STRIP ${branch_name} branch_name)
+string(STRIP "${branch_name}" branch_name)
 
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E echo ${branch_name}
