@@ -42,6 +42,8 @@ fosc: ["Forecast Oscillator", indicator, [real], [period], [fosc], []]
 
 # Special moving averages and other overlays
 bbands: ["Bollinger Bands", overlay, [real], [period, stddev], [bbands_lower, bbands_middle, bbands_upper], []]
+bf2: ["2-pole Butterworth Filter", overlay, [real], [period], [bf2], [stream]]
+bf3: ["3-pole Butterworth Filter", overlay, [real], [period], [bf3], [stream]]
 kc: ["Keltner Channel", overlay, [high, low, close], [period, multiple], [kc_lower, kc_middle, kc_upper], [stream]]
 kama: ["Kaufman Adaptive Moving Average", overlay, [real], [period], [kama], []]
 psar: ["Parabolic SAR", overlay, [high, low], [acceleration factor step, acceleration factor maximum], [psar], []]
