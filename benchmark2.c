@@ -254,6 +254,13 @@ void gf4_option_setter(double period, double* options) {
     options[0] = MIN(period*2, 40);
 }
 
+void ehma_option_setter(double period, double* options) {
+    while ((int)pow((int)sqrt(period), 2) != (int)period || (int)period % 2 != 0) {
+        period += 1;
+    }
+    options[0] = period;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -295,6 +302,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "gf2") == 0) { options_setter = gf2_option_setter; }
     if (strcmp(info->name, "gf3") == 0) { options_setter = gf3_option_setter; }
     if (strcmp(info->name, "gf4") == 0) { options_setter = gf4_option_setter; }
+    if (strcmp(info->name, "ehma") == 0) { options_setter = ehma_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
