@@ -40,6 +40,7 @@ ehma: ["Exponential Hull Moving Average", overlay, [real], [period], [ehma], [st
 evwma: ["Elastic Volume Weighted Moving Average", overlay, [close, volume], [period, gamma], [evwma], [stream, ref]]
 lma: ["Leo Moving Average", overlay, [close], [period], [lma], [stream, ref]]
 pwma: ["Power Weighted Moving Average", overlay, [real], [period, power], [pwma], [stream, ref]]
+swma: ["Sine Weighted Moving Average", overlay, [real], [period], [swma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
