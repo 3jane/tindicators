@@ -246,6 +246,10 @@ void gf2_option_setter(double period, double* options) {
     options[0] = MIN(period*2, 40);
 }
 
+void gf3_option_setter(double period, double* options) {
+    options[0] = MIN(period*2, 40);
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -285,6 +289,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "bf3") == 0) { options_setter = bf23_option_setter; }
     if (strcmp(info->name, "gf1") == 0) { options_setter = gf1_option_setter; }
     if (strcmp(info->name, "gf2") == 0) { options_setter = gf2_option_setter; }
+    if (strcmp(info->name, "gf3") == 0) { options_setter = gf3_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
