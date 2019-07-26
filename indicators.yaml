@@ -102,6 +102,7 @@ willr: ["Williams %R", indicator, [high, low, close], [period], [willr], []]
 ultosc: ["Ultimate Oscillator", indicator, [high, low, close], [short period, medium period, long period], [ultosc], []]
 vhf: ["Vertical Horizontal Filter", indicator, [real], [period], [vhf], []]
 vosc: ["Volume Oscillator", indicator, [volume], [short period, long period], [vosc], []]
+er: ["Efficiency Ratio", indicator, [real], [period], [er], [ref, stream]]
 
 # DX, ADX, ADXR, etc
 dm: ["Directional Movement", indicator, [high, low], [period], [plus_dm, minus_dm], []]
