@@ -266,6 +266,11 @@ void evwma_option_setter(double period, double* options) {
     options[1] = 1;
 }
 
+void pwma_option_setter(double period, double* options) {
+    options[0] = fmin(period, 10);
+    options[1] = 2;
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -309,6 +314,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "gf4") == 0) { options_setter = gf4_option_setter; }
     if (strcmp(info->name, "ehma") == 0) { options_setter = ehma_option_setter; }
     if (strcmp(info->name, "evwma") == 0) { options_setter = evwma_option_setter; }
+    if (strcmp(info->name, "pwma") == 0) { options_setter = pwma_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
