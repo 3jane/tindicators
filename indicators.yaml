@@ -37,6 +37,7 @@ gf2: ["Gaussian Filter - 2 Poles", overlay, [real], [period], [gf2], [stream, re
 gf3: ["Gaussian Filter - 3 Poles", overlay, [real], [period], [gf3], [stream, ref]]
 gf4: ["Gaussian Filter - 4 Poles", overlay, [real], [period], [gf4], [stream, ref]]
 ehma: ["Exponential Hull Moving Average", overlay, [real], [period], [ehma], [stream, ref]]
+evwma: ["Elastic Volume Weighted Moving Average", overlay, [close, volume], [period, gamma], [evwma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
