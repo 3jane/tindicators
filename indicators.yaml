@@ -41,6 +41,7 @@ evwma: ["Elastic Volume Weighted Moving Average", overlay, [close, volume], [per
 lma: ["Leo Moving Average", overlay, [close], [period], [lma], [stream, ref]]
 pwma: ["Power Weighted Moving Average", overlay, [real], [period, power], [pwma], [stream, ref]]
 swma: ["Sine Weighted Moving Average", overlay, [real], [period], [swma], [stream, ref]]
+dwma: ["Double Weighted Moving Average", overlay, [real], [period], [dwma], [ref, stream]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
