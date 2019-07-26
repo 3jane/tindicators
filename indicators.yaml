@@ -175,3 +175,6 @@ tanh: ["Vector Hyperbolic Tangent", simple, [real], [], [tanh], []]
 todeg: ["Vector Degree Conversion", simple, [real], [], [degrees], []]
 torad: ["Vector Radian Conversion", simple, [real], [], [radians], []]
 trunc: ["Vector Truncate", simple, [real], [], [trunc], []]
+
+
+vi: ["Vortex Indicator", indicator, [high, low, close], [period], [vi_p, vi_m], [ref, stream]]
