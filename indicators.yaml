@@ -108,6 +108,7 @@ ultosc: ["Ultimate Oscillator", indicator, [high, low, close], [short period, me
 vhf: ["Vertical Horizontal Filter", indicator, [real], [period], [vhf], []]
 vosc: ["Volume Oscillator", indicator, [volume], [short period, long period], [vosc], []]
 er: ["Efficiency Ratio", indicator, [real], [period], [er], [ref, stream]]
+pvt: ["Price Volume Trend", indicator, [close, volume], [], [pvt], [ref, stream]]
 
 # DX, ADX, ADXR, etc
 dm: ["Directional Movement", indicator, [high, low], [period], [plus_dm, minus_dm], []]
@@ -181,6 +182,7 @@ tanh: ["Vector Hyperbolic Tangent", simple, [real], [], [tanh], []]
 todeg: ["Vector Degree Conversion", simple, [real], [], [degrees], []]
 torad: ["Vector Radian Conversion", simple, [real], [], [radians], []]
 trunc: ["Vector Truncate", simple, [real], [], [trunc], []]
+
 
 
 vi: ["Vortex Indicator", indicator, [high, low, close], [period], [vi_p, vi_m], [ref, stream]]
