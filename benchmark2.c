@@ -290,6 +290,10 @@ void mhlma_option_setter(double period, double* options) {
     options[1] = 10 + period / 4;
 }
 
+void t3_option_setter(double period, double* options) {
+    options[0] = MIN(period, 10);
+}
+
 void bench(const ti_indicator_info *info) {
     printf("Running: %s ", info->name);
     fflush(stdout);
@@ -338,6 +342,7 @@ void bench(const ti_indicator_info *info) {
     if (strcmp(info->name, "hurst") == 0) { options_setter = hurst_option_setter; }
     if (strcmp(info->name, "arsi") == 0) { options_setter = arsi_option_setter; }
     if (strcmp(info->name, "mhlma") == 0) { options_setter = mhlma_option_setter; }
+    if (strcmp(info->name, "t3") == 0) { options_setter = t3_option_setter; }
 
     static TI_REAL *inputs[TI_MAXINDPARAMS];
     for (int i = 0; i < info->inputs; ++i) {
