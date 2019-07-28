@@ -45,6 +45,7 @@ dwma: ["Double Weighted Moving Average", overlay, [real], [period], [dwma], [ref
 shmma: ["Sharp Modified Moving Average", overlay, [real], [period], [shmma], [stream, ref]]
 ahma: ["Ahrens Moving Average", overlay, [real], [period], [ahma], [stream, ref]]
 t3: ["T3", overlay, [real], [period, v], [t3], [stream, ref]]
+mhlma: ["Middle-High-Low Moving Average", overlay, [real], [period, ma_period], [mhlsma, mhlema], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
