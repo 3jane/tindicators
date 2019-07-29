@@ -292,6 +292,7 @@ void mhlma_option_setter(double period, double* options) {
 
 void t3_option_setter(double period, double* options) {
     options[0] = MIN(period, 10);
+    options[1] = 1;
 }
 
 void bench(const ti_indicator_info *info) {
