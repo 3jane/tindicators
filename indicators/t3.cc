@@ -93,7 +93,7 @@ int DONTOPTIMIZE ti_t3_ref(int size, TI_REAL const *const *inputs, TI_REAL const
         ti_ema(size, arr1, &period, arr2);
 
         for (int i = 0; i < size; ++i) {
-            output[i] = ema1[i] * (1+v) + ema2[i] * v;
+            output[i] = ema1[i] * (1+v) - ema2[i] * v;
         }
 
         return output;
