@@ -39,5 +39,5 @@ setuptools.setup(
         'dev': tuple(TESTS_REQUIREMENTS + DEV_REQUIREMENTS)
     },
     classifiers=["Programming Language :: Python :: 3", "Operating System :: OS Independent"],
-    package_data={"tulipindicators": ["libindicators.so", "indicators.dll"]}
+    package_data={"tulipindicators": ["libindicators.so", "indicators.dll", "libindicators.dylib"]}
 )

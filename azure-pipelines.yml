@@ -80,10 +80,49 @@ jobs:
       artifactName: 'linux_binary'
       targetPath: 'build/libindicators.so'
 
+# Initially copied from the Linux job
+- job: 'MacOS'
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+  - script: mkdir build
+    displayName: mkdirbuild
+  - script: cmake .. -DCMAKE_BUILD_TYPE=Debug -Dbranch_name="$(System.PullRequest.SourceBranch)" && cmake --build . -j
+    displayName: 'DebugBuild'
+    workingDirectory: build
+    # segfault for some reason, possibly libasan can't run in the given container because of insufficient privileges
+    #condition: eq(variables['Build.Reason'], 'PullRequest')
+    enabled: false
+  - script: LD_PRELOAD=libasan.so.5 ctest -VV --output-on-failure
+    displayName: 'DebugTest'
+    workingDirectory: build
+    #condition: eq(variables['Build.Reason'], 'PullRequest')
+    enabled: false
+  - script: cmake .. -DCMAKE_BUILD_TYPE=Release -Dbranch_name="$(System.PullRequest.SourceBranch)" && cmake --build . -j
+    displayName: 'ReleaseBuild'
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R smoke
+    displayName: 'smoke'
+    workingDirectory: build
+  - script: ctest -C Release --output-on-failure -R fuzzer
+    displayName: 'fuzzer'
+    workingDirectory: build
+  - script: ctest -C Release -V -R benchmark2
+    displayName: 'benchmark2'
+    workingDirectory: build
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'macos_binary'
+      targetPath: 'build/libindicators.dylib'
+
 - job: 'Bindings'
   dependsOn:
     - Linux
     - Windows
+    - MacOS
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   steps:
   - task: UsePythonVersion@0
@@ -96,6 +135,10 @@ jobs:
   - task: DownloadPipelineArtifact@1
     inputs:
       artifactName: 'windows_binary'
+      targetPath: $(System.DefaultWorkingDirectory)
+  - task: DownloadPipelineArtifact@1
+    inputs:
+      artifactName: 'macos_binary'
       targetPath: $(System.DefaultWorkingDirectory)
   - script: cmake . -DBINARIES=$(System.DefaultWorkingDirectory)
     displayName: 'CMake'

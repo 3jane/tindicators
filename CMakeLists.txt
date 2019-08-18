@@ -148,10 +148,11 @@ add_custom_target(check COMMAND ${VALGRIND_CMD} CTEST_OUTPUT_ON_FAILURE=1 ${CMAK
 
 ## Bindings
 add_custom_command(
-    COMMAND echo 'dir=${BINARIES}'
-    COMMAND ls -lah ${BINARIES}
-    COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
-    COMMAND ${CMAKE_COMMAND} -E copy ${BINARIES}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND echo 'dir=${CMAKE_BINARY_DIR}'
+    COMMAND ls -lah ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.dylib ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ${Python3_EXECUTABLE} -m pip install -e .[dev]
     COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
