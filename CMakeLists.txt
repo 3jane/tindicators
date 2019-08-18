@@ -151,6 +151,7 @@ add_custom_command(
     COMMAND echo 'dir=${CMAKE_BINARY_DIR}'
     COMMAND ls -lah ${CMAKE_BINARY_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.dylib ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
     COMMAND ${Python3_EXECUTABLE} -m pip install -e .[dev]
