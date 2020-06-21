@@ -81,7 +81,7 @@ with open(path_prefix+'indicators.h', 'w') as f:
         '#endif',
         '',
         '#ifdef _MSC_VER',
-        '    #define DONTOPTIMIZE __pragma(optimize("", off))',
+        '    #define DONTOPTIMIZE /* __pragma(optimize("", off)) */',
         '#elif __clang__',
         '    #define DONTOPTIMIZE [[clang::optnone]]',
         '#elif __GNUC__',
