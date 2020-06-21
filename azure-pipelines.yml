@@ -83,7 +83,7 @@ jobs:
 # Initially copied from the Linux job
 - job: 'MacOS'
   pool:
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-10.15'
   steps:
   - task: UsePythonVersion@0
     inputs:
