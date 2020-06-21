@@ -26,7 +26,7 @@ int ti_pvt(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_pvt_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_pvt_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const close = inputs[0];
     TI_REAL const *const volume = inputs[1];
     

@@ -48,7 +48,7 @@ int ti_vi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_vi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_vi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const high = inputs[0];
     TI_REAL const *const low = inputs[1];
     TI_REAL const *const close = inputs[2];

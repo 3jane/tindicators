@@ -39,7 +39,7 @@ int ti_shmma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_shmma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_shmma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *shmma = outputs[0];

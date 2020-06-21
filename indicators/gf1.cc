@@ -37,7 +37,7 @@ int ti_gf1(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_gf1_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_gf1_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const int period = options[0];
     TI_REAL *gf1 = outputs[0];

@@ -69,7 +69,7 @@ int ti_t3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_t3_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_t3_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL v = options[1];
