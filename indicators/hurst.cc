@@ -63,7 +63,8 @@ int ti_hurst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     return TI_OUT_OF_MEMORY;
 }
 
-DONTOPTIMIZE int ti_hurst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE
+int ti_hurst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *hurst = outputs[0];
