@@ -114,7 +114,7 @@ int ti_mhlma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_mhlma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_mhlma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL ma_period = options[1];

@@ -46,7 +46,7 @@ int ti_evwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_evwma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_evwma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const close = inputs[0];
     TI_REAL const *const volume = inputs[1];
     const int period = options[0];

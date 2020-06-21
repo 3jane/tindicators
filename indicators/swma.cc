@@ -53,7 +53,7 @@ int ti_swma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_swma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_swma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const int period = options[0];
     TI_REAL *swma = outputs[0];

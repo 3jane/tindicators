@@ -21,8 +21,8 @@ def declaration_start(name):
     return f'int ti_{name}_start(TI_REAL const *options)'
 def declaration_plain(name):
     return f'int ti_{name}(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
-def declaration_ref(name):
-    return f'int DONTOPTIMIZE ti_{name}_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
+def declaration_ref(name, opt_pragma=True):
+    return 'DONTOPTIMIZE'*int(opt_pragma) + f'int ti_{name}_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs)'
 def declaration_stream_new(name):
     return f'int ti_{name}_stream_new(TI_REAL const *options, ti_stream **stream)'
 def declaration_stream_run(name):
@@ -44,7 +44,7 @@ with open(path_prefix+'indicators.h', 'w') as f:
             f'DLLEXPORT extern {declaration_start(name)};',
             f'DLLEXPORT extern {declaration_plain(name)};',
         ] + ([
-            f'DLLEXPORT extern {declaration_ref(name)};',
+            f'DLLEXPORT extern {declaration_ref(name, opt_pragma=False)};',
         ] if 'ref' in features else []) + ([
             f'DLLEXPORT extern {declaration_stream_new(name)};',
             f'DLLEXPORT extern {declaration_stream_run(name)};',
@@ -80,10 +80,12 @@ with open(path_prefix+'indicators.h', 'w') as f:
         '    #define DLLEXPORT',
         '#endif',
         '',
-        '#ifndef _WIN32',
-        '    #define DONTOPTIMIZE __attribute__((optimize("-fno-fast-math")))',
-        '#else',
+        '#ifdef _MSC_VER',
         '    #define DONTOPTIMIZE __pragma(optimize("", off))',
+        '#elif __clang__',
+        '    #define DONTOPTIMIZE [[clang::optnone]]',
+        '#elif __GNUC__',
+        '    #define DONTOPTIMIZE __attribute__((optimize("O0")))',
         '#endif',
         '',
         'DLLEXPORT extern const char* ti_version();',
@@ -398,7 +400,7 @@ for indicator in indicators.items():
             first_part = lines[:index_next_include]
             second_part = lines[index_next_include:]
             for head_file in head_files:
-                if head_file is '\n':
+                if head_file == '\n':
                     first_part += [head_file]
                 elif head_file not in lines:
                     first_part += [head_file]

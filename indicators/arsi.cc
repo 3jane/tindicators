@@ -72,7 +72,7 @@ int ti_arsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_arsi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_arsi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL cycpart = options[0];
     TI_REAL *arsi = outputs[0];

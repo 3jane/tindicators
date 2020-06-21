@@ -28,7 +28,7 @@ int ti_ahma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     return TI_OKAY;
 }
 
-int DONTOPTIMIZE ti_ahma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
+DONTOPTIMIZE int ti_ahma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
     TI_REAL const *const real = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *ahma = outputs[0];
