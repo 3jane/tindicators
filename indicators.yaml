@@ -49,6 +49,7 @@ mhlma: ["Middle-High-Low Moving Average", overlay, [real], [period, ma_period], 
 cmi: ["Choppy Market Indicator", indicator, [high, low, close], [period], [cmi], [stream, ref]]
 idwma: ["Inverse Distance Weighted Moving Average", overlay, [real], [period, exponent], [idwma], [stream, ref]]
 emsd: ["Exponential Moving Standard Deviation", overlay, [real], [period, ma_period], [emsd], [stream, ref]]
+hwma: ["Henderson asymmetric filter", overlay, [real], [period], [hwma], [stream, ref]]
 
 # Line fitting
 linreg: ["Linear Regression", overlay, [real], [period], [linreg], []]
