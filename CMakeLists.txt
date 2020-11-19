@@ -12,8 +12,18 @@ project(tulipindicators VERSION "${version}" LANGUAGES C CXX)
 file(GLOB src indicators/*)
 file(GLOB utils utils/*)
 add_library(indicators SHARED ${src} ${utils} indicators.h indicators_index.c)
+# target_link_libraries(indicators PUBLIC
+    # "$<$<OR:$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
+    # "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
+
+target_link_libraries(indicators PUBLIC "$<$<C_COMPILER_ID:GNU>:$<$<CONFIG:DEBUG>:asan;ubsan>>")
 target_link_libraries(indicators PUBLIC
-    "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:asan;ubsan>;m>")
+    "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:m>")
+target_link_options(indicators PUBLIC
+    "$<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:$<$<CONFIG:DEBUG>:-fsanitize=undefined;-fsanitize=address;$<$<NOT:$<C_COMPILER_ID:AppleClang>>:-fsanitize=leak>>>")
+
+
+# -fsanitize=address
 
 set_target_properties(indicators PROPERTIES PUBLIC_HEADER "indicators.h")
 install(TARGETS indicators
@@ -25,11 +35,11 @@ target_compile_options(indicators
     PUBLIC
     $<$<OR:$<C_COMPILER_ID:Clang>,$<C_COMPILER_ID:AppleClang>,$<C_COMPILER_ID:GNU>>:
         -Wall -Wextra -Wshadow -g3 -ggdb -O2 -Werror=sequence-point -Werror=vla
-        -Wno-unused-variable -Wno-float-conversion -Wno-maybe-uninitialized -Wno-unused-value -Wno-unused-parameter
+        -Wno-unused-variable -Wno-float-conversion -Wno-unused-value -Wno-unused-parameter $<$<C_COMPILER_ID:GNU>:-Wno-maybe-uninitialized>
         $<$<COMPILE_LANGUAGE:CXX>:-std=c++17 -pedantic>
         $<$<COMPILE_LANGUAGE:C>:-std=c99 -pedantic>
         $<$<CONFIG:DEBUG>:
-            -fsanitize=undefined -fsanitize=address -fsanitize=leak>
+            -fsanitize=undefined -fsanitize=address $<$<NOT:$<C_COMPILER_ID:AppleClang>>:-fsanitize=leak>>
         $<$<CONFIG:RELEASE>:
             -ffast-math -fno-finite-math-only>>
     $<$<C_COMPILER_ID:MSVC>:
