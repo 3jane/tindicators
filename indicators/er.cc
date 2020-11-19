@@ -19,7 +19,6 @@ int ti_er(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     if (period < 1) { return TI_INVALID_OPTION; }
 
-    TI_REAL net_change = 0;
     TI_REAL trajectory = 0;
 
     int i = 0;

@@ -20,8 +20,8 @@ int ti_pwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     if (period < 1) { return TI_INVALID_OPTION; }
 
     TI_REAL denom = 0;
-    int i = 0;
-    for (; i < period && i < size; ++i) {
+
+    for (int i = 0; i < period && i < size; ++i) {
         denom += pow(i+1, power);
     }
 
@@ -45,8 +45,8 @@ DONTOPTIMIZE int ti_pwma_ref(int size, TI_REAL const *const *inputs, TI_REAL con
     if (period < 1) { return TI_INVALID_OPTION; }
 
     TI_REAL denom = 0;
-    int i = 0;
-    for (; i < period && i < size; ++i) {
+
+    for (int i = 0; i < period && i < size; ++i) {
         denom += pow(i+1, power);
     }
 

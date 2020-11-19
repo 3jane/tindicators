@@ -104,7 +104,7 @@ struct ti_vi_stream : ti_stream {
 
     struct {
         TI_REAL last_vm_p_period = 0;
-        TI_REAL last_vm_m_period = 0;;
+        TI_REAL last_vm_m_period = 0;
         TI_REAL last_TR_period = 0;
     } state;
 

@@ -55,7 +55,7 @@ struct ti_ssmooth_stream : ti_stream {
         TI_REAL b1 = 2*a1*cos(1.414*3.14159 / 10);
         TI_REAL c2 = b1;
         TI_REAL c3 = -a1*a1;
-        TI_REAL c1 = 1 - c2 - c3;;
+        TI_REAL c1 = 1 - c2 - c3;
     } constants;
 };
 
