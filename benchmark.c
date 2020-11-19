@@ -236,7 +236,7 @@ int run_ta(const TA_FuncInfo *info, double *options, int goal) {
                 CHECKR("set price");
             } else if (input->type == TA_Input_Real) {
                 r = TA_SetInputParamRealPtr(ph, (unsigned int)i, in[3]);
-                CHECKR("set real");
+                CHECKR("set series");
             } else if (input->type == TA_Input_Integer) {
                 assert(0);
             } else {
@@ -299,7 +299,7 @@ int run_ti(const ti_indicator_info *info, double *options, int goal) {
                 inputs[j] = in[2];
             } else if (strcmp(info->input_names[j], "close") == 0) {
                 inputs[j] = in[3];
-            } else if (strcmp(info->input_names[j], "real") == 0) {
+            } else if (strcmp(info->input_names[j], "series") == 0) {
                 inputs[j] = in[3];
             } else if (strcmp(info->input_names[j], "volume") == 0) {
                 inputs[j] = in[4];
@@ -413,7 +413,7 @@ void bench(FILE *log, const ti_indicator_info *info) {
 
 
     /* Some functions need a different option generator strategy.
-     * Messy, but can't really be helped. */
+     * Messy, but can't seriesly be helped. */
     void (*options_setter)(double period, double *options, int ti) = 0;
 
     if (strcmp(info->name, "apo") == 0) options_setter = ppo_option_setter;
@@ -580,7 +580,7 @@ void bench(FILE *log, const ti_indicator_info *info) {
 
 int main(int argc, char **argv) {
     printf("Tulip Charts Indicator benchmark.\n");
-    printf("Using real size of: %d.\n\n", sizeof(TI_REAL));
+    printf("Using series size of: %d.\n\n", sizeof(TI_REAL));
 
     generate_inputs();
 

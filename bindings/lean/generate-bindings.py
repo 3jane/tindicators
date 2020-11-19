@@ -45,14 +45,14 @@ def streaming(indicator):
     options = indicator.options
 
     n = '\n'
-    real = 'real' in inputs
-    if real and len(inputs) > 1:
+    series = 'series' in inputs
+    if series and len(inputs) > 1:
         print(f"warning: skipping '{name}' for its inputs: {inputs}")
         return ''
     if not indicator.raw.stream_new:
         return ''
 
-    input_type = ['TradeBar', 'IndicatorDataPoint'][real]
+    input_type = ['TradeBar', 'IndicatorDataPoint'][series]
 
     result = f'''
     public class {lean_name} : IndicatorBase<{input_type}> {{
@@ -68,7 +68,7 @@ def streaming(indicator):
         private double[] tmp = new double[{max(len(inputs), len(outputs))}];
         protected override decimal ComputeNextValue({input_type} data) {{
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not real else "Value"};' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'tmp[{i}] = (double)data.{input.capitalize() if not series else "Value"};' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, {i}, inputs[{i}], 1);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double));' for i, output in enumerate(outputs))}
             int result = ti_{name}_stream_run(state, 1, inputs, outputs);
@@ -100,12 +100,12 @@ def default(indicator):
     options = indicator.options
 
     n = '\n'
-    real = 'real' in inputs
-    if real and len(inputs) > 1:
+    series = 'series' in inputs
+    if series and len(inputs) > 1:
         print(f"warning: skipping '{name}' for its inputs: {inputs}")
         return ''
 
-    input_type = ['TradeBar', 'IndicatorDataPoint'][real]
+    input_type = ['TradeBar', 'IndicatorDataPoint'][series]
 
     result = f'''
     public class {lean_name} : WindowIndicator<{input_type}> {{
@@ -127,7 +127,7 @@ def default(indicator):
             if (!ready) {{ return 0; }}
             double[] tmp = new double[window.Count];
             {f"{n}".join(f'inputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * window.Count);' for i, input in enumerate(inputs))}
-            {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[window.Count-i-1] = (double)value.{input.capitalize() if not real else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
+            {f"{n}".join(f'{{ int i = 0; foreach ({input_type} value in window) {{ tmp[window.Count-i-1] = (double)value.{input.capitalize() if not series else "Value"}; i += 1; }} }}' for i, input in enumerate(inputs))}
             {f"{n}".join(f'Marshal.Copy(tmp, 0, inputs[{i}], window.Count);' for i, input in enumerate(inputs))}
             {f"{n}".join(f'outputs[{i}] = Marshal.AllocHGlobal(sizeof(double) * (window.Count - start));' for i, output in enumerate(outputs))}
             int result = ti_{name}(window.Count, inputs, options, outputs);

@@ -22,7 +22,7 @@ pbands_3(pbands_lower=array([    nan,     nan, 200.28 , 198.61 , 196.305, 194.71
 >>> ti.ema
 Name:           ema
 Full Name:      Exponential Moving Average
-Inputs:         real
+Inputs:         series
 Options:        period
 Outputs:        ema
 >>> ti.ema([1,2,3,4,5], 4)

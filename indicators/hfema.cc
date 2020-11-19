@@ -17,7 +17,7 @@ int ti_hfema_start(TI_REAL const *options) {
 }
 
 int ti_hfema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     int ema_period = options[0];
     int k = options[1];
     TI_REAL threshold = options[2];
@@ -34,17 +34,17 @@ int ti_hfema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
     int i = 0;
     for (; i < 1 && i < size; ++i, step(price)) {
-        ema = real[i];
+        ema = series[i];
         price = ema;
         rankedprice.insert(price);
     }
     for (; i < 2*k && i < size; ++i, step(price)) {
-        ema = (real[i] - ema) * 2. / (1. + ema_period) + ema;
+        ema = (series[i] - ema) * 2. / (1. + ema_period) + ema;
         price = ema;
         rankedprice.insert(price);
     }
     for (; i < size; ++i, step(price)) {
-        ema = (real[i] - ema) * 2. / (1. + ema_period) + ema;
+        ema = (series[i] - ema) * 2. / (1. + ema_period) + ema;
         price = ema;
         rankedprice.insert(price);
 
@@ -72,7 +72,7 @@ int lessthan(void *one, void *two) {
 }
 
 int ti_hfema_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     int ema_period = options[0];
     int k = options[1];
     TI_REAL threshold = options[2];
@@ -83,7 +83,7 @@ int ti_hfema_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options,
     if (threshold < 0) { return TI_INVALID_OPTION; }
 
     TI_REAL *ema = new TI_REAL[size];
-    ti_ema(size, &real, options, &ema);
+    ti_ema(size, &series, options, &ema);
 
     TI_REAL *data = new TI_REAL[2*k+1];
 
@@ -167,7 +167,7 @@ void ti_hfema_stream_free(ti_stream *stream) {
 
 int ti_hfema_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_hfema_stream *ptr = static_cast<ti_hfema_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *hfema = outputs[0];
     int progress = ptr->progress;
     int ema_period = ptr->options.ema_period;
@@ -181,17 +181,17 @@ int ti_hfema_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
 
     int i = 0;
     for (; progress < -2*k+1 && i < size; ++i, ++progress, step(price)) {
-        ema = real[i];
+        ema = series[i];
         price = ema;
         rankedprice.insert(ema);
     }
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        ema = (real[i] - ema) * 2. / (ema_period + 1.) + ema;
+        ema = (series[i] - ema) * 2. / (ema_period + 1.) + ema;
         price = ema;
         rankedprice.insert(ema);
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        ema = (real[i] - ema) * 2. / (ema_period + 1.) + ema;
+        ema = (series[i] - ema) * 2. / (ema_period + 1.) + ema;
         price = ema;
         rankedprice.insert(ema);
         TI_REAL median_price = *std::next(rankedprice.begin(), k);

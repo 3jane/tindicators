@@ -14,7 +14,7 @@ int ti_rema_start(TI_REAL const *options) {
 }
 
 int ti_rema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL period = options[0];
     TI_REAL lambda = options[1];
     TI_REAL *rema = outputs[0];
@@ -28,17 +28,17 @@ int ti_rema(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i = 0;
     for (; i < size && i == 0; ++i) {
-        rema_val = real[i];
+        rema_val = series[i];
         *rema++ = rema_val;
     }
     for (; i < size && i == 1; ++i) {
-        rema_val1 = std::exchange(rema_val, (real[i] - rema_val) * alpha + rema_val);
+        rema_val1 = std::exchange(rema_val, (series[i] - rema_val) * alpha + rema_val);
         *rema++ = rema_val;
     }
     for (; i < size; ++i) {
         rema_val1 = std::exchange(
             rema_val,
-            (rema_val*(1. + 2.*lambda) + alpha*(real[i] - rema_val) - lambda*rema_val1) / (1. + lambda)
+            (rema_val*(1. + 2.*lambda) + alpha*(series[i] - rema_val) - lambda*rema_val1) / (1. + lambda)
         );
         *rema++ = rema_val;
     }
@@ -91,7 +91,7 @@ void ti_rema_stream_free(ti_stream *stream) {
 
 int ti_rema_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_rema_stream *ptr = static_cast<ti_rema_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *rema = outputs[0];
     int progress = ptr->progress;
     TI_REAL period = ptr->options.period;
@@ -103,17 +103,17 @@ int ti_rema_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; i < size && progress == 0; ++i, ++progress) {
-        rema_val = real[i];
+        rema_val = series[i];
         *rema++ = rema_val;
     }
     for (; i < size && progress == 1; ++i, ++progress) {
-        rema_val1 = std::exchange(rema_val, (real[i] - rema_val) * alpha + rema_val);
+        rema_val1 = std::exchange(rema_val, (series[i] - rema_val) * alpha + rema_val);
         *rema++ = rema_val;
     }
     for (; i < size; ++i, ++progress) {
         rema_val1 = std::exchange(
             rema_val,
-            (rema_val*(1. + 2.*lambda) + alpha*(real[i] - rema_val) - lambda*rema_val1) / (1. + lambda)
+            (rema_val*(1. + 2.*lambda) + alpha*(series[i] - rema_val) - lambda*rema_val1) / (1. + lambda)
         );
         *rema++ = rema_val;
     }

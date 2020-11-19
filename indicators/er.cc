@@ -12,7 +12,7 @@ int ti_er_start(TI_REAL const *options) {
 }
 
 int ti_er(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     const int n = period;
     TI_REAL *er = outputs[0];
@@ -23,22 +23,22 @@ int ti_er(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     int i = 0;
     for (i = 1; i < n && i < size; ++i) {
-        trajectory += fabs(real[i] - real[i-1]);
+        trajectory += fabs(series[i] - series[i-1]);
     }
     for (; i < size; ++i) {
-        trajectory += fabs(real[i] - real[i-1]);
-        TI_REAL net_change = fabs(real[i] - real[i-n]);
+        trajectory += fabs(series[i] - series[i-1]);
+        TI_REAL net_change = fabs(series[i] - series[i-n]);
 
         *er++ = net_change ? net_change / trajectory : 0;
 
-        trajectory -= fabs(real[i-n+1] - real[i-n]);
+        trajectory -= fabs(series[i-n+1] - series[i-n]);
     }
 
     return TI_OKAY;
 }
 
 DONTOPTIMIZE int ti_er_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     const int n = period;
     TI_REAL *er = outputs[0];
@@ -46,10 +46,10 @@ DONTOPTIMIZE int ti_er_ref(int size, TI_REAL const *const *inputs, TI_REAL const
     if (period < 1) { return TI_INVALID_OPTION; }
 
     for (int i = n + 1; i <= size; ++i) {
-        TI_REAL net_change = fabs(real[i-1] - real[i-n-1]);
+        TI_REAL net_change = fabs(series[i-1] - series[i-n-1]);
         TI_REAL trajectory = 0;
         for (int j = i - n; j < i; ++j) {
-            trajectory += fabs(real[j] - real[j-1]);
+            trajectory += fabs(series[j] - series[j-1]);
         }
         *er++ = net_change ? net_change / trajectory : 0;
     }
@@ -99,7 +99,7 @@ void ti_er_stream_free(ti_stream *stream) {
 
 int ti_er_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_er_stream *ptr = static_cast<ti_er_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *er = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -109,14 +109,14 @@ int ti_er_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
 
     int i = 0;
     for (; i < size && progress < -n+1; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress < 0; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         trajectory += fabs(price - price[1]);
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         trajectory += fabs(price - price[1]);
 
         TI_REAL net_change = fabs(price - price[n]);

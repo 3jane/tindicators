@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
             inputs[j] = close; c = 1;
         } else if (strcmp(info->input_names[j], "volume") == 0) {
             inputs[j] = volume; v = 1;
-        } else if (strcmp(info->input_names[j], "real") == 0) {
+        } else if (strcmp(info->input_names[j], "series") == 0) {
             if (!r) {
                 inputs[j] = close; r = 1;
             } else {

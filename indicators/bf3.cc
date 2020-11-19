@@ -23,7 +23,7 @@ struct {
 } static tables;
 
 int ti_bf3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL period = options[0];
     TI_REAL *bf3 = outputs[0];
 
@@ -50,16 +50,16 @@ int ti_bf3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*real[i] + B1*g1 + B2*g2 + B3*g3;
+        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*series[i] + B1*g1 + B2*g2 + B3*g3;
 
-        g3 = std::exchange(g2, std::exchange(g1, real[i]));
+        g3 = std::exchange(g2, std::exchange(g1, series[i]));
         f3 = std::exchange(f2, std::exchange(f1, f));
     }
     for (; i < size; ++i, ++progress) {
-        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*real[i] + B1*g1 + B2*g2 + B3*g3;
+        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*series[i] + B1*g1 + B2*g2 + B3*g3;
         *bf3++ = f;
 
-        g3 = std::exchange(g2, std::exchange(g1, real[i]));
+        g3 = std::exchange(g2, std::exchange(g1, series[i]));
         f3 = std::exchange(f2, std::exchange(f1, f));
     }
 
@@ -125,7 +125,7 @@ void ti_bf3_stream_free(ti_stream *stream) {
 
 int ti_bf3_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_bf3_stream *ptr = static_cast<ti_bf3_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *bf3 = outputs[0];
     int progress = ptr->progress;
     TI_REAL period = ptr->options.period;
@@ -147,16 +147,16 @@ int ti_bf3_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*real[i] + B1*g1 + B2*g2 + B3*g3;
+        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*series[i] + B1*g1 + B2*g2 + B3*g3;
 
-        g3 = std::exchange(g2, std::exchange(g1, real[i]));
+        g3 = std::exchange(g2, std::exchange(g1, series[i]));
         f3 = std::exchange(f2, std::exchange(f1, f));
     }
     for (; i < size; ++i, ++progress) {
-        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*real[i] + B1*g1 + B2*g2 + B3*g3;
+        TI_REAL f = A1*f1 + A2*f2 + A3*f3 + B0*series[i] + B1*g1 + B2*g2 + B3*g3;
         *bf3++ = f;
 
-        g3 = std::exchange(g2, std::exchange(g1, real[i]));
+        g3 = std::exchange(g2, std::exchange(g1, series[i]));
         f3 = std::exchange(f2, std::exchange(f1, f));
     }
 

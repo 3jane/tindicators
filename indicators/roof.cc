@@ -10,7 +10,7 @@ int ti_roof_start(TI_REAL const *options) {
 }
 
 int ti_roof(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     
     TI_REAL *roof = outputs[0];
 
@@ -29,7 +29,7 @@ int ti_roof(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     TI_REAL c1 = 1. - c2 - c3;
 
     for (int i = 0; i < size; ++i) {
-        TI_REAL price = real[i];
+        TI_REAL price = series[i];
         TI_REAL HP = (1. - alpha1 / 2.)*(1. - alpha1 / 2.)*(price - 2*price1 + price2) + 2*(1 - alpha1)*HP1 - (1 - alpha1)*(1 - alpha1)*HP2;
         TI_REAL filt = c1*(HP + HP1) / 2. + c2*filt1 + c3*filt2;
 
@@ -85,7 +85,7 @@ void ti_roof_stream_free(ti_stream *stream) {
 
 int ti_roof_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_roof_stream *ptr = static_cast<ti_roof_stream*>(stream);
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *roof = outputs[0];
     int progress = ptr->progress;
 
@@ -105,7 +105,7 @@ int ti_roof_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; i < size; ++i, ++progress) {
-        TI_REAL price = real[i];
+        TI_REAL price = series[i];
         TI_REAL HP = (1. - alpha1 / 2.)*(1. - alpha1 / 2.)*(price - 2*price1 + price2) + 2*(1 - alpha1)*HP1 - (1 - alpha1)*(1 - alpha1)*HP2;
         TI_REAL filt = c1*(HP + HP1) / 2. + c2*filt1 + c3*filt2;
 

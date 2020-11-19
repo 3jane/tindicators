@@ -17,7 +17,7 @@ int ti_gf2_start(TI_REAL const *options) {
 }
 
 int ti_gf2(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *gf2 = outputs[0];
 
@@ -37,7 +37,7 @@ int ti_gf2(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < size; ++i, step(f)) {
-        f = (B0*real[i] + A1*f[1] + A2*f[2]) * csum_recipr;
+        f = (B0*series[i] + A1*f[1] + A2*f[2]) * csum_recipr;
         *gf2++ = f;
     }
 
@@ -45,7 +45,7 @@ int ti_gf2(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 }
 
 DONTOPTIMIZE int ti_gf2_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *gf2 = outputs[0];
 
@@ -65,7 +65,7 @@ DONTOPTIMIZE int ti_gf2_ref(int size, TI_REAL const *const *inputs, TI_REAL cons
 
     int i = 0;
     for (; i < size; ++i, step(f)) {
-        f = (B0*real[i] + A1*f[1] + A2*f[2]) * csum_recipr;
+        f = (B0*series[i] + A1*f[1] + A2*f[2]) * csum_recipr;
         *gf2++ = f;
     }
 
@@ -121,7 +121,7 @@ void ti_gf2_stream_free(ti_stream *stream) {
 
 int ti_gf2_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_gf2_stream *ptr = static_cast<ti_gf2_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *gf2 = outputs[0];
     int progress = ptr->progress;
     int period = ptr->options.period;
@@ -134,7 +134,7 @@ int ti_gf2_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; i < size; ++i, ++progress, step(f)) {
-        f = (B0*real[i] + A1*f[1] + A2*f[2]) * csum_recipr;
+        f = (B0*series[i] + A1*f[1] + A2*f[2]) * csum_recipr;
         *gf2++ = f;
     }
 

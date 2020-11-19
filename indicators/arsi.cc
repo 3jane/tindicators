@@ -15,7 +15,7 @@ int ti_arsi_start(TI_REAL const *options) {
 const static TI_REAL PI = acos(-1);
 
 int ti_arsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL cycpart = options[0];
     TI_REAL *arsi = outputs[0];
 
@@ -33,7 +33,7 @@ int ti_arsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     ringbuf<2> SmoothPeriod;
 
     for (int i = 5; i < size; ++i, step(Smooth,Detrender,I1,Q1,I2,Q2,Re,Im,Period,SmoothPeriod)) {
-        Smooth = (4*real[i] + 3*real[i-1] + 2*real[i-2] + real[i-3]) / 10.;
+        Smooth = (4*series[i] + 3*series[i-1] + 2*series[i-2] + series[i-3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);
 
         Q1 = (.0962*Detrender + .5769*Detrender[2] - .5769*Detrender[4] - .0962*Detrender[6]) * (.075*Period[1] + .54);
@@ -63,8 +63,8 @@ int ti_arsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         TI_REAL CU = 0;
         TI_REAL CD = 0;
         for (int count = 0; count < (int)(cycpart * SmoothPeriod) && count < i; ++count) {
-            CU += std::max<TI_REAL>(0, real[i-count] - real[i-count-1]);
-            CD += -std::min<TI_REAL>(0, real[i-count] - real[i-count-1]);
+            CU += std::max<TI_REAL>(0, series[i-count] - series[i-count-1]);
+            CD += -std::min<TI_REAL>(0, series[i-count] - series[i-count-1]);
         }
         *arsi++ = CU + CD != 0 ? 100*CU / (CU + CD) : 0;
     }
@@ -73,7 +73,7 @@ int ti_arsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 DONTOPTIMIZE int ti_arsi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL cycpart = options[0];
     TI_REAL *arsi = outputs[0];
 
@@ -91,7 +91,7 @@ DONTOPTIMIZE int ti_arsi_ref(int size, TI_REAL const *const *inputs, TI_REAL con
     ringbuf<2> SmoothPeriod;
 
     for (int i = 5; i < size; ++i, step(Smooth,Detrender,I1,Q1,I2,Q2,Re,Im,Period,SmoothPeriod)) {
-        Smooth = (4*real[i] + 3*real[i-1] + 2*real[i-2] + real[i-3]) / 10.;
+        Smooth = (4*series[i] + 3*series[i-1] + 2*series[i-2] + series[i-3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);
 
         Q1 = (.0962*Detrender + .5769*Detrender[2] - .5769*Detrender[4] - .0962*Detrender[6]) * (.075*Period[1] + .54);
@@ -121,8 +121,8 @@ DONTOPTIMIZE int ti_arsi_ref(int size, TI_REAL const *const *inputs, TI_REAL con
         TI_REAL CU = 0;
         TI_REAL CD = 0;
         for (int count = 0; count < (int)(cycpart * SmoothPeriod) && count < i; ++count) {
-            CU += std::max<TI_REAL>(0, real[i-count] - real[i-count-1]);
-            CD += -std::min<TI_REAL>(0, real[i-count] - real[i-count-1]);
+            CU += std::max<TI_REAL>(0, series[i-count] - series[i-count-1]);
+            CD += -std::min<TI_REAL>(0, series[i-count] - series[i-count-1]);
         }
         *arsi++ = CU + CD != 0 ? 100*CU / (CU + CD) : 0;
     }
@@ -180,7 +180,7 @@ void ti_arsi_stream_free(ti_stream *stream) {
 
 int ti_arsi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_arsi_stream *ptr = static_cast<ti_arsi_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *arsi = outputs[0];
     int progress = ptr->progress;
     const TI_REAL cycpart = ptr->options.cycpart;
@@ -198,10 +198,10 @@ int ti_arsi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(Price)) {
-        Price = real[i];
+        Price = series[i];
     }
     for (; i < size; ++i, ++progress, step(Smooth,Detrender,I1,Q1,I2,Q2,Re,Im,Period,SmoothPeriod,Price)) {
-        Price = real[i];
+        Price = series[i];
 
         Smooth = (4*Price + 3*Price[1] + 2*Price[2] + Price[3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);

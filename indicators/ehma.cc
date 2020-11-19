@@ -13,7 +13,7 @@ int ti_ehma_start(TI_REAL const *options) {
 }
 
 int ti_ehma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *ehma = outputs[0];
 
@@ -30,15 +30,15 @@ int ti_ehma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i = 0;
     for (; i < 1 && i < size; ++i) {
-        ema_n2 = real[i];
-        ema_n = real[i];
+        ema_n2 = series[i];
+        ema_n = series[i];
         ema_n05 = 2*ema_n2 - ema_n;
         
         *ehma++ = ema_n05;
     }
     for (; i < size; ++i) {
-        ema_n2 = (real[i] - ema_n2) * 2. / (n2 + 1.) + ema_n2;
-        ema_n = (real[i] - ema_n) * 2. / (n + 1.) + ema_n;
+        ema_n2 = (series[i] - ema_n2) * 2. / (n2 + 1.) + ema_n2;
+        ema_n = (series[i] - ema_n) * 2. / (n + 1.) + ema_n;
         ema_n05 = ((2*ema_n2 - ema_n) - ema_n05) * 2. / (n05 + 1.) + ema_n05;
 
         *ehma++ = ema_n05;
@@ -48,7 +48,7 @@ int ti_ehma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 DONTOPTIMIZE int ti_ehma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *ehma = outputs[0];
 
@@ -65,9 +65,9 @@ DONTOPTIMIZE int ti_ehma_ref(int size, TI_REAL const *const *inputs, TI_REAL con
     TI_REAL* arr_[1];
 
     arr_[0] = ema_n2.data();
-    ti_ema(size, &real, &n2, arr_);
+    ti_ema(size, &series, &n2, arr_);
     arr_[0] = ema_n.data();
-    ti_ema(size, &real, &n, arr_);
+    ti_ema(size, &series, &n, arr_);
 
     for (int i = 0; i < size; ++i) {
         subtr[i] = 2. * ema_n2[i] - ema_n[i];
@@ -125,7 +125,7 @@ void ti_ehma_stream_free(ti_stream *stream) {
 
 int ti_ehma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_ehma_stream *ptr = static_cast<ti_ehma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *ehma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -140,15 +140,15 @@ int ti_ehma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < 1 && i < size; ++i, ++progress) {
-        ema_n2 = real[i];
-        ema_n = real[i];
+        ema_n2 = series[i];
+        ema_n = series[i];
         ema_n05 = 2*ema_n2 - ema_n;
 
         *ehma++ = ema_n05;
     }
     for (; i < size; ++i, ++progress) {
-        ema_n2 = (real[i] - ema_n2) * 2. * n2_plus1_recipr + ema_n2;
-        ema_n = (real[i] - ema_n) * 2. * n_plus1_recipr + ema_n;
+        ema_n2 = (series[i] - ema_n2) * 2. * n2_plus1_recipr + ema_n2;
+        ema_n = (series[i] - ema_n) * 2. * n_plus1_recipr + ema_n;
         ema_n05 = ((2*ema_n2 - ema_n) - ema_n05) * 2. * n05_plus1_recipr + ema_n05;
 
         *ehma++ = ema_n05;

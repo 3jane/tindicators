@@ -18,7 +18,7 @@ int ti_rmf_start(TI_REAL const *options) {
 }
 
 int ti_rmf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL critical_period = options[0];
     TI_REAL median_period = options[1];
     TI_REAL *rmf = outputs[0];
@@ -36,11 +36,11 @@ int ti_rmf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
     }
     for (; i < size && progress == 0; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
         rmf_val = *std::next(rankedprice.begin(), median_period / 2);
         *rmf++ = rmf_val;
@@ -49,7 +49,7 @@ int ti_rmf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         price.pop_front();
     }
     for (; i < size; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
         rmf_val = alpha * *std::next(rankedprice.begin(), median_period / 2) + (1. - alpha) * rmf_val;
         *rmf++ = rmf_val;
@@ -108,7 +108,7 @@ void ti_rmf_stream_free(ti_stream *stream) {
 
 int ti_rmf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_rmf_stream *ptr = static_cast<ti_rmf_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *rmf = outputs[0];
     int progress = ptr->progress;
     TI_REAL median_period = ptr->options.median_period;
@@ -120,11 +120,11 @@ int ti_rmf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
     }
     for (; i < size && progress == 0; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
         rmf_val = *std::next(rankedprice.begin(), median_period / 2);
         *rmf++ = rmf_val;
@@ -133,7 +133,7 @@ int ti_rmf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         price.pop_front();
     }
     for (; i < size; ++i, ++progress) {
-        price.push_back(real[i]);
+        price.push_back(series[i]);
         rankedprice.insert(price.back());
         rmf_val = alpha * *std::next(rankedprice.begin(), median_period / 2) + (1. - alpha) * rmf_val;
         *rmf++ = rmf_val;

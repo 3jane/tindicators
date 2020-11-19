@@ -16,7 +16,7 @@ int ti_hfsma_start(TI_REAL const *options) {
 }
 
 int ti_hfsma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    const TI_REAL *const real = inputs[0];
+    const TI_REAL *const series = inputs[0];
     int sma_period = options[0];
     int k = options[1];
     TI_REAL threshold = options[2];
@@ -33,17 +33,17 @@ int ti_hfsma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
     int i = 0;
     for (; i < sma_period-1 && i < size; ++i, step(smoothed_price)) {
-        sum += real[i];
+        sum += series[i];
     }
     for (; i < sma_period-1 + 2*k && i < size; ++i, step(smoothed_price)) {
-        sum += real[i];
+        sum += series[i];
         rankedprice.insert(sum/sma_period);
         smoothed_price = sum/sma_period;
 
-        sum -= real[i-sma_period+1];
+        sum -= series[i-sma_period+1];
     }
     for (; i < size; ++i, step(smoothed_price)) {
-        sum += real[i];
+        sum += series[i];
         rankedprice.insert(sum/sma_period);
         smoothed_price = sum/sma_period;
 
@@ -57,7 +57,7 @@ int ti_hfsma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
         TI_REAL candidate = smoothed_price[k];
         *hfsma++ = fabs(candidate - median_price) <= threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        sum -= real[i-sma_period+1];
+        sum -= series[i-sma_period+1];
         rankedprice.erase(rankedprice.find(smoothed_price[2*k]));
     }
 
@@ -67,7 +67,7 @@ int ti_hfsma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 }
 
 int ti_hfsma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    const TI_REAL *const real = inputs[0];
+    const TI_REAL *const series = inputs[0];
     int sma_period = options[0];
     int k = options[1];
     TI_REAL threshold = options[2];
@@ -78,7 +78,7 @@ int ti_hfsma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options,
     if (threshold < 0) { return TI_INVALID_OPTION; }
 
     TI_REAL *sma = new TI_REAL[size];
-    ti_sma(size, &real, options, &sma);
+    ti_sma(size, &series, options, &sma);
 
     TI_REAL *data = new TI_REAL[2*(int)k+1];
 
@@ -166,7 +166,7 @@ void ti_hfsma_stream_free(ti_stream *stream) {
 
 int ti_hfsma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_hfsma_stream *ptr = static_cast<ti_hfsma_stream*>(stream);
-    const TI_REAL *const real = inputs[0];
+    const TI_REAL *const series = inputs[0];
     TI_REAL *hfsma = outputs[0];
     int progress = ptr->progress;
     int sma_period = ptr->options.sma_period;
@@ -182,20 +182,20 @@ int ti_hfsma_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
     int i = 0;
 
     for (; i < size && progress < -2*k; ++i, ++progress, step(price, smoothed_price)) {
-        price = real[i];
-        sum += real[i];
+        price = series[i];
+        sum += series[i];
     }
     for (; i < size && progress < 0; ++i, ++progress, step(price, smoothed_price)) {
-        price = real[i];
-        sum += real[i];
+        price = series[i];
+        sum += series[i];
         smoothed_price = sum/sma_period;
         rankedprice.insert(sum/sma_period);
 
         sum -= price[sma_period-1];
     }
     for (; i < size; ++i, ++progress, step(price, smoothed_price)) {
-        price = real[i];
-        sum += real[i];
+        price = series[i];
+        sum += series[i];
         smoothed_price = sum/sma_period;
         rankedprice.insert(sum/sma_period);
         TI_REAL median_price = *std::next(rankedprice.begin(), k);

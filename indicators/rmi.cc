@@ -36,7 +36,7 @@ int ti_rmi_start(TI_REAL const *options) {
 
 
 int ti_rmi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL lookback_period = options[1];
     TI_REAL *rmi = outputs[0];
@@ -50,16 +50,16 @@ int ti_rmi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = lookback_period;
     {
-        gains_ema = MAX(0, real[i] - real[i-(int)lookback_period]);
-        losses_ema = MAX(0, real[i-(int)lookback_period] - real[i]);
+        gains_ema = MAX(0, series[i] - series[i-(int)lookback_period]);
+        losses_ema = MAX(0, series[i-(int)lookback_period] - series[i]);
         ++i;
     }
     {
         *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
     for (; i < size; ++i) {
-        gains_ema = (MAX(0, real[i] - real[i-(int)lookback_period]) - gains_ema) * 2. / (1 + period) + gains_ema;
-        losses_ema = (MAX(0, real[i-(int)lookback_period] - real[i]) - losses_ema) * 2. / (1 + period) + losses_ema;
+        gains_ema = (MAX(0, series[i] - series[i-(int)lookback_period]) - gains_ema) * 2. / (1 + period) + gains_ema;
+        losses_ema = (MAX(0, series[i-(int)lookback_period] - series[i]) - losses_ema) * 2. / (1 + period) + losses_ema;
         *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
 
@@ -69,7 +69,7 @@ int ti_rmi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 }
 
 int ti_rmi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL lookback_period = options[1];
     TI_REAL *rmi = outputs[0];
@@ -82,8 +82,8 @@ int ti_rmi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
     TI_REAL *losses = (TI_REAL*)malloc(sizeof(TI_REAL) * (size-start));
 
     for (int i = lookback_period; i < size; ++i) {
-        gains[i-start] = MAX(0, real[i] - real[i-(int)lookback_period]);
-        losses[i-start] = MAX(0, real[i-(int)lookback_period] - real[i]);
+        gains[i-start] = MAX(0, series[i] - series[i-(int)lookback_period]);
+        losses[i-start] = MAX(0, series[i-(int)lookback_period] - series[i]);
     }
     ti_ema(size-start, &gains, &period, &gains);
     ti_ema(size-start, &losses, &period, &losses);
@@ -151,7 +151,7 @@ void ti_rmi_stream_free(ti_stream *stream) {
 int ti_rmi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_rmi_stream *ptr = static_cast<ti_rmi_stream*>(stream);
 
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *rmi = outputs[0];
 
     int progress = ptr->progress;
@@ -166,21 +166,21 @@ int ti_rmi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress < 1; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        gains_ema = std::max(0., real[i] - price[lookback_period]);
-        losses_ema = std::max(0., price[lookback_period] - real[i]);
+        gains_ema = std::max(0., series[i] - price[lookback_period]);
+        losses_ema = std::max(0., price[lookback_period] - series[i]);
 
         *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        gains_ema = (std::max(0., real[i] - price[lookback_period]) - gains_ema) * 2. / (period + 1) + gains_ema;
-        losses_ema = (std::max(0., price[lookback_period] - real[i]) - losses_ema) * 2. / (period + 1) + losses_ema;
+        gains_ema = (std::max(0., series[i] - price[lookback_period]) - gains_ema) * 2. / (period + 1) + gains_ema;
+        losses_ema = (std::max(0., price[lookback_period] - series[i]) - losses_ema) * 2. / (period + 1) + losses_ema;
 
         *rmi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 0;
     }

@@ -39,7 +39,7 @@ int ti_pfe_start(TI_REAL const *options) {
  */
 
 int ti_pfe(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const int period = options[0];
     const int ema_period = options[1];
     TI_REAL *pfe = outputs[0];
@@ -60,21 +60,21 @@ int ti_pfe(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 1;
     for (; i < period; ++i, step(denom)) {
-        denom = sqrt(pow(real[i] - real[i-1], 2) + 1.);
+        denom = sqrt(pow(series[i] - series[i-1], 2) + 1.);
         sum += denom;
     }
     for (; i < period+1; ++i, step(denom)) {
-        denom = sqrt(pow(real[i] - real[i-1], 2) + 1.);
+        denom = sqrt(pow(series[i] - series[i-1], 2) + 1.);
         sum += denom;
-        TI_REAL numer = SIGN(real[i] - real[i-period]) * 100. * sqrt(pow(real[i] - real[i-period], 2) + 100.);
+        TI_REAL numer = SIGN(series[i] - series[i-period]) * 100. * sqrt(pow(series[i] - series[i-period], 2) + 100.);
         ema = numer / sum;
         *pfe++ = ema;
         sum -= denom[period-1];
     }
     for (; i < size; ++i, step(denom)) {
-        denom = sqrt(pow(real[i] - real[i-1], 2) + 1.);
+        denom = sqrt(pow(series[i] - series[i-1], 2) + 1.);
         sum += denom;
-        TI_REAL numer = SIGN(real[i] - real[i-period]) * 100. * sqrt(pow(real[i] - real[i-period], 2) + 100.);
+        TI_REAL numer = SIGN(series[i] - series[i-period]) * 100. * sqrt(pow(series[i] - series[i-period], 2) + 100.);
 
         ema = EMA_NEXT(numer / sum);
         *pfe++ = ema;
@@ -95,7 +95,7 @@ int ti_pfe(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
  */
 
 int ti_pfe_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL ema_period = options[1];
     TI_REAL *pfe = outputs[0];
@@ -106,10 +106,10 @@ int ti_pfe_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
     for (int i = period; i < size; ++i) {
         TI_REAL div = 0.;
         for (int j = i - period + 1; j <= i; ++j) {
-            div += sqrt(pow(real[j] - real[j-1], 2) + 1);
+            div += sqrt(pow(series[j] - series[j-1], 2) + 1);
         }
-        TI_REAL numer = SIGN(real[i] - real[i-(int)period]) * 100. * sqrt(pow(real[i] - real[i-(int)period], 2) + 100.);
-        *pfe++ = SIGN(real[i] - real[i-(int)period]) * 100. * sqrt(pow(real[i] - real[i-(int)period], 2) + 100.) / div;
+        TI_REAL numer = SIGN(series[i] - series[i-(int)period]) * 100. * sqrt(pow(series[i] - series[i-(int)period], 2) + 100.);
+        *pfe++ = SIGN(series[i] - series[i-(int)period]) * 100. * sqrt(pow(series[i] - series[i-(int)period], 2) + 100.) / div;
     }
     ti_ema(size - period, outputs, &ema_period, outputs);
 
@@ -174,7 +174,7 @@ void ti_pfe_stream_free(ti_stream *stream) {
 int ti_pfe_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_pfe_stream *ptr = static_cast<ti_pfe_stream*>(stream);
 
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const int period = ptr->options.period;
     const int ema_period = ptr->options.ema_period;
     TI_REAL *pfe = outputs[0];
@@ -196,15 +196,15 @@ int ti_pfe_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; progress < -period + 1 && i < size; ++i, ++progress, step(price, denom)) {
-        price = real[i];
+        price = series[i];
     }
     for (; progress < 0 && i < size; ++i, ++progress, step(price, denom)) {
-        price = real[i];
+        price = series[i];
         denom = sqrt(pow(price - price[1], 2) + 1.);
         sum += denom;
     }
     for (; progress < 1 && i < size; ++i, ++progress, step(price, denom)) {
-        price = real[i];
+        price = series[i];
         denom = sqrt(pow(price - price[1], 2) + 1.);
         sum += denom;
         numer = SIGN(price - price[period]) * 100. * sqrt(pow(price - price[period], 2) + 100.);
@@ -214,7 +214,7 @@ int ti_pfe_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
         sum -= denom[period-1];
     }
     for (; i < size; ++i, ++progress, step(price, denom)) {
-        price = real[i];
+        price = series[i];
         denom = sqrt(pow(price - price[1], 2) + 1.);
         sum += denom;
         numer = SIGN(price - price[period]) * 100. * sqrt(pow(price - price[period], 2) + 100.);

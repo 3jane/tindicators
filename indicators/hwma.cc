@@ -23,7 +23,7 @@ struct {
 } static tables;
 
 int ti_hwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *hwma = outputs[0];
 
@@ -34,7 +34,7 @@ int ti_hwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     for (int i = period-1; i < size; ++i) {
         TI_REAL filt = 0;
         for (int j = 0; j < period; ++j) {
-            filt += c[12-j] * real[i-j];
+            filt += c[12-j] * series[i-j];
         }
         *hwma++ = filt;
     }
@@ -43,7 +43,7 @@ int ti_hwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 DONTOPTIMIZE int ti_hwma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *hwma = outputs[0];
 
@@ -54,7 +54,7 @@ DONTOPTIMIZE int ti_hwma_ref(int size, TI_REAL const *const *inputs, TI_REAL con
     for (int i = period-1; i < size; ++i) {
         TI_REAL filt = 0;
         for (int j = 0; j < period; ++j) {
-            filt += c[12-j] * real[i-j];
+            filt += c[12-j] * series[i-j];
         }
         *hwma++ = filt;
     }
@@ -101,7 +101,7 @@ void ti_hwma_stream_free(ti_stream *stream) {
 
 int ti_hwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_hwma_stream *ptr = static_cast<ti_hwma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *hwma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -111,10 +111,10 @@ int ti_hwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         *hwma++ =
               c[0] *price[12]
             + c[1] *price[11]

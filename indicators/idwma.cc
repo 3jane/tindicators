@@ -14,7 +14,7 @@ int ti_idwma_start(TI_REAL const *options) {
 }
 
 int ti_idwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     const TI_REAL exponent = options[1];
     TI_REAL *idwma = outputs[0];
@@ -33,7 +33,7 @@ int ti_idwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
     for (int i = period-1; i < size; ++i) {
         TI_REAL numer = 0;
         for (int j = 0; j < period; ++j) {
-            numer += real[i-j] * coefficients[j];
+            numer += series[i-j] * coefficients[j];
         }
         *idwma++ = numer / denom;
     }
@@ -42,7 +42,7 @@ int ti_idwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 }
 
 DONTOPTIMIZE int ti_idwma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL exponent = options[1];
     TI_REAL *idwma = outputs[0];
@@ -59,7 +59,7 @@ DONTOPTIMIZE int ti_idwma_ref(int size, TI_REAL const *const *inputs, TI_REAL co
     for (int i = period-1; i < size; ++i) {
         TI_REAL numer = 0;
         for (int j = 0; j < period; ++j) {
-            numer += real[i-j] * 1 / pow(j+1, exponent);
+            numer += series[i-j] * 1 / pow(j+1, exponent);
         }
         idwma[i-(int)period+1] = numer / denom;
     }
@@ -121,7 +121,7 @@ void ti_idwma_stream_free(ti_stream *stream) {
 
 int ti_idwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_idwma_stream *ptr = static_cast<ti_idwma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *idwma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -135,10 +135,10 @@ int ti_idwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
     int i = 0;
     
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         
         TI_REAL numer = 0;
         for (int j = 0; j < period; ++j) {

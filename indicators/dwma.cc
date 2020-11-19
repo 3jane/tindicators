@@ -13,7 +13,7 @@ int ti_dwma_start(TI_REAL const *options) {
 }
 
 int ti_dwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *dwma = outputs[0];
 
@@ -30,29 +30,29 @@ int ti_dwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i = 0;
     for (; i < period-1 && i < size; ++i) {
-        numer1 += (i+1)*real[i];
-        sum1 += real[i];
+        numer1 += (i+1)*series[i];
+        sum1 += series[i];
     }
     for (; i < 2*(period-1) && i < size; ++i, step(filt1)) {
-        numer1 += period*real[i];
-        sum1 += real[i];
+        numer1 += period*series[i];
+        sum1 += series[i];
 
         filt1 = numer1/denom;
 
         numer1 -= sum1;
-        sum1 -= real[i-period+1];
+        sum1 -= series[i-period+1];
 
         numer2 += (i-(period-1)+1)*filt1;
         sum2 += filt1;
     }
     for (; i < size; ++i, step(filt1)) {
-        numer1 += period*real[i];
-        sum1 += real[i];
+        numer1 += period*series[i];
+        sum1 += series[i];
 
         filt1 = numer1/denom;
 
         numer1 -= sum1;
-        sum1 -= real[i-period+1];
+        sum1 -= series[i-period+1];
 
         numer2 += period*filt1;
         sum2 += filt1;
@@ -70,7 +70,7 @@ int ti_dwma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
 DONTOPTIMIZE
 int ti_dwma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *dwma = outputs[0];
 
@@ -146,7 +146,7 @@ void ti_dwma_stream_free(ti_stream *stream) {
 
 int ti_dwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_dwma_stream *ptr = static_cast<ti_dwma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *dwma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -162,15 +162,15 @@ int ti_dwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < -(period-1) && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
-        numer1 += (progress+2*(period-1)+1)*real[i];
-        sum1 += real[i];
+        price = series[i];
+        numer1 += (progress+2*(period-1)+1)*series[i];
+        sum1 += series[i];
     }
     for (; progress < 0 && i < size; ++i, ++progress, step(filt1, price)) {
-        price = real[i];
+        price = series[i];
 
-        numer1 += period*real[i];
-        sum1 += real[i];
+        numer1 += period*series[i];
+        sum1 += series[i];
 
         filt1 = numer1/denom;
 
@@ -181,10 +181,10 @@ int ti_dwma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         sum2 += filt1;
     }
     for (; i < size; ++i, ++progress, step(filt1, price)) {
-        price = real[i];
+        price = series[i];
 
-        numer1 += period*real[i];
-        sum1 += real[i];
+        numer1 += period*series[i];
+        sum1 += series[i];
 
         filt1 = numer1/denom;
 

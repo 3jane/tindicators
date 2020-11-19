@@ -52,7 +52,7 @@ int ti_kst_start(TI_REAL const *options) {
 }
 
 int ti_kst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const int roc1 = options[0];
     const int roc2 = options[1];
     const int roc3 = options[2];
@@ -82,7 +82,7 @@ int ti_kst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     TI_REAL per4 = 2. / (ma4 + 1);
     TI_REAL per_signal = 2. / (9. + 1.);
 
-    #define ROC(idx, period) ((real[idx] - real[idx-period]) / real[idx-period])
+    #define ROC(idx, period) ((series[idx] - series[idx-period]) / series[idx-period])
 
     TI_REAL _1 = ROC(roc1, roc1);
     TI_REAL _2 = ROC(roc2, roc2);
@@ -124,7 +124,7 @@ int ti_kst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 }
 
 int ti_kst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL *roc = options;
     const TI_REAL *ma = options + 4;
     TI_REAL *kst = outputs[0];
@@ -150,7 +150,7 @@ int ti_kst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
         size_ema[i] = size_roc[i] - ti_ema_start(ma + i);
 
         roc_mem[i] = (TI_REAL*)malloc(sizeof(TI_REAL) * size_roc[i]);
-        ti_roc(size, &real, roc + i, roc_mem + i);
+        ti_roc(size, &series, roc + i, roc_mem + i);
 
         ema_mem[i] = (TI_REAL*)malloc(sizeof(TI_REAL) * size_ema[i]);
         ti_ema(size_roc[i], roc_mem + i, ma + i, ema_mem + i);

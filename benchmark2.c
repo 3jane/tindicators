@@ -388,7 +388,7 @@ void bench(const ti_indicator_info *info) {
         else if (strcmp(info->input_names[i], "high") == 0) { inputs[i] = high; }
         else if (strcmp(info->input_names[i], "low") == 0) { inputs[i] = low; }
         else if (strcmp(info->input_names[i], "close") == 0) { inputs[i] = close; }
-        else if (strcmp(info->input_names[i], "real") == 0) { inputs[i] = close; }
+        else if (strcmp(info->input_names[i], "series") == 0) { inputs[i] = close; }
         else if (strcmp(info->input_names[i], "volume") == 0) { inputs[i] = volume; }
         else { assert(0 && "unsupported input"); };
     }

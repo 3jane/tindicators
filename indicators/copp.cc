@@ -37,7 +37,7 @@ int ti_copp_start(TI_REAL const *options) {
 
 
 int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL roc_shorter_period = options[0];
     const TI_REAL roc_longer_period = options[1];
     const TI_REAL wma_period = options[2];
@@ -58,10 +58,10 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i = 0;
     for (; i < roc_longer_period; ++i, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < roc_longer_period + wma_period-1; ++i, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
 
         rocs = price[roc_shorter_period] && price[roc_longer_period]
             ? ((price / price[roc_shorter_period] - 1) + (price / price[roc_longer_period] - 1)) / 2. * 100.
@@ -71,7 +71,7 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         weighted_rocs_sum += rocs * (i + 1 - roc_longer_period);
     }
     for (; i < size; ++i, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
 
         rocs = price[roc_shorter_period] && price[roc_longer_period]
             ? ((price / price[roc_shorter_period] - 1) + (price / price[roc_longer_period] - 1)) / 2. * 100.
@@ -91,7 +91,7 @@ int ti_copp(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 int ti_copp_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL roc_shorter_period = options[0];
     const TI_REAL roc_longer_period = options[1];
     const TI_REAL wma_period = options[2];
@@ -115,8 +115,8 @@ int ti_copp_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
     // int wma_len = roc_long_len-ti_wma_start(&wma_period);
     // TI_REAL *wma = malloc(sizeof(TI_REAL[wma_len]));
 
-    ti_roc(size, &real, &roc_shorter_period, &roc_short);
-    ti_roc(size, &real, &roc_longer_period, &roc_long);
+    ti_roc(size, &series, &roc_shorter_period, &roc_short);
+    ti_roc(size, &series, &roc_longer_period, &roc_long);
 
     for (int i = 0; i < roc_long_len; ++i) {
         interm[i] = (roc_long[i] + roc_short[i+(roc_short_len-roc_long_len)]) * 100. / 2.;
@@ -198,7 +198,7 @@ int ti_copp_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
     ti_copp_stream *ptr = static_cast<ti_copp_stream*>(stream);
     int progress = ptr->progress;
 
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *copp = outputs[0];
 
     const int roc_shorter_period = ptr->options.roc_shorter_period;
@@ -215,10 +215,10 @@ int ti_copp_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; i < size && progress < -START + roc_longer_period; ++i, ++progress, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress < -START + roc_longer_period + wma_period-1; ++i, ++progress, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
 
         rocs = price[roc_shorter_period] && price[roc_longer_period]
             ? ((price / price[roc_shorter_period] - 1) + (price / price[roc_longer_period] - 1)) / 2. * 100.
@@ -228,7 +228,7 @@ int ti_copp_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         weighted_rocs_sum += rocs * (progress + 1 - (-START + roc_longer_period));
     }
     for (; i < size; ++i, ++progress, step(price, rocs)) {
-        price = real[i];
+        price = series[i];
 
         rocs = price[roc_shorter_period] && price[roc_longer_period]
             ? ((price / price[roc_shorter_period] - 1) + (price / price[roc_longer_period] - 1)) / 2. * 100.
