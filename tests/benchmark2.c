@@ -30,9 +30,9 @@
 #include <ctype.h>
 #include <math.h>
 
-#include "indicators.h"
-#include "utils/testing.h"
-#include "utils/minmax.h"
+#include "../indicators.h"
+#include "../utils/testing.h"
+#include "../utils/minmax.h"
 
 #define INSIZE 400
 #define MIN_PERIOD 4

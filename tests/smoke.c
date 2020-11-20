@@ -21,10 +21,10 @@
  *
  */
 
-#include "indicators.h"
-#include "utils/buffer.h"
-#include "utils/minmax.h"
-#include "utils/testing.h"
+#include "../indicators.h"
+#include "../utils/buffer.h"
+#include "../utils/minmax.h"
+#include "../utils/testing.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -346,9 +346,9 @@ int main(int argc, const char** argv) {
     }
 
 
-    run_tests("tests/untest.txt", target_name, 1);
-    run_tests("tests/atoz.txt", target_name, 0);
-    run_tests("tests/extra.txt", target_name, 0);
+    run_tests("tests/smoke-testcases/untest.txt", target_name, 1);
+    run_tests("tests/smoke-testcases/atoz.txt", target_name, 0);
+    run_tests("tests/smoke-testcases/extra.txt", target_name, 0);
 
     if (!target_name) {
         int i;

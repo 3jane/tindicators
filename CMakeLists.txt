@@ -110,17 +110,17 @@ message("${VALGRIND_CMD}")
 ## Tests
 enable_testing()
 
-add_executable(smoke smoke.c ${utils})
+add_executable(smoke tests/smoke.c ${utils})
 target_link_libraries(smoke indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/smoke" path)
 add_test(NAME smoke COMMAND ${VALGRIND_CMD} ${path} ${indicator_name} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-add_executable(fuzzer fuzzer.cc)
+add_executable(fuzzer tests/fuzzer.cc)
 target_link_libraries(fuzzer indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/fuzzer" path)
 add_test(NAME fuzzer COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
 
-add_executable(benchmark2 benchmark2.c ${utils})
+add_executable(benchmark2 tests/benchmark2.c ${utils})
 target_link_libraries(benchmark2 indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/benchmark2" path)
 if (NOT "${indicator_name}" STREQUAL "")
