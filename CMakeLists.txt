@@ -106,26 +106,6 @@ endif()
     
 message("${VALGRIND_CMD}")
 
-# Samples
-# failed to build on MSVC:
-# add_executable(example1 example1.c)
-# target_link_libraries(example1 indicators)
-
-add_executable(example2 example2.c)
-target_link_libraries(example2 indicators)
-
-add_executable(sample sample.c)
-target_link_libraries(sample indicators)
-
-# not ready yet:
-# file(GLOB src-h utils/*.h indicators/*.h)
-# add_custom_command(
-#     OUTPUT tiamalgamation.c
-#     COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_FLAGS} -E -P -DTI_SKIP_SYSTEM_HEADERS -D__TI_INDICATORS_H__ -D__BUFFER_H__ -D__MINMAX_H__ ${src} | cat - ${src-h} > tiamalgamation.c
-# )
-
-# CC -E -P $CFLAGS -DTI_SKIP_SYSTEM_HEADERS -D__TI_INDICATORS_H__ -D__BUFFER_H__ -D__MINMAX_H__ |
-# cat <(CC -E -P $CFLAGS -DTI_SKIP_SYSTEM_HEADERS -D__TI_INDICATORS_H__ -D__BUFFER_H__ -D__MINMAX_H__) <(**/*.h) > tiamalgamation.c
 
 ## Tests
 enable_testing()
@@ -139,12 +119,6 @@ add_executable(fuzzer fuzzer.cc)
 target_link_libraries(fuzzer indicators)
 file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/fuzzer" path)
 add_test(NAME fuzzer COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
-
-add_executable(benchmark benchmark.c)
-set_target_properties(benchmark PROPERTIES EXCLUDE_FROM_ALL 1)
-target_link_libraries(benchmark indicators ta_lib)
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/benchmark" path)
-#add_test(NAME benchmark COMMAND ${VALGRIND_CMD} ${path} ${indicator_name})
 
 add_executable(benchmark2 benchmark2.c ${utils})
 target_link_libraries(benchmark2 indicators)
