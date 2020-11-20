@@ -33,7 +33,7 @@ int ti_mama_start(TI_REAL const *options) {
 }
 
 int ti_mama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *out_mama = outputs[0];
     TI_REAL *out_fama = outputs[1];
 
@@ -58,7 +58,7 @@ int ti_mama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     ringbuf<2> fama;
 
     for (int i = 6; i < size; ++i, step(smooth,detrender,I1,Q1,I2,Q2,Re,Im,period,smoothperiod,phase,mama,fama)) {
-        smooth = (4 * real[i] + 3 * real[i-1] + 2 * real[i-2] + real[i-3]) / 10.;
+        smooth = (4 * series[i] + 3 * series[i-1] + 2 * series[i-2] + series[i-3]) / 10.;
         detrender = (.0962*smooth + .5769*smooth[2] - .5769*smooth[4] - .0962*smooth[6]) * (.075*period[1] + .54);
 
         Q1 = (.0962*detrender + .5769*detrender[2] - .5769*detrender[4] - .0962*detrender[6]) * (.075*period[1] + .54);
@@ -93,7 +93,7 @@ int ti_mama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         const TI_REAL deltaphase = std::max(1., phase[1] - phase);
         const TI_REAL alpha = std::max(slowlimit, fastlimit / deltaphase);
 
-        mama = alpha * real[i] + (1. - alpha) * mama[1];
+        mama = alpha * series[i] + (1. - alpha) * mama[1];
         fama = .5 * alpha * mama + (1. - .5 * alpha) * fama[1];
 
         *out_mama++ = mama;
@@ -106,7 +106,7 @@ int ti_mama(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 int ti_mama_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL fastlimit = options[0];
     const TI_REAL slowlimit = options[1];
     TI_REAL *mama = outputs[0];
@@ -119,7 +119,7 @@ int ti_mama_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, 
     }
 
     // Straightforward translation of the original definition in EasyLanguage
-    TI_REAL const *price = real;
+    TI_REAL const *price = series;
 
     TI_REAL *smooth = (TI_REAL*)calloc(size, sizeof(TI_REAL));
     TI_REAL *detrender = (TI_REAL*)calloc(size, sizeof(TI_REAL));
@@ -265,7 +265,7 @@ int ti_mama_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
     ti_mama_stream *ptr = static_cast<ti_mama_stream*>(stream);
     int progress = ptr->progress;
 
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL fastlimit = ptr->options.fastlimit;
     const TI_REAL slowlimit = ptr->options.slowlimit;
     TI_REAL *out_mama = outputs[0];
@@ -288,10 +288,10 @@ int ti_mama_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress, step(price,smooth,detrender,I1,Q1,I2,Q2,Re,Im,period,smoothperiod,phase,mama,fama)) {
-        price = real[i];
+        price = series[i];
     }
     for (i; i < size; ++i, ++progress, step(price,smooth,detrender,I1,Q1,I2,Q2,Re,Im,period,smoothperiod,phase,mama,fama)) {
-        price = real[i];
+        price = series[i];
 
         smooth = (4*price + 3*price[1] + 2*price[2] + price[3]) / 10.;
         detrender = (.0962*smooth + .5769*smooth[2] - .5769*smooth[4] - .0962*smooth[6]) * (.075*period[1] + .54);

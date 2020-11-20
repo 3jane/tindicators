@@ -9,7 +9,7 @@ int ti_mgdyn_start(TI_REAL const *options) {
 }
 
 int ti_mgdyn(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL N = options[0];
     
     TI_REAL *mgdyn = outputs[0];
@@ -18,11 +18,11 @@ int ti_mgdyn(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
     int i = 0;
     for (; i < 1 && i < size; ++i) {
-        filt = real[i];
+        filt = series[i];
         *mgdyn++ = filt;
     }
     for (; i < size; ++i) {
-        filt = filt + (real[i] - filt)/(N*pow(real[i]/filt, 4));
+        filt = filt + (series[i] - filt)/(N*pow(series[i]/filt, 4));
         *mgdyn++ = filt;        
     }
 
@@ -30,7 +30,7 @@ int ti_mgdyn(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 }
 
 DONTOPTIMIZE int ti_mgdyn_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL N = options[0];
     
     TI_REAL *mgdyn = outputs[0];
@@ -39,11 +39,11 @@ DONTOPTIMIZE int ti_mgdyn_ref(int size, TI_REAL const *const *inputs, TI_REAL co
 
     int i = 0;
     for (; i < 1 && i < size; ++i) {
-        filt = real[i];
+        filt = series[i];
         *mgdyn++ = filt;
     }
     for (; i < size; ++i) {
-        filt = filt + (real[i] - filt)/(N*pow(real[i]/filt, 4));
+        filt = filt + (series[i] - filt)/(N*pow(series[i]/filt, 4));
         *mgdyn++ = filt;        
     }
 
@@ -88,7 +88,7 @@ void ti_mgdyn_stream_free(ti_stream *stream) {
 
 int ti_mgdyn_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_mgdyn_stream *ptr = static_cast<ti_mgdyn_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *mgdyn = outputs[0];
     const TI_REAL N = ptr->options.N;
     int progress = ptr->progress;
@@ -96,11 +96,11 @@ int ti_mgdyn_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
 
     int i = 0;
     for (; progress < 1 && i < size; ++i, ++progress) {
-        filt = real[i];
+        filt = series[i];
         *mgdyn++ = filt;
     }
     for (; i < size; ++i, ++progress) {
-        filt = filt + (real[i] - filt)/(N*pow(real[i]/filt, 4));
+        filt = filt + (series[i] - filt)/(N*pow(series[i]/filt, 4));
         *mgdyn++ = filt;        
     }
 

@@ -11,7 +11,7 @@ int ti_ssmooth_start(TI_REAL const *options) {
 }
 
 int ti_ssmooth(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *ssmooth = outputs[0];
 
     TI_REAL price1 = 0;
@@ -26,7 +26,7 @@ int ti_ssmooth(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
 
     int i = 0;
     for (; i < size; ++i) {
-        TI_REAL price = real[i];
+        TI_REAL price = series[i];
         TI_REAL filt = c1*(price + price1) / 2 + c2*filt1 + c3*filt2;
 
         price1 = price;
@@ -76,7 +76,7 @@ void ti_ssmooth_stream_free(ti_stream *stream) {
 
 int ti_ssmooth_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_ssmooth_stream *ptr = static_cast<ti_ssmooth_stream*>(stream);
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *ssmooth = outputs[0];
     int progress = ptr->progress;
 
@@ -92,7 +92,7 @@ int ti_ssmooth_stream_run(ti_stream *stream, int size, TI_REAL const *const *inp
 
     int i = 0;
     for (; i < size; ++i, ++progress) {
-        TI_REAL price = real[i];
+        TI_REAL price = series[i];
         TI_REAL filt = c1*(price + price1) / 2 + c2*filt1 + c3*filt2;
 
         price1 = price;

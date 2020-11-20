@@ -208,10 +208,10 @@ foreach i $indicators {
     puts -nonewline $o "\$ti_example\['$ind(name)'\] = \""
     puts $o "/* Example usage of $ind(full_name) */"
 
-    if {$ind(inputs) == "real"} {
+    if {$ind(inputs) == "series"} {
         puts $o "/* Assuming that 'input' is a pre-loaded array of size 'in_size'. */"
         set inputs input
-    } elseif {$ind(inputs) == "real real"} {
+    } elseif {$ind(inputs) == "series series"} {
         puts $o "/* Assuming that 'input1' and 'input2' are pre-loaded arrays of size 'in_size'. */"
         set inputs "input1 input2"
     } else {

@@ -14,7 +14,7 @@ build = int(time.time())
 
 path_prefix = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
 
-indicators = yaml.safe_load(open(path_prefix+'indicators.yaml'))
+indicators = yaml.safe_load(open(path_prefix+'indicators.yaml', encoding='utf8'))
 
 
 def declaration_start(name):
@@ -33,7 +33,7 @@ def declaration_stream_free(name):
 
 with open(path_prefix+'indicators.h', 'w') as f:
     def declarations(indicator):
-        name, (elab_name, type, inputs, options, outputs, features) = indicator
+        name, (elab_name, type, inputs, options, outputs, features, source) = indicator
         result = '\n'.join([
             f'/* {name} */',
             f'/* Type: {type} */',
@@ -138,7 +138,7 @@ with open(path_prefix+'indicators.h', 'w') as f:
 
 with open(path_prefix+'indicators_index.c', 'w') as f:
     def index_entry(indicator):
-        name, (elab_name, type, inputs, options, outputs, features) = indicator
+        name, (elab_name, type, inputs, options, outputs, features, source) = indicator
         result = '{' + ', '.join([
             f'"{name}"',
             f'"{elab_name}"',
@@ -208,7 +208,7 @@ with open(path_prefix+'indicators_index.c', 'w') as f:
     f.write(result)
 
 for indicator in indicators.items():
-    name, (elab_name, type, inputs, options, outputs, features) = indicator
+    name, (elab_name, type, inputs, options, outputs, features, source) = indicator
     file_path_c = os.path.join(path_prefix+'indicators', f'{name}.c')
     file_path_cc = os.path.join(path_prefix+'indicators', f'{name}.cc')
 

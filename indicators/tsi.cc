@@ -30,7 +30,7 @@ int ti_tsi_start(TI_REAL const *options) {
 }
 
 int ti_tsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL y_period = options[0];
     const TI_REAL z_period = options[1];
     TI_REAL *tsi = outputs[0];
@@ -48,20 +48,20 @@ int ti_tsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
     int i = 0;
 
     for (; i < size && progress == -1; ++i, ++progress) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress == 0; ++i, ++progress) {
-        z_ema_num = y_ema_num = real[i] - price;
-        z_ema_den = y_ema_den = fabs(real[i] - price);
+        z_ema_num = y_ema_num = series[i] - price;
+        z_ema_den = y_ema_den = fabs(series[i] - price);
 
 
         *tsi++ = 100. * (z_ema_den ? z_ema_num / z_ema_den : 0);
 
-        price = real[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress) {
-        y_ema_num = ((real[i] - price) - y_ema_num) * 2. / (1. + y_period) + y_ema_num;
-        y_ema_den = ((fabs(real[i] - price)) - y_ema_den) * 2. / (1. + y_period) + y_ema_den;
+        y_ema_num = ((series[i] - price) - y_ema_num) * 2. / (1. + y_period) + y_ema_num;
+        y_ema_den = ((fabs(series[i] - price)) - y_ema_den) * 2. / (1. + y_period) + y_ema_den;
 
         z_ema_num = (y_ema_num - z_ema_num) * 2. / (1. + z_period) + z_ema_num;
         z_ema_den = (y_ema_den - z_ema_den) * 2. / (1. + z_period) + z_ema_den;
@@ -69,14 +69,14 @@ int ti_tsi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
         *tsi++ = 100. * (z_ema_den ? z_ema_num / z_ema_den : 0);
 
-        price = real[i];
+        price = series[i];
     }
 
     return TI_OKAY;
 }
 
 int ti_tsi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const TI_REAL y_period = options[0];
     const TI_REAL z_period = options[1];
     TI_REAL *tsi = outputs[0];
@@ -86,7 +86,7 @@ int ti_tsi_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, T
     TI_REAL _one = 1;
     int outsize = size - ti_mom_start(&_one);
     TI_REAL *momentum = (TI_REAL*)malloc(sizeof(TI_REAL) * outsize);
-    ti_mom(size, &real, &_one, &momentum);
+    ti_mom(size, &series, &_one, &momentum);
 
     TI_REAL *absmomentum = (TI_REAL*)malloc(sizeof(TI_REAL) * outsize);
     ti_abs(outsize, &momentum, 0, &absmomentum);
@@ -147,7 +147,7 @@ void ti_tsi_stream_free(ti_stream *stream) {
 
 int ti_tsi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_tsi_stream *ptr = static_cast<ti_tsi_stream*>(stream);
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *tsi = outputs[0];
 
     const TI_REAL y_period = ptr->options.y_period;
@@ -164,20 +164,20 @@ int ti_tsi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
     int i = 0;
 
     for (; i < size && progress == -1; ++i, ++progress) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress == 0; ++i, ++progress) {
-        z_ema_num = y_ema_num = real[i] - price;
-        z_ema_den = y_ema_den = fabs(real[i] - price);
+        z_ema_num = y_ema_num = series[i] - price;
+        z_ema_den = y_ema_den = fabs(series[i] - price);
 
 
         *tsi++ = 100. * (z_ema_den ? z_ema_num / z_ema_den : 0);
 
-        price = real[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress) {
-        y_ema_num = ((real[i] - price) - y_ema_num) * 2. / (1. + y_period) + y_ema_num;
-        y_ema_den = ((fabs(real[i] - price)) - y_ema_den) * 2. / (1. + y_period) + y_ema_den;
+        y_ema_num = ((series[i] - price) - y_ema_num) * 2. / (1. + y_period) + y_ema_num;
+        y_ema_den = ((fabs(series[i] - price)) - y_ema_den) * 2. / (1. + y_period) + y_ema_den;
 
         z_ema_num = (y_ema_num - z_ema_num) * 2. / (1. + z_period) + z_ema_num;
         z_ema_den = (y_ema_den - z_ema_den) * 2. / (1. + z_period) + z_ema_den;
@@ -185,7 +185,7 @@ int ti_tsi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
         *tsi++ = 100. * (z_ema_den ? z_ema_num / z_ema_den : 0);
 
-        price = real[i];
+        price = series[i];
     }
 
     ptr->progress = progress;

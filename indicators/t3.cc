@@ -14,7 +14,7 @@ int ti_t3_start(TI_REAL const *options) {
 }
 
 int ti_t3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL v = options[1];
     TI_REAL *t3 = outputs[0];
@@ -36,22 +36,22 @@ int ti_t3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     int i = 0;
     for (; i < 1 && i < size; ++i) {
-        ema1_1 = real[i];
-        ema2_1 = real[i];
-        gd1 = real[i];
+        ema1_1 = series[i];
+        ema2_1 = series[i];
+        gd1 = series[i];
 
-        ema1_2 = real[i];
-        ema2_2 = real[i];
-        gd2 = real[i];
+        ema1_2 = series[i];
+        ema2_2 = series[i];
+        gd2 = series[i];
 
-        ema1_3 = real[i];
-        ema2_3 = real[i];
-        gd3 = real[i];
+        ema1_3 = series[i];
+        ema2_3 = series[i];
+        gd3 = series[i];
 
         *t3++ = gd3;
     }
     for (; i < size; ++i) {
-        ema1_1 = (real[i] - ema1_1) * 2. / (period + 1) + ema1_1;
+        ema1_1 = (series[i] - ema1_1) * 2. / (period + 1) + ema1_1;
         ema2_1 = (ema1_1 - ema2_1) * 2. / (period + 1) + ema2_1;
         gd1 = ema1_1 * (1+v) - ema2_1 * v;
 
@@ -70,7 +70,7 @@ int ti_t3(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 }
 
 DONTOPTIMIZE int ti_t3_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL v = options[1];
     TI_REAL *t3 = outputs[0];
@@ -100,7 +100,7 @@ DONTOPTIMIZE int ti_t3_ref(int size, TI_REAL const *const *inputs, TI_REAL const
     };
 
     std::vector<TI_REAL> input(size);
-    std::memcpy(input.data(), real, sizeof(TI_REAL) * size);
+    std::memcpy(input.data(), series, sizeof(TI_REAL) * size);
     std::vector<TI_REAL> output = GD(GD(GD(input)));
     std::memcpy(t3, output.data(), sizeof(TI_REAL) * size);
 
@@ -159,7 +159,7 @@ void ti_t3_stream_free(ti_stream *stream) {
 
 int ti_t3_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_t3_stream *ptr = static_cast<ti_t3_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *t3 = outputs[0];
     int progress = ptr->progress;
     const TI_REAL period = ptr->options.period;
@@ -180,22 +180,22 @@ int ti_t3_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
 
     int i = 0;
     for (; progress < 1 && i < size; ++i, ++progress) {
-        ema1_1 = real[i];
-        ema2_1 = real[i];
-        gd1 = real[i];
+        ema1_1 = series[i];
+        ema2_1 = series[i];
+        gd1 = series[i];
 
-        ema1_2 = real[i];
-        ema2_2 = real[i];
-        gd2 = real[i];
+        ema1_2 = series[i];
+        ema2_2 = series[i];
+        gd2 = series[i];
 
-        ema1_3 = real[i];
-        ema2_3 = real[i];
-        gd3 = real[i];
+        ema1_3 = series[i];
+        ema2_3 = series[i];
+        gd3 = series[i];
 
         *t3++ = gd3;
     }
     for (; i < size; ++i, ++progress) {
-        ema1_1 = (real[i] - ema1_1) * 2. / (period + 1) + ema1_1;
+        ema1_1 = (series[i] - ema1_1) * 2. / (period + 1) + ema1_1;
         ema2_1 = (ema1_1 - ema2_1) * 2. / (period + 1) + ema2_1;
         gd1 = ema1_1 * (1+v) - ema2_1 * v;
 

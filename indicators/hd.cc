@@ -13,7 +13,7 @@ int ti_hd_start(TI_REAL const *options) {
 static const TI_REAL PI = acos(-1);
 
 int ti_hd(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     
     TI_REAL *hd = outputs[0];
 
@@ -31,10 +31,10 @@ int ti_hd(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     int i = 0;
     for (; i < 5 && i < size; ++i, step(Price)) {
-        Price = real[i];
+        Price = series[i];
     }
     for (; i < size; ++i, step(Smooth,Detrender,I1,Q1,I2,Q2,Re,Im,Period,SmoothPeriod,Price)) {
-        Price = real[i];
+        Price = series[i];
 
         Smooth = (4*Price + 3*Price[1] + 2*Price[2] + Price[3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);
@@ -71,7 +71,7 @@ int ti_hd(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 }
 
 DONTOPTIMIZE int ti_hd_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     
     TI_REAL *hd = outputs[0];
 
@@ -91,10 +91,10 @@ DONTOPTIMIZE int ti_hd_ref(int size, TI_REAL const *const *inputs, TI_REAL const
 
     int i = 0;
     for (; i < 5 && i < size; ++i, step(Price)) {
-        Price = real[i];
+        Price = series[i];
     }
     for (; i < size; ++i, step(Smooth,Detrender,I1,Q1,jI,jQ,I2,Q2,Re,Im,Period,SmoothPeriod,Price)) {
-        Price = real[i];
+        Price = series[i];
 
         Smooth = (4*Price + 3*Price[1] + 2*Price[2] + Price[3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);
@@ -171,7 +171,7 @@ void ti_hd_stream_free(ti_stream *stream) {
 
 int ti_hd_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
 ti_hd_stream *ptr = static_cast<ti_hd_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *hd = outputs[0];
     int progress = ptr->progress;
     auto &Smooth = ptr->state.Smooth;
@@ -188,10 +188,10 @@ ti_hd_stream *ptr = static_cast<ti_hd_stream*>(stream);
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(Price)) {
-        Price = real[i];
+        Price = series[i];
     }
     for (; i < size; ++i, ++progress, step(Smooth,Detrender,I1,Q1,I2,Q2,Re,Im,Period,SmoothPeriod,Price)) {
-        Price = real[i];
+        Price = series[i];
 
         Smooth = (4*Price + 3*Price[1] + 2*Price[2] + Price[3]) / 10.;
         Detrender = (.0962*Smooth + .5769*Smooth[2] - .5769*Smooth[4] - .0962*Smooth[6]) * (.075*Period[1] + .54);

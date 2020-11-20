@@ -12,7 +12,7 @@ int ti_lf_start(TI_REAL const *options) {
 }
 
 int ti_lf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL gamma = options[0];
     TI_REAL *lf = outputs[0];
 
@@ -25,7 +25,7 @@ int ti_lf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     int i = 0;
     for (; i < size; ++i) {
-        TI_REAL L0_new = (1. - gamma) * real[i] + gamma*L0;
+        TI_REAL L0_new = (1. - gamma) * series[i] + gamma*L0;
         TI_REAL L1_new = -gamma*L0_new + L0 + gamma*L1;
         TI_REAL L2_new = -gamma*L1_new + L1 + gamma*L2;
         TI_REAL L3_new = -gamma*L2_new + L2 + gamma*L3;
@@ -82,7 +82,7 @@ void ti_lf_stream_free(ti_stream *stream) {
 
 int ti_lf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_lf_stream *ptr = static_cast<ti_lf_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *lf = outputs[0];
     int progress = ptr->progress;
     TI_REAL gamma = ptr->options.gamma;
@@ -94,7 +94,7 @@ int ti_lf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
 
     int i = 0;
     for (; i < size; ++i, ++progress) {
-        TI_REAL L0_new = (1. - gamma) * real[i] + gamma*L0;
+        TI_REAL L0_new = (1. - gamma) * series[i] + gamma*L0;
         TI_REAL L1_new = -gamma*L0_new + L0 + gamma*L1;
         TI_REAL L2_new = -gamma*L1_new + L1 + gamma*L2;
         TI_REAL L3_new = -gamma*L2_new + L2 + gamma*L3;

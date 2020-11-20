@@ -14,7 +14,7 @@ int ti_hurst_start(TI_REAL const *options) {
 }
 
 int ti_hurst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *hurst = outputs[0];
     TI_REAL *fractal_dim = outputs[1];
@@ -26,11 +26,11 @@ int ti_hurst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
     int i = 1;
     for (; i < period && i < size; ++i, step(r)) {
-        r = real[i] && real[i-1] ? log(real[i] / real[i-1]) : 0;
+        r = series[i] && series[i-1] ? log(series[i] / series[i-1]) : 0;
         sum += r;
     }
     for (; i < size; ++i, step(r)) {
-        r = real[i] && real[i-1] ? log(real[i] / real[i-1]) : 0;
+        r = series[i] && series[i-1] ? log(series[i] / series[i-1]) : 0;
         sum += r;
 
         TI_REAL mean = sum / period;
@@ -65,14 +65,14 @@ int ti_hurst(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
 DONTOPTIMIZE
 int ti_hurst_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *hurst = outputs[0];
     TI_REAL *fractal_dim = outputs[1];
 
     if (period < 2) { return TI_INVALID_OPTION; }
 
-    #define r(i) log(real[(i)]/real[(i)-1])
+    #define r(i) log(series[(i)]/series[(i)-1])
 
     for (int i = period; i < size; ++i) {
         TI_REAL mean = 0;
@@ -157,7 +157,7 @@ void ti_hurst_stream_free(ti_stream *stream) {
 
 int ti_hurst_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_hurst_stream *ptr = static_cast<ti_hurst_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *hurst = outputs[0];
     TI_REAL *fractal_dim = outputs[1];
     int progress = ptr->progress;
@@ -169,16 +169,16 @@ int ti_hurst_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
 
     int i = 0;
     for (; progress < -period+1 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; progress < 0 && i < size; ++i, ++progress, step(price, r)) {
-        price = real[i];
+        price = series[i];
 
         r = price && price[1] ? log(price / price[1]) : 0;
         sum += r;
     }
     for (; i < size; ++i, ++progress, step(price, r)) {
-        price = real[i];
+        price = series[i];
 
         r = price && price[1] ? log(price / price[1]) : 0;
         sum += r;

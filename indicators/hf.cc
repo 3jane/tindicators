@@ -16,7 +16,7 @@ int ti_hf_start(TI_REAL const *options) {
 }
 
 int ti_hf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int k = options[0];
     const TI_REAL threshold = options[1];
     TI_REAL *hf = outputs[0];
@@ -29,10 +29,10 @@ int ti_hf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
 
     int i = 0;
     for (; i < 2*k && i < size; ++i) {
-        rankedprice.insert(real[i]);
+        rankedprice.insert(series[i]);
     }
     for (; i < size; ++i) {
-        rankedprice.insert(real[i]);
+        rankedprice.insert(series[i]);
 
         TI_REAL median_price = *std::next(rankedprice.begin(), k);
 
@@ -45,17 +45,17 @@ int ti_hf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REA
         std::nth_element(a.begin(), a.begin()+k, a.end());
         TI_REAL median_deviation = a[k];
 
-        TI_REAL candidate = real[i];
+        TI_REAL candidate = series[i];
         *hf++ = fabs(candidate - median_price) < threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(rankedprice.find(real[i-2*k]));
+        rankedprice.erase(rankedprice.find(series[i-2*k]));
     }
 
     return TI_OKAY;
 }
 
 DONTOPTIMIZE int ti_hf_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int k = options[0];
     const TI_REAL threshold = options[1];
     TI_REAL *hf = outputs[0];
@@ -67,10 +67,10 @@ DONTOPTIMIZE int ti_hf_ref(int size, TI_REAL const *const *inputs, TI_REAL const
 
     int i = 0;
     for (; i < 2*k && i < size; ++i) {
-        rankedprice.insert(real[i]);
+        rankedprice.insert(series[i]);
     }
     for (; i < size; ++i) {
-        rankedprice.insert(real[i]);
+        rankedprice.insert(series[i]);
 
         TI_REAL median_price = *std::next(rankedprice.begin(), k);
 
@@ -82,10 +82,10 @@ DONTOPTIMIZE int ti_hf_ref(int size, TI_REAL const *const *inputs, TI_REAL const
         std::nth_element(a.begin(), a.begin()+k, a.end());
         TI_REAL median_deviation = a[k];
 
-        TI_REAL candidate = real[i];
+        TI_REAL candidate = series[i];
         *hf++ = fabs(candidate - median_price) < threshold * 1.4826 * median_deviation ? candidate : median_price;
 
-        rankedprice.erase(rankedprice.find(real[i-2*k]));;
+        rankedprice.erase(rankedprice.find(series[i-2*k]));;
     }
 
     return TI_OKAY;
@@ -138,7 +138,7 @@ void ti_hf_stream_free(ti_stream *stream) {
 
 int ti_hf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_hf_stream *ptr = static_cast<ti_hf_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *hf = outputs[0];
     int progress = ptr->progress;
     const int k = ptr->options.k;
@@ -150,12 +150,12 @@ int ti_hf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
-        rankedprice.insert(real[i]);
+        price = series[i];
+        rankedprice.insert(series[i]);
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
-        rankedprice.insert(real[i]);
+        price = series[i];
+        rankedprice.insert(series[i]);
 
         TI_REAL median_price = *std::next(rankedprice.begin(), k);
 
@@ -168,7 +168,7 @@ int ti_hf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, 
         std::nth_element(absbuf.begin(), absbuf.begin()+k, absbuf.end());
         TI_REAL median_deviation = absbuf[k];
 
-        TI_REAL candidate = real[i];
+        TI_REAL candidate = series[i];
         *hf++ = fabs(candidate - median_price) < threshold * 1.4826 * median_deviation ? candidate : median_price;
 
         rankedprice.erase(rankedprice.find(price[2*k]));;

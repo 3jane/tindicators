@@ -11,7 +11,7 @@ int ti_shmma_start(TI_REAL const *options) {
 }
 
 int ti_shmma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *shmma = outputs[0];
 
@@ -22,25 +22,25 @@ int ti_shmma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_
 
     int i = 0;
     for (; i < period-1 && i < size; ++i) {
-        T += real[i];
-        S += (-period + 2*i+1.) / 2. * real[i];
+        T += series[i];
+        S += (-period + 2*i+1.) / 2. * series[i];
     }
     for (; i < size; ++i) {
-        T += real[i];
-        S += (period-1.) / 2. * real[i];
+        T += series[i];
+        S += (period-1.) / 2. * series[i];
 
         *shmma++ = T/period + (6.*S)/((period+1) * period);
 
         S -= T;
-        S += (period + 1.) / 2. * real[i-period+1];
-        T -= real[i-period+1];
+        S += (period + 1.) / 2. * series[i-period+1];
+        T -= series[i-period+1];
     }
 
     return TI_OKAY;
 }
 
 DONTOPTIMIZE int ti_shmma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *shmma = outputs[0];
 
@@ -49,12 +49,12 @@ DONTOPTIMIZE int ti_shmma_ref(int size, TI_REAL const *const *inputs, TI_REAL co
     for (int i = period-1; i < size; ++i) {
         TI_REAL T = 0;
         for (int j = 0; j < period; ++j) {
-            T += real[i-j];
+            T += series[i-j];
         }
 
         TI_REAL S = 0;
         for (int j = 0; j < period; ++j) {
-            S += (period - (j*2+1.)) / 2. * real[i-j];
+            S += (period - (j*2+1.)) / 2. * series[i-j];
         }
 
         *shmma++ = T/period + (6*S)/((period+1) * period);
@@ -105,7 +105,7 @@ void ti_shmma_stream_free(ti_stream *stream) {
 
 int ti_shmma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_shmma_stream *ptr = static_cast<ti_shmma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *shmma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -116,16 +116,16 @@ int ti_shmma_stream_run(ti_stream *stream, int size, TI_REAL const *const *input
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        T += real[i];
-        S += (-period + 2*(progress+period-1)+1.) / 2. * real[i];
+        T += series[i];
+        S += (-period + 2*(progress+period-1)+1.) / 2. * series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        T += real[i];
-        S += (period-1.) / 2. * real[i];
+        T += series[i];
+        S += (period-1.) / 2. * series[i];
 
         *shmma++ = T/period + (6.*S)/((period+1) * period);
 

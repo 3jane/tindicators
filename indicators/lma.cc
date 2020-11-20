@@ -13,7 +13,7 @@ int ti_lma_start(TI_REAL const *options) {
 }
 
 int ti_lma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *lma = outputs[0];
 
@@ -31,24 +31,24 @@ int ti_lma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < period-1 && i < size; ++i) {
-        wsum_price += (i+1) * real[i];
-        sum_price += real[i];
+        wsum_price += (i+1) * series[i];
+        sum_price += series[i];
     }
     for (; i < size; ++i) {
-        wsum_price += period * real[i];
-        sum_price += real[i];
+        wsum_price += period * series[i];
+        sum_price += series[i];
 
         *lma++ = 2*wsum_price/denom - sum_price/period;
 
         wsum_price -= sum_price;
-        sum_price -= real[i-period+1];
+        sum_price -= series[i-period+1];
     }
 
     return TI_OKAY;
 }
 
 DONTOPTIMIZE int ti_lma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     TI_REAL *lma = outputs[0];
 
@@ -60,9 +60,9 @@ DONTOPTIMIZE int ti_lma_ref(int size, TI_REAL const *const *inputs, TI_REAL cons
     TI_REAL* arr[1];
  
     arr[0] = wma_price.data();
-    ti_wma(size, &real, &period, arr);
+    ti_wma(size, &series, &period, arr);
     arr[0] = sma_price.data();
-    ti_sma(size, &real, &period, arr);
+    ti_sma(size, &series, &period, arr);
 
     for (int i = 0; i < size-period+1; ++i) {
         lma[i] = 2*wma_price[i] - sma_price[i];
@@ -122,7 +122,7 @@ void ti_lma_stream_free(ti_stream *stream) {
 
 int ti_lma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_lma_stream *ptr = static_cast<ti_lma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *lma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -136,14 +136,14 @@ int ti_lma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        wsum_price += (progress+(period-1)+1) * real[i];
-        sum_price += real[i];
-        price = real[i];
+        wsum_price += (progress+(period-1)+1) * series[i];
+        sum_price += series[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        wsum_price += period * real[i];
-        sum_price += real[i];
-        price = real[i];
+        wsum_price += period * series[i];
+        sum_price += series[i];
+        price = series[i];
 
         *lma++ = 2*wsum_price*denom_recipr - sum_price*period_recipr;
 

@@ -23,14 +23,14 @@ def test_sma():
 
 
 def test_sma_accept_series():
-    series_real = pd.Series(REAL)
-    result = ti.sma(series_real, 5, pad=False)
+    series_series = pd.Series(REAL)
+    result = ti.sma(series_series, 5, pad=False)
     assert np.allclose(result, EXPECTED)
 
 
 def test_pad_left():
-    series_real = pd.Series(REAL)
-    result = ti.sma(series_real, 5)
+    series_series = pd.Series(REAL)
+    result = ti.sma(series_series, 5)
     assert len(result) == len(REAL)
 
 
@@ -38,7 +38,7 @@ def test_indicator_info():
     assert ti.bbands.info.full_name == 'Bollinger Bands'
     assert ti.bbands.info.name == 'bbands'
     assert ti.bbands.info.type == 'overlay'
-    assert ti.bbands.info.inputs == ('real',)
+    assert ti.bbands.info.inputs == ('series',)
     assert ti.bbands.info.options == ('period', 'stddev')
     assert ti.bbands.info.outputs == (
         'bbands_lower', 'bbands_middle', 'bbands_upper')
@@ -63,9 +63,9 @@ def test_convert_to_dataframe():
 
 
 def test_vidya():
-    real = np.array([50.25, 50.55, 52.5, 54.5, 54.1, 54.12, 55.5, 50.2, 50.45, 50.24, 50.24, 55.12, 56.54, 56.12, 56.1, 54.12, 59.54, 54.52])
+    series = np.array([50.25, 50.55, 52.5, 54.5, 54.1, 54.12, 55.5, 50.2, 50.45, 50.24, 50.24, 55.12, 56.54, 56.12, 56.1, 54.12, 59.54, 54.52])
     expected = np.array([54.1000, 54.1004, 54.2148, 53.1633, 52.5165, 52.4937, 52.4732, 52.9862, 53.7103, 53.8114, 53.8453, 53.8693, 55.3888, 55.1443])
-    vidya = ti.vidya(real, 3, 6, .2, pad=False)
+    vidya = ti.vidya(series, 3, 6, .2, pad=False)
     assert np.allclose(vidya, expected)
 
 

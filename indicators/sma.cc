@@ -109,7 +109,7 @@ int ti_sma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
     ti_sma_stream *ptr = static_cast<ti_sma_stream*>(stream);
     int progress = ptr->progress;
 
-    const TI_REAL *real = inputs[0];
+    const TI_REAL *series = inputs[0];
     int period = ptr->options.period;
     TI_REAL *sma = outputs[0];
 
@@ -120,11 +120,11 @@ int ti_sma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) { // warm up
-        price = real[i];
+        price = series[i];
         sum += price;
     }
     for (; i < size; ++i, ++progress, step(price)) { // continue in normal mode
-        price = real[i];
+        price = series[i];
         sum += price;
 
         *sma++ = sum * per;

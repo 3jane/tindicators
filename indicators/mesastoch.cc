@@ -21,7 +21,7 @@ int ti_mesastoch_start(TI_REAL const *options) {
 #define DEG2RAD(x) ((x)*3.141592/180.)
 
 int ti_mesastoch(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     int period = options[0];
     int max_cycle_considered = options[1];
     TI_REAL *mesastoch = outputs[0];
@@ -48,7 +48,7 @@ int ti_mesastoch(int size, TI_REAL const *const *inputs, TI_REAL const *options,
 
     int i = 2;
     for (; i < ti_mesastoch_start(options) && i < size; ++i, step(HP, filt)) {
-        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*real[i-1] + real[i-2]) +
+        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*series[i-1] + series[i-2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
         filt = c1 * (HP + HP[1]) / 2. + c2 * filt[1] + c3 * filt[2];
 
@@ -63,7 +63,7 @@ int ti_mesastoch(int size, TI_REAL const *const *inputs, TI_REAL const *options,
     }
 
     for (; i < size; ++i, step(HP, filt, stoc, result)) {
-        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*real[i-1] + real[i-2]) +
+        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*series[i-1] + series[i-2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
         filt = c1 * (HP + HP[1]) / 2. + c2 * filt[1] + c3 * filt[2];
 
@@ -96,7 +96,7 @@ int ti_mesastoch(int size, TI_REAL const *const *inputs, TI_REAL const *options,
 }
 
 int ti_mesastoch_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     int period = options[0];
     int max_cycle_considered = options[1];
     TI_REAL *mesastoch = outputs[0];
@@ -125,7 +125,7 @@ int ti_mesastoch_ref(int size, TI_REAL const *const *inputs, TI_REAL const *opti
         result.pop_back(); result.push_front(0);
 
         alpha1 = (cos(DEG2RAD(.707*360 / mcc)) + sin(DEG2RAD(.707*360 / mcc)) - 1) / cos(DEG2RAD(.707*360 / mcc));
-        HP[0] = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*real[i-1] + real[i-2]) +
+        HP[0] = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*series[i-1] + series[i-2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
         a1 = exp(-1.414*3.141459/10.);
         b1 = 2*a1*cos(DEG2RAD(1.414*180./10.));
@@ -142,7 +142,7 @@ int ti_mesastoch_ref(int size, TI_REAL const *const *inputs, TI_REAL const *opti
         result.pop_back(); result.push_front(0);
 
         alpha1 = (cos(DEG2RAD(.707*360 / mcc)) + sin(DEG2RAD(.707*360 / mcc)) - 1) / cos(DEG2RAD(.707*360 / mcc));
-        HP[0] = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*real[i-1] + real[i-2]) +
+        HP[0] = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*series[i-1] + series[i-2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
         a1 = exp(-1.414*3.141459/10.);
         b1 = 2*a1*cos(DEG2RAD(1.414*180./10.));
@@ -234,7 +234,7 @@ void ti_mesastoch_stream_free(ti_stream *stream) {
 
 int ti_mesastoch_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_mesastoch_stream *ptr = static_cast<ti_mesastoch_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *mesastoch = outputs[0];
     int progress = ptr->progress;
     int period = ptr->options.period;
@@ -259,12 +259,12 @@ int ti_mesastoch_stream_run(ti_stream *stream, int size, TI_REAL const *const *i
 
     int i = 0;
     for (; i < size && progress < -period; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size && progress < 0; ++i, ++progress, step(price, HP, filt)) {
-        price = real[i];
+        price = series[i];
 
-        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*price[1] + price[2]) +
+        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*price[1] + price[2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
 
         filt = c1 * (HP + HP[1]) / 2. + c2 * filt[1] + c3 * filt[2];
@@ -279,9 +279,9 @@ int ti_mesastoch_stream_run(ti_stream *stream, int size, TI_REAL const *const *i
         }
     }
     for (; i < size; ++i, ++progress, step(price, HP, filt, stoc, result)) {
-        price = real[i];
+        price = series[i];
 
-        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(real[i] - 2*price[1] + price[2]) +
+        HP = (1 - alpha1 / 2.)*(1 - alpha1 / 2.)*(series[i] - 2*price[1] + price[2]) +
             2.*(1. - alpha1)*HP[1] - (1 - alpha1) * (1 - alpha1)*HP[2];
 
 

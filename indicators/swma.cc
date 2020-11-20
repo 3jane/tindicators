@@ -28,7 +28,7 @@ static TI_REAL table[] = {
 };
 
 int ti_swma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *swma = outputs[0];
 
@@ -45,7 +45,7 @@ int ti_swma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
         TI_REAL numer = 0;
         for (int j = 0; j < period; ++j) {
             TI_REAL c = table[j%12];
-            numer += c * real[i-j];
+            numer += c * series[i-j];
         }
         *swma++ = numer / denom;
     }
@@ -54,7 +54,7 @@ int ti_swma(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 }
 
 DONTOPTIMIZE int ti_swma_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *swma = outputs[0];
 
@@ -66,7 +66,7 @@ DONTOPTIMIZE int ti_swma_ref(int size, TI_REAL const *const *inputs, TI_REAL con
         TI_REAL denom = 0;
         for (int j = 0; j < period; ++j) {
             TI_REAL c = sin((j+1) * PI / 6.);
-            numer += c * real[i-j];
+            numer += c * series[i-j];
             denom += c;
         }
         *swma++ = numer / denom;
@@ -126,7 +126,7 @@ void ti_swma_stream_free(ti_stream *stream) {
 
 int ti_swma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_swma_stream *ptr = static_cast<ti_swma_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *swma = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -135,10 +135,10 @@ int ti_swma_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         TI_REAL numer = 0;
         for (int j = 0; j < period; ++j) {
             TI_REAL c = table[j%12];

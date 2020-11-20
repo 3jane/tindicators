@@ -12,7 +12,7 @@ int ti_emsd_start(TI_REAL const *options) {
 }
 
 int ti_emsd(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     const int ma_period = options[1];
     TI_REAL *emsd = outputs[0];
@@ -26,37 +26,37 @@ int ti_emsd(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
     int i = 0;
     for (; i < period-1 && i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
     }
     for (; i < period && i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2/period - pow(sum/period, 2);
         ema = variance;
         *emsd++ = sqrt(variance);
 
-        sum -= real[i-period+1];
-        sum2 -= real[i-period+1]*real[i-period+1];
+        sum -= series[i-period+1];
+        sum2 -= series[i-period+1]*series[i-period+1];
     }
     for (; i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2/period - (sum/period)*(sum/period);
         ema = (variance - ema) * 2 / (ma_period + 1) + ema;
         *emsd++ = sqrt(variance);
 
-        sum -= real[i-period+1];
-        sum2 -= real[i-period+1]*real[i-period+1];
+        sum -= series[i-period+1];
+        sum2 -= series[i-period+1]*series[i-period+1];
     }
 
     return TI_OKAY;
 }
 
 DONTOPTIMIZE int ti_emsd_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const TI_REAL period = options[0];
     const TI_REAL ma_period = options[1];
     TI_REAL *emsd = outputs[0];
@@ -70,30 +70,30 @@ DONTOPTIMIZE int ti_emsd_ref(int size, TI_REAL const *const *inputs, TI_REAL con
 
     int i = 0;
     for (; i < period-1 && i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
     }
     for (; i < period && i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2/period - pow(sum/period, 2);
         ema = variance;
         *emsd++ = sqrt(variance);
 
-        sum -= real[i-(int)period+1];
-        sum2 -= real[i-(int)period+1]*real[i-(int)period+1];
+        sum -= series[i-(int)period+1];
+        sum2 -= series[i-(int)period+1]*series[i-(int)period+1];
     }
     for (; i < size; ++i) {
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2/period - (sum/period)*(sum/period);
         ema = (variance - ema) * 2 / (ma_period + 1) + ema;
         *emsd++ = sqrt(variance);
 
-        sum -= real[i-(int)period+1];
-        sum2 -= real[i-(int)period+1]*real[i-(int)period+1];
+        sum -= series[i-(int)period+1];
+        sum2 -= series[i-(int)period+1]*series[i-(int)period+1];
     }
 
     return TI_OKAY;
@@ -150,7 +150,7 @@ void ti_emsd_stream_free(ti_stream *stream) {
 
 int ti_emsd_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_emsd_stream *ptr = static_cast<ti_emsd_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *emsd = outputs[0];
     int progress = ptr->progress;
     const int period = ptr->options.period;
@@ -164,16 +164,16 @@ int ti_emsd_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; progress < 0 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
     }
     for (; progress < 1 && i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2*period_reciprocal - pow(sum*period_reciprocal, 2);
         ema = variance;
@@ -183,10 +183,10 @@ int ti_emsd_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
         sum2 -= price[period-1]*price[period-1];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        sum += real[i];
-        sum2 += real[i]*real[i];
+        sum += series[i];
+        sum2 += series[i]*series[i];
 
         TI_REAL variance = sum2*period_reciprocal - (sum*period_reciprocal)*(sum*period_reciprocal);
         ema = (variance - ema) * 2 * ma_period_plus1_reciprocal + ema;

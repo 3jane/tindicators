@@ -14,7 +14,7 @@ int ti_edcf_start(TI_REAL const *options) {
 }
 
 int ti_edcf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL length = options[0];
     TI_REAL *edcf = outputs[0];
 
@@ -30,10 +30,10 @@ int ti_edcf(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
     int progress = -ti_edcf_start(options);
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        price.push_front(real[i]);
+        price.push_front(series[i]);
     }
     for (; i < size; ++i, ++progress) {
-        price.push_front(real[i]);
+        price.push_front(series[i]);
         for (int count = 0; count < length; ++count) {
             distance2[count] = 0;
             for (int lookback = 1; lookback < length; ++lookback) {
@@ -100,7 +100,7 @@ void ti_edcf_stream_free(ti_stream *stream) {
 
 int ti_edcf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_edcf_stream *ptr = static_cast<ti_edcf_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *edcf = outputs[0];
     int progress = ptr->progress;
     TI_REAL length = ptr->options.length;
@@ -111,10 +111,10 @@ int ti_edcf_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs
 
     int i = 0;
     for (; i < size && progress < 0; ++i, ++progress) {
-        price.push_front(real[i]);
+        price.push_front(series[i]);
     }
     for (; i < size; ++i, ++progress) {
-        price.push_front(real[i]);
+        price.push_front(series[i]);
         for (int count = 0; count < length; ++count) {
             distance2[count] = 0;
             for (int lookback = 1; lookback < length; ++lookback) {

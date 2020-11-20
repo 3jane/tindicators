@@ -33,7 +33,7 @@ int ti_rvi_start(TI_REAL const *options) {
 }
 
 int ti_rvi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) try {
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     const int ema_period = options[0];
     const int stddev_period = options[1];
     TI_REAL *rvi = outputs[0];
@@ -52,18 +52,18 @@ int ti_rvi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < stddev_period - 1 && i < size; ++i) {
-        xy_sum += real[i] * (i + 1);
-        y_sum += real[i];
+        xy_sum += series[i] * (i + 1);
+        y_sum += series[i];
     }
     for (; i < size; ++i) {
-        xy_sum += real[i]*stddev_period;
-        y_sum += real[i];
+        xy_sum += series[i]*stddev_period;
+        y_sum += series[i];
 
         // y = a + bx
         TI_REAL b = (xy_sum / stddev_period - x_sum / stddev_period * y_sum / stddev_period) / (xsq_sum / stddev_period - (x_sum / stddev_period)*(x_sum / stddev_period));
         TI_REAL a = y_sum / stddev_period - b * x_sum / stddev_period;
 
-        TI_REAL above = real[i] - (a + b * stddev_period);
+        TI_REAL above = series[i] - (a + b * stddev_period);
         if (above > 0) {
             gains_ema = (above * above / stddev_period - gains_ema) * 2. / (ema_period + 1) + gains_ema;
         } else {
@@ -73,7 +73,7 @@ int ti_rvi(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
         *rvi++ = gains_ema ? gains_ema / (gains_ema + losses_ema) * 100. : 50.;
 
         xy_sum -= y_sum;
-        y_sum -= real[i-stddev_period+1];
+        y_sum -= series[i-stddev_period+1];
     }
 
     return TI_OKAY;
@@ -143,7 +143,7 @@ void ti_rvi_stream_free(ti_stream *stream) {
 int ti_rvi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_rvi_stream *ptr = static_cast<ti_rvi_stream*>(stream);
 
-    TI_REAL const *real = inputs[0];
+    TI_REAL const *series = inputs[0];
     TI_REAL *rvi = outputs[0];
 
     int progress = ptr->progress;
@@ -164,22 +164,22 @@ int ti_rvi_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
     int i = 0;
     TI_REAL var1;
     for (; i < size && progress < 0; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
 
-        xy_sum += real[i] * (progress - (-stddev_period+1) + 1);
-        y_sum += real[i];
+        xy_sum += series[i] * (progress - (-stddev_period+1) + 1);
+        y_sum += series[i];
     }
     for (; i < size; ++i, ++progress, step(price)) {
-        price = real[i];
+        price = series[i];
         
-        xy_sum += real[i] * stddev_period;
-        y_sum += real[i];
+        xy_sum += series[i] * stddev_period;
+        y_sum += series[i];
 
         // y = a + bx
         TI_REAL b = (xy_sum / stddev_period - x_sum / stddev_period * y_sum / stddev_period) / (xsq_sum / stddev_period - (x_sum / stddev_period)*(x_sum / stddev_period));
         TI_REAL a = y_sum / stddev_period - b * x_sum / stddev_period;
 
-        TI_REAL above = real[i] - (a + b * stddev_period);
+        TI_REAL above = series[i] - (a + b * stddev_period);
         if (above > 0) {
             gains_ema = (above * above / stddev_period - gains_ema) * 2. / (ema_period + 1) + gains_ema;
         } else {

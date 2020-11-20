@@ -15,7 +15,7 @@ int ti_gf1_start(TI_REAL const *options) {
 }
 
 int ti_gf1(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *gf1 = outputs[0];
 
@@ -30,7 +30,7 @@ int ti_gf1(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 
     int i = 0;
     for (; i < size; ++i) {
-        f = (B0*real[i] + A1*f) / (B0 + A1);
+        f = (B0*series[i] + A1*f) / (B0 + A1);
         *gf1++ = f;
     }
 
@@ -38,7 +38,7 @@ int ti_gf1(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_RE
 }
 
 DONTOPTIMIZE int ti_gf1_ref(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_REAL *const *outputs) {
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     const int period = options[0];
     TI_REAL *gf1 = outputs[0];
 
@@ -53,7 +53,7 @@ DONTOPTIMIZE int ti_gf1_ref(int size, TI_REAL const *const *inputs, TI_REAL cons
 
     int i = 0;
     for (; i < size; ++i) {
-        f = (B0*real[i] + A1*f) / (B0 + A1);
+        f = (B0*series[i] + A1*f) / (B0 + A1);
         *gf1++ = f;
     }
 
@@ -106,7 +106,7 @@ void ti_gf1_stream_free(ti_stream *stream) {
 
 int ti_gf1_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs, TI_REAL *const *outputs) {
     ti_gf1_stream *ptr = static_cast<ti_gf1_stream*>(stream);
-    TI_REAL const *const real = inputs[0];
+    TI_REAL const *const series = inputs[0];
     TI_REAL *gf1 = outputs[0];
     int progress = ptr->progress;
     int period = ptr->options.period;
@@ -118,7 +118,7 @@ int ti_gf1_stream_run(ti_stream *stream, int size, TI_REAL const *const *inputs,
 
     int i = 0;
     for (; i < size; ++i, ++progress) {
-        f = (tables.B0[period/2-1]*real[i] + tables.A1[period/2-1]*f) * csum_recipr;
+        f = (tables.B0[period/2-1]*series[i] + tables.A1[period/2-1]*f) * csum_recipr;
         *gf1++ = f;
     }
 

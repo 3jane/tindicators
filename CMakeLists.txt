@@ -184,3 +184,22 @@ add_custom_command(
 )
 add_custom_target(tulipindicators-lean DEPENDS tulipindicators-python ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tulipindicators-lean.${version}.nupkg)
 set_target_properties(tulipindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)
+
+
+## Docs
+find_package(Git)
+
+add_custom_command(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --symbolic-full-name --abbrev-ref HEAD
+    COMMAND ${GIT_EXECUTABLE} rev-parse --symbolic-full-name --abbrev-ref HEAD | xargs -I % -n 1 sh -c '[[ x"%" == x"master" ]]'
+    COMMAND ${Python3_EXECUTABLE} docsgen.py docs.md
+    COMMAND ${GIT_EXECUTABLE} checkout gh-pages
+    COMMAND ${CMAKE_COMMAND} -E rename docs.md index.markdown
+    COMMAND ${GIT_EXECUTABLE} add index.markdown
+    CIMMAND ${GIT_EXECUTABLE} commit -m 'updated'
+    COMMAND ${GIT_EXECUTABLE} checkout -
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT ${CMAKE_SOURCE_DIR}/index.markdown
+)
+add_custom_target(docs DEPENDS ${CMAKE_SOURCE_DIR}/index.markdown)
+set_target_properties(tulipindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)

@@ -29,7 +29,7 @@ Tulip Indicators operates on time series represented as a set of arrays of float
 - close
 - volume
 
-And a special component `real`, which is used when it's the only component of the bar.
+And a special component `series`, which is used when it's the only component of the bar.
 
 Indicators do also have parameters, or *options*, such as a lookback period or some coefficient. Indicators might also have multiple *outputs*.
 

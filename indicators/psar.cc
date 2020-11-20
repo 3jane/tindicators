@@ -48,7 +48,7 @@ int ti_psar(int size, TI_REAL const *const *inputs, TI_REAL const *options, TI_R
 
 
     /* Try to choose if we start as short or long.
-     * There is really no right answer here. */
+     * There is seriesly no right answer here. */
     int lng;
     if (high[0] + low[0] <= high[1] + low[1])
         lng = 1;
