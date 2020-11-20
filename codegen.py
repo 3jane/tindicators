@@ -14,7 +14,7 @@ build = int(time.time())
 
 path_prefix = os.path.join(os.path.dirname(os.path.realpath(__file__)), '')
 
-indicators = yaml.safe_load(open(path_prefix+'indicators.yaml'))
+indicators = yaml.safe_load(open(path_prefix+'indicators.yaml', encoding='utf8'))
 
 
 def declaration_start(name):
