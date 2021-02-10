@@ -122,7 +122,13 @@ class _Indicator:
 
         errcode = self.__run(insize, inputs, options, outputs)
         if errcode != 0:
-            raise ret2exc[errcode](f'{elaborated_name}')
+            if ret2exc[errcode] is InvalidOption:
+                raise InvalidOption(
+                    f'{elaborated_name}: You have provided an invalid option. Refer to the source code '
+                    f'of the options validation for this indicator. Find it on <url>')
+            elif ret2exc[errcode] is OutOfMemory:
+                raise OutOfMemory(
+                    f'{elaborated_name}: memory allocation failed')
 
         ret_t = namedtuple(elaborated_name, self.info.outputs)
         outputs_lst = [np.ctypeslib.as_array(outputs[idx].contents) for idx in range(len(self.info.outputs))]
