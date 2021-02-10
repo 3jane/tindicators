@@ -1,3 +1,8 @@
+<!--
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019
+-->
+
 <Project>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)..\content\libindicators.so" CopyToOutputDirectory="Always" />

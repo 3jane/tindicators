@@ -1,3 +1,10 @@
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2021
+ * Author: Lewis Van Winkle <lv@codeplea.com>, 2016-2017
+ */
+
+
 #ifndef __SIMPLE2_H__
 #define __SIMPLE2_H__
 

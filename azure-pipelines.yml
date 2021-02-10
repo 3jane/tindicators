@@ -1,3 +1,9 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
+# Author: Anatoly <elengar17@gmail.com>, 2019
+# Author: Alex T <ksanderer@gmail.com>, 2019
+
+
 name: $(Build.SourceVersion)-$(date:yyyyMMdd)-rev$(rev:.r)
 trigger:
 - 0.9-dev

@@ -1,3 +1,7 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2020
+
+
 import yaml
 import time
 import os

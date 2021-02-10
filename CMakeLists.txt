@@ -1,3 +1,8 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
+# Author: Anatoly <elengar17@gmail.com>, 2019
+
+
 cmake_minimum_required(VERSION 3.12.4)
 find_package(Python3 COMPONENTS Interpreter)
 execute_process(

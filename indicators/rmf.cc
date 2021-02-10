@@ -1,3 +1,9 @@
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
+
 #include <new>
 #include <utility>
 #include <deque>

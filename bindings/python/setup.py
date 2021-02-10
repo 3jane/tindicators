@@ -1,3 +1,8 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019
+# Author: Anatoly <elengar17@gmail.com>, 2019
+
+
 import setuptools
 
 import sys
