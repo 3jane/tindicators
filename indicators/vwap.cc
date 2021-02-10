@@ -21,10 +21,10 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
-
-#include <new>
 
 int ti_vwap_start(TI_REAL const *options) {
     return (int)options[0]-1;

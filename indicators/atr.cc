@@ -21,8 +21,9 @@
  *
  */
 
-#include "../indicators.h"
 #include <new>
+
+#include "../indicators.h"
 #include "truerange.h"
 #include "../utils/minmax.h"
 

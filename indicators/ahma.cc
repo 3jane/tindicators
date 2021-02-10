@@ -1,7 +1,6 @@
-#include "../indicators.h"
 #include <new>
-#include "../utils/log.h"
-#include "../utils/minmax.h"
+
+#include "../indicators.h"
 #include "../utils/ringbuf.hh"
 
 int ti_ahma_start(TI_REAL const *options) {

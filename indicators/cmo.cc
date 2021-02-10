@@ -22,9 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 #define UPWARD(I) (input[(I)] > input[(I)-1] ? input[(I)] - input[(I)-1] : 0)
 #define DOWNWARD(I) (input[(I)] < input[(I)-1] ? input[(I)-1] - input[(I)] : 0)

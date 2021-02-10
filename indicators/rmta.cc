@@ -22,9 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 int ti_rmta_start(TI_REAL const *options) {
     return (int)options[0]-1;

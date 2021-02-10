@@ -1,11 +1,11 @@
-#include "../indicators.h"
-#include "../utils/ringbuf.hh"
-
 #include <vector>
 #include <deque>
 #include <set>
 #include <algorithm>
 #include <new>
+
+#include "../indicators.h"
+#include "../utils/ringbuf.hh"
 
 int ti_hfsma_start(TI_REAL const *options) {
     int sma_period = options[0];

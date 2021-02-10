@@ -1,9 +1,8 @@
-#include "../indicators.h"
-#include <new>
-#include "../utils/log.h"
-
 #include <new>
 #include <utility>
+
+#include "../indicators.h"
+#include "../utils/log.h"
 
 int ti_roof_start(TI_REAL const *options) {
     return 0;

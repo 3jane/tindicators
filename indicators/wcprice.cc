@@ -22,10 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
-
 
 
 int ti_wcprice_start(TI_REAL const *options) {

@@ -21,11 +21,11 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
 #include "../utils/log.h"
-
-#include <new>
 
 int ti_copp_start(TI_REAL const *options) {
     const TI_REAL roc_shorter_period = options[0];

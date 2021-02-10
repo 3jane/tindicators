@@ -1,12 +1,11 @@
-#include "../indicators.h"
 #include <new>
-#include "../utils/log.h"
-#include "../utils/minmax.h"
-#include "../utils/ringbuf.hh"
-
 #include <vector>
 #include <queue>
 
+#include "../indicators.h"
+#include "../utils/log.h"
+#include "../utils/minmax.h"
+#include "../utils/ringbuf.hh"
 
 int ti_vi_start(TI_REAL const *options) {
     const TI_REAL period = options[0];

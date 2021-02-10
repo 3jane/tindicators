@@ -21,10 +21,9 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 #define CHANGE(i) (input[i-1] ? input[i]/input[i-1]-1.0 : 0)
 

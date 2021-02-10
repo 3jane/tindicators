@@ -1,12 +1,11 @@
-#include "../indicators.h"
-#include <new>
-#include "../utils/localbuffer.h"
-#include "../utils/log.h"
-
 #include <new>
 #include <utility>
 #include <deque>
 #include <set>
+
+#include "../indicators.h"
+#include "../utils/localbuffer.h"
+#include "../utils/log.h"
 
 const TI_REAL PI = acos(-1);
 

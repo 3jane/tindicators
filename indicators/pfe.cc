@@ -21,11 +21,11 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
 #include "../utils/log.h"
-
-#include <new>
 
 int ti_pfe_start(TI_REAL const *options) {
     const TI_REAL period = options[0];

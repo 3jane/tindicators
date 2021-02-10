@@ -22,9 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 
 #define INIT() const TI_REAL p = (1.0 / (period)); TI_REAL tsf = 0;

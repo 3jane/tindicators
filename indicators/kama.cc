@@ -23,9 +23,6 @@
 
 #include "../indicators.h"
 #include <new>
-#include <new>
-#include <new>
-
 
 
 int ti_kama_start(TI_REAL const *options) {

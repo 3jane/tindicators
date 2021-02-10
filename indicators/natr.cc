@@ -21,12 +21,10 @@
  *
  */
 
-#include "../indicators.h"
 #include <new>
-#include <new>
-#include <new>
-#include "truerange.h"
 
+#include "../indicators.h"
+#include "truerange.h"
 
 
 int ti_natr_start(TI_REAL const *options) {

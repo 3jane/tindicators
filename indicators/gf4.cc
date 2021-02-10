@@ -1,5 +1,6 @@
-#include "../indicators.h"
 #include <new>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 #include "../utils/ringbuf.hh"

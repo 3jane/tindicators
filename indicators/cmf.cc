@@ -22,9 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 /* Source:
  * Kirkpatrick, Dahlquist. Technical Analysis: The Complete Resource for Financial Market Technicians (2 ed.)

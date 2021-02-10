@@ -21,9 +21,9 @@
  *
  */
 
-#include "../indicators.h"
 #include <new>
 
+#include "../indicators.h"
 
 int ti_tsi_start(TI_REAL const *options) {
     return 1;

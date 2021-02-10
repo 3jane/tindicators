@@ -21,10 +21,9 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "../utils/buffer.h"
 
 

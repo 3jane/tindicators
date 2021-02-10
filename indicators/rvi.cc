@@ -21,10 +21,10 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
-
-#include <new>
 
 int ti_rvi_start(TI_REAL const *options) {
     const TI_REAL ema_period = options[0];

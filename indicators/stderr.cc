@@ -21,11 +21,9 @@
  *
  */
 
-#include "../indicators.h"
-#include <new>
-#include <new>
 #include <new>
 
+#include "../indicators.h"
 
 
 int ti_stderr_start(TI_REAL const *options) {

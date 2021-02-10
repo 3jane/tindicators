@@ -22,11 +22,7 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "../utils/minmax.h"
-
 
 
 int ti_wad_start(TI_REAL const *options) {

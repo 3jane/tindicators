@@ -21,10 +21,11 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
 
-#include <new>
 
 int ti_smi_start(TI_REAL const *options) {
     const TI_REAL q_period = options[0];

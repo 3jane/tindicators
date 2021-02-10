@@ -22,9 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 #define INIT() do{}while(0)
 

@@ -21,10 +21,9 @@
  *
  */
 
+#include <new>
+
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 
 #define MAX4(var, a, b, c, d) { \
     var = a; \

@@ -22,11 +22,7 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "trend.h"
-
 
 
 int ti_tsf_start(TI_REAL const *options) {

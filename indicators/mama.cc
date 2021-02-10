@@ -21,12 +21,12 @@
  *
  */
 
+#include <new>
+#include <algorithm>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
 #include "../utils/minmax.h"
-
-#include <new>
-#include <algorithm>
 
 int ti_mama_start(TI_REAL const *options) {
     return 6;

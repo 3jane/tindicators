@@ -1,12 +1,11 @@
-#include "../indicators.h"
 #include <new>
-#include "../utils/ringbuf.hh"
-#include "../utils/log.h"
-
 #include <vector>
 #include <set>
 #include <algorithm>
-#include <new>
+
+#include "../indicators.h"
+#include "../utils/ringbuf.hh"
+#include "../utils/log.h"
 
 int ti_hfema_start(TI_REAL const *options) {
     int ema_period = options[0];

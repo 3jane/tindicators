@@ -1,10 +1,9 @@
-#include "../indicators.h"
-#include <new>
-#include "../utils/localbuffer.h"
-#include "../utils/log.h"
-
 #include <new>
 #include <utility>
+
+#include "../indicators.h"
+#include "../utils/localbuffer.h"
+#include "../utils/log.h"
 
 int ti_rema_start(TI_REAL const *options) {
     TI_REAL period = options[0];

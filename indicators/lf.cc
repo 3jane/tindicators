@@ -1,9 +1,8 @@
-#include "../indicators.h"
 #include <new>
+
+#include "../indicators.h"
 #include "../utils/localbuffer.h"
 #include "../utils/log.h"
-
-#include <new>
 
 int ti_lf_start(TI_REAL const *options) {
     TI_REAL gamma = options[0];

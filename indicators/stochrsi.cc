@@ -22,10 +22,8 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "../utils/buffer.h"
+
 
 int ti_stochrsi_start(TI_REAL const *options) {
     return ((int)options[0]) * 2 - 1;

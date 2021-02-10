@@ -21,8 +21,9 @@
  *
  */
 
-#include "../indicators.h"
 #include <new>
+
+#include "../indicators.h"
 
 
 int ti_fi_start(TI_REAL const *options) {

@@ -22,11 +22,7 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "../utils/log.h"
-
 
 
 int ti_pvi_start(TI_REAL const *options) {

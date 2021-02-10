@@ -1,11 +1,11 @@
+#include <deque>
+#include <algorithm>
+#include <new>
+
 #include "../indicators.h"
 #include "../utils/localbuffer.h"
 #include "../utils/log.h"
 #include "../utils/ringbuf.hh"
-
-#include <deque>
-#include <algorithm>
-#include <new>
 
 int ti_mesastoch_start(TI_REAL const *options) {
     int period = options[0];

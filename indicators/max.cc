@@ -22,10 +22,6 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
-
 
 
 int ti_max_start(TI_REAL const *options) {

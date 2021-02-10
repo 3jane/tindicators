@@ -21,12 +21,12 @@
  *
  */
 
+#include <new>
+#include <algorithm>
+
 #include "../indicators.h"
 #include "../utils/ringbuf.hh"
 #include "../utils/log.h"
-
-#include <new>
-#include <algorithm>
 
 int ti_kc_start(TI_REAL const *options) {
     const TI_REAL period = options[0];

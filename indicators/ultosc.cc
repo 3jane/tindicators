@@ -22,12 +22,8 @@
  */
 
 #include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
 #include "../utils/buffer.h"
 #include "../utils/minmax.h"
-
 
 
 int ti_ultosc_start(TI_REAL const *options) {

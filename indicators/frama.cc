@@ -1,11 +1,10 @@
-#include "../indicators.h"
+#include <queue>
 #include <new>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 
-#include <new>
-#include <set>
-#include <queue>
 
 int ti_frama_start(TI_REAL const *options) {
     TI_REAL period = options[0];

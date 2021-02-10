@@ -1,10 +1,10 @@
-#include "../indicators.h"
 #include <new>
+#include <algorithm>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 #include "../utils/ringbuf.hh"
-
-#include <algorithm>
 
 int ti_hd_start(TI_REAL const *options) {
     return 5;
