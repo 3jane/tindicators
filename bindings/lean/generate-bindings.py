@@ -2,7 +2,7 @@
 # Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
 
 
-from tulipindicators import ti
+from tindicators import ti
 import os
 import shutil
 import re
@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using QuantConnect.Data.Market;
 using QuantConnect.Indicators;
 
-namespace QuantConnect.Rcdb.TulipIndicators {
+namespace QuantConnect.Rcdb.TIndicators {
     class util {
         public class InvalidOption : System.Exception {}
         public class OutOfMemory : System.Exception {}
@@ -160,5 +160,5 @@ if __name__ == '__main__':
         .replace('$streaming', '\n'.join(streaming(ti.__getattr__(name).info) for name in ti.available_indicators)) \
         .replace('$default', '\n'.join(default(ti.__getattr__(name).info) for name in ti.available_indicators))
 
-    with open('tulipindicators.cs', 'w') as f:
+    with open('tindicators.cs', 'w') as f:
         f.write(result)

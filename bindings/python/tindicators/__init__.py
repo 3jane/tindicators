@@ -4,7 +4,7 @@
 # Author: alexpl52 <apolishchuk52@gmail.com>, 2019
 
 
-__all__ = ['InvalidOption', 'OutOfMemory', 'NoSuchIndicator', 'TulipIndicators', 'ti']
+__all__ = ['InvalidOption', 'OutOfMemory', 'NoSuchIndicator', 'Indicators', 'ti']
 
 from ctypes import *
 import numpy as np
@@ -125,7 +125,8 @@ class _Indicator:
             if ret2exc[errcode] is InvalidOption:
                 raise InvalidOption(
                     f'{elaborated_name}: You have provided an invalid option. Refer to the source code '
-                    f'of the options validation for this indicator. Find it on <url>')
+                    f'of the options validation of this indicator. You can find it at: '
+                    f'https://3jane.github.io/tindicators')
             elif ret2exc[errcode] is OutOfMemory:
                 raise OutOfMemory(
                     f'{elaborated_name}: memory allocation failed')
@@ -154,7 +155,7 @@ class _Indicator:
         return np.pad(output, (padsize, 0), 'constant', constant_values=(pad,))
 
 
-class TulipIndicators:
+class Indicators:
     def __init__(self, sharedlib_path=None):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         if sharedlib_path is None:
@@ -184,9 +185,9 @@ class TulipIndicators:
 
     def __repr__(self):
         return '\n'.join([
-            f'Tulip Indicators, version {self.version}',
+            f'tindicators, version {self.version}',
             ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
         ])
 
 
-ti = TulipIndicators()
+ti = Indicators()

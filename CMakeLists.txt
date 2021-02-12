@@ -11,7 +11,7 @@ execute_process(
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
-project(tulipindicators VERSION "${version}" LANGUAGES C CXX)
+project(tindicators VERSION "${version}" LANGUAGES C CXX)
 
 ## Library
 file(GLOB src indicators/*)
@@ -138,20 +138,21 @@ add_custom_target(check COMMAND ${VALGRIND_CMD} CTEST_OUTPUT_ON_FAILURE=1 ${CMAK
 
 ## Bindings
 add_custom_command(
+    DEPENDS indicators
     COMMAND echo 'dir=${CMAKE_BINARY_DIR}'
     COMMAND ls -lah ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.dylib ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
-    COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tulipindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.so ${CMAKE_SOURCE_DIR}/bindings/python/tindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/libindicators.dylib ${CMAKE_SOURCE_DIR}/bindings/python/tindicators/
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/indicators.dll ${CMAKE_SOURCE_DIR}/bindings/python/tindicators/
+    COMMAND ls -lah ${CMAKE_SOURCE_DIR}/bindings/python/tindicators/
     COMMAND ${Python3_EXECUTABLE} -m pip install -e .[dev]
     COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
     COMMAND ${Python3_EXECUTABLE} -m tox
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bindings/python
-    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/python/dist/tulipindicators-${version}-py3-none-any.whl
+    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/python/dist/tindicators-${version}-py3-none-any.whl
 )
-add_custom_target(tulipindicators-python DEPENDS ${CMAKE_SOURCE_DIR}/bindings/python/dist/tulipindicators-${version}-py3-none-any.whl)
-set_target_properties(tulipindicators-python PROPERTIES EXCLUDE_FROM_ALL 1)
+add_custom_target(tindicators-python DEPENDS ${CMAKE_SOURCE_DIR}/bindings/python/dist/tindicators-${version}-py3-none-any.whl)
+set_target_properties(tindicators-python PROPERTIES EXCLUDE_FROM_ALL 1)
 
 add_custom_command(
     COMMAND ${Python3_EXECUTABLE} generate-bindings.py
@@ -159,10 +160,10 @@ add_custom_command(
     COMMAND msbuild /t:restore
     COMMAND msbuild /t:pack /p:PackageVersion=${version} /p:Configuration=Release
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bindings/lean
-    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tulipindicators-lean.${version}.nupkg
+    OUTPUT ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tindicators-lean.${version}.nupkg
 )
-add_custom_target(tulipindicators-lean DEPENDS tulipindicators-python ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tulipindicators-lean.${version}.nupkg)
-set_target_properties(tulipindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)
+add_custom_target(tindicators-lean DEPENDS tindicators-python ${CMAKE_SOURCE_DIR}/bindings/lean/bin/Release/tindicators-lean.${version}.nupkg)
+set_target_properties(tindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)
 
 
 ## Docs
@@ -181,4 +182,4 @@ add_custom_command(
     OUTPUT ${CMAKE_SOURCE_DIR}/index.markdown
 )
 add_custom_target(docs DEPENDS ${CMAKE_SOURCE_DIR}/index.markdown)
-set_target_properties(tulipindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)
+set_target_properties(tindicators-lean PROPERTIES EXCLUDE_FROM_ALL 1)

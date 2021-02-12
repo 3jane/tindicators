@@ -11,7 +11,7 @@ import argparse
 import re
 
 
-parser = argparse.ArgumentParser(description='Generate the boilerplate for Tulip Indicators')
+parser = argparse.ArgumentParser(description='Generate the boilerplate for tindicators')
 parser.add_argument('--old', help='use old defaults', action='store_true')
 args = parser.parse_args()
 

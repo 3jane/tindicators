@@ -8,7 +8,7 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from tulipindicators import TulipIndicators, InvalidOption
+from tindicators import Indicators, InvalidOption
 
 
 REAL = np.array([
@@ -20,7 +20,7 @@ EXPECTED = np.array([
     83.778, 84.254, 84.994, 85.574, 86.218,
     86.804]),
 
-ti = TulipIndicators()
+ti = Indicators()
 
 
 def test_sma():

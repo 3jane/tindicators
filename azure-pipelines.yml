@@ -148,13 +148,13 @@ jobs:
       targetPath: $(System.DefaultWorkingDirectory)
   - script: cmake . -DBINARIES=$(System.DefaultWorkingDirectory)
     displayName: 'CMake'
-  - script: cmake --build . --config Release -j --target tulipindicators-python
+  - script: cmake --build . --config Release -j --target tindicators-python
     displayName: 'Python'
-  - script: cmake --build . --config Release -j --target tulipindicators-lean
+  - script: cmake --build . --config Release -j --target tindicators-lean
     displayName: 'Lean'
   - script: |
-      cp bindings/python/dist/tulipindicators-*.whl '$(Build.ArtifactStagingDirectory)'
-      cp bindings/lean/bin/Release/tulipindicators-lean.*.nupkg '$(Build.ArtifactStagingDirectory)'
+      cp bindings/python/dist/tindicators-*.whl '$(Build.ArtifactStagingDirectory)'
+      cp bindings/lean/bin/Release/tindicators-lean.*.nupkg '$(Build.ArtifactStagingDirectory)'
     displayName: 'ExtractArtifacts'
   - task: PublishBuildArtifacts@1
     inputs:

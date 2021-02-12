@@ -10,7 +10,7 @@ import glob
 
 from version import version
 
-parser = argparse.ArgumentParser(description='Generate the docs for Tulip Indicators')
+parser = argparse.ArgumentParser(description='Generate the docs for tindicators')
 # parser.add_argument('--old', help='use old defaults', action='store_true')
 parser.add_argument('outfile', default='index.markdown')
 args = parser.parse_args()

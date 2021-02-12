@@ -9,7 +9,7 @@
     <TargetFramework>net461</TargetFramework>
     <RootNamespace>QuantConnect</RootNamespace>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <PackageId>tulipindicators-lean</PackageId>
+    <PackageId>tindicators-lean</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
