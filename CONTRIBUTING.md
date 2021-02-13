@@ -120,12 +120,12 @@ You may be asked to sign a CLA.
 Wait for the tests to finish. Btw, our testing server is configured 
 in such a way that when testing a PR, it runs only the relevant tests
 from the test suites, based on the branch name: if the first word
-in the dash-separated third slash-separated part of the branch name
+in the dash-separated last slash-separated part of the branch name
 is the name of an indicator, it is considered to be the *current* 
 indicator and the only one to be tested. For instance:
-- `feature/DEV-230/sma` will run only tests for the sma indicator,
-- `feature/DEV-230/sma-fix` will do so as well,
-- `feature/DEV-230/fix-sma` won't do (until we've got an indicator named 'fix').
+- `sma`, `sma-fix`, `sma-smth` will only run tests for the sma indicator,
+- `feature/DEV-230/sma`, `feature/DEV-231/sma-fix` will do so as well,
+- `feature/DEV-232/fix-sma` will run the whole suite (until we've got an indicator named 'fix').
 
 Name your branches wisely.
 

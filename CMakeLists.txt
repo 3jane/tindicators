@@ -79,11 +79,11 @@ string(STRIP "${branch_name}" branch_name)
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E echo ${branch_name}
     COMMAND ${Python3_EXECUTABLE} -c "pass; \
-        import re; \
-        m = re.match('[^/]*/[^/]*/([a-zA-Z0-9]+)(-.*)?', input()); \
+        s = input(); \
+        candidate = s.split('/')[-1].split('-')[0]; \
         import yaml, os.path; \
         indicators = yaml.safe_load(open(os.path.join('${CMAKE_CURRENT_SOURCE_DIR}','indicators.yaml'))); \
-        print(m[1], end='') if m and m[1] in indicators else ''; \
+        print(candidate, end='') if candidate in indicators else '' \
     "
     OUTPUT_VARIABLE indicator_name
 )
