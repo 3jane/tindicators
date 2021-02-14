@@ -67,7 +67,7 @@ for indicator in indicators.items():
 	outfile.write(f'''
 #### {elab_name}
 *Source:* {source} <br/>
-*Implementation:* [{filename}](https://github.com/3jane/tindicators/indicators/{filename}) <br/>
+*Implementation:* [{filename}](https://github.com/3jane/tindicators/indicators/tree/master/{filename}) <br/>
 *Signature:*
 
 ```python
