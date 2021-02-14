@@ -43,6 +43,11 @@ setuptools.setup(
     extras_require={
         'dev': tuple(TESTS_REQUIREMENTS + DEV_REQUIREMENTS)
     },
-    classifiers=["Programming Language :: Python :: 3", "Operating System :: OS Independent"],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+    ],
     package_data={"tindicators": ["libindicators.so", "indicators.dll", "libindicators.dylib"]}
 )
