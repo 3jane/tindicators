@@ -2,4 +2,4 @@
 # Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
 
 
-version = '0.9.11'
+version = '0.9.12'
