@@ -1,5 +1,13 @@
-#include "../indicators.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2020-2021
+ * Author: Linar <linar200015@gmail.com>, 2019
+ */
+
+
 #include <new>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 #include "../utils/ringbuf.hh"

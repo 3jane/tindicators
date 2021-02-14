@@ -1,10 +1,16 @@
-#include "../indicators.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
+
 #include <new>
+#include <numeric>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 #include "../utils/ringbuf.hh"
-
-#include <numeric>
 
 int ti_evwma_start(TI_REAL const *options) {
     const int period = options[0];

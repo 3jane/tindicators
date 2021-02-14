@@ -1,4 +1,10 @@
-#include "indicators.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
+ */
+
+
+#include "../indicators.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -6,7 +12,7 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
-#include "utils/log.h"
+#include "../utils/log.h"
 
 double g_options[] = {-20, 0, .7, 5};
 #define M (sizeof(g_options) / sizeof(g_options[0]))

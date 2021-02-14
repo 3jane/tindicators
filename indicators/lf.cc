@@ -1,9 +1,14 @@
-#include "../indicators.h"
-#include <new>
-#include "../utils/localbuffer.h"
-#include "../utils/log.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
 
 #include <new>
+
+#include "../indicators.h"
+#include "../utils/localbuffer.h"
+#include "../utils/log.h"
 
 int ti_lf_start(TI_REAL const *options) {
     TI_REAL gamma = options[0];

@@ -1,4 +1,8 @@
-__all__ = ['InvalidOption', 'OutOfMemory', 'NoSuchIndicator', 'TulipIndicators', 'ti']
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019
+# Author: Anatoly <elengar17@gmail.com>, 2019
+# Author: alexpl52 <apolishchuk52@gmail.com>, 2019
+
 
 from ctypes import *
 import numpy as np
@@ -59,7 +63,7 @@ class _IndicatorInfo:
     def __init__(self, lib, indicator_name):
         try:
             info = lib.ti_find_indicator(c_char_p(bytes(indicator_name, 'ascii'))).contents
-        except:
+        except ValueError:
             raise NoSuchIndicator(indicator_name)
 
         self.name = indicator_name
@@ -116,7 +120,13 @@ class _Indicator:
 
         errcode = self.__run(insize, inputs, options, outputs)
         if errcode != 0:
-            raise ret2exc[errcode](f'{elaborated_name}')
+            if ret2exc[errcode] is InvalidOption:
+                raise InvalidOption(
+                    f'{elaborated_name}: You have provided an invalid option. Refer to the options validation source '
+                    f'code of this indicator. You can find it at: https://3jane.github.io/tindicators')
+            elif ret2exc[errcode] is OutOfMemory:
+                raise OutOfMemory(
+                    f'{elaborated_name}: memory allocation failed')
 
         ret_t = namedtuple(elaborated_name, self.info.outputs)
         outputs_lst = [np.ctypeslib.as_array(outputs[idx].contents) for idx in range(len(self.info.outputs))]
@@ -142,7 +152,7 @@ class _Indicator:
         return np.pad(output, (padsize, 0), 'constant', constant_values=(pad,))
 
 
-class TulipIndicators:
+class Indicators:
     def __init__(self, sharedlib_path=None):
         dir_path = os.path.dirname(os.path.abspath(__file__))
         if sharedlib_path is None:
@@ -172,9 +182,9 @@ class TulipIndicators:
 
     def __repr__(self):
         return '\n'.join([
-            f'Tulip Indicators, version {self.version}',
+            f'tindicators, version {self.version}',
             ' '.join([f'{self._indicator_count} indicators are available:'] + self.available_indicators)
         ])
 
 
-ti = TulipIndicators()
+ti = Indicators()

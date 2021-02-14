@@ -1,3 +1,8 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019
+# Author: Anatoly <elengar17@gmail.com>, 2019
+
+
 import setuptools
 
 import sys
@@ -26,11 +31,11 @@ DEV_REQUIREMENTS = [
 
 
 setuptools.setup(
-    name="tulipindicators",
+    name="tindicators",
     version=version,
     author="Ilya Pikulin",
-    author_email="ilya.p@rcdb.io",
-    description="Python wrapper for Tulip Indicators",
+    author_email="ilya.pikulin@gmail.com",
+    description="Python wrapper for tindicators",
     packages=setuptools.find_packages(),
     setup_requires=SETUP_REQUIREMENTS,
     tests_require=TESTS_REQUIREMENTS,
@@ -39,5 +44,5 @@ setuptools.setup(
         'dev': tuple(TESTS_REQUIREMENTS + DEV_REQUIREMENTS)
     },
     classifiers=["Programming Language :: Python :: 3", "Operating System :: OS Independent"],
-    package_data={"tulipindicators": ["libindicators.so", "indicators.dll", "libindicators.dylib"]}
+    package_data={"tindicators": ["libindicators.so", "indicators.dll", "libindicators.dylib"]}
 )

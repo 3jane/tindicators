@@ -1,3 +1,8 @@
+# This file is part of tindicators, licensed under GNU LGPL v3.
+# Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2020
+# Author: Linar <linar200015@gmail.com>, 2019
+
+
 import yaml
 import os.path
 import time
@@ -6,7 +11,7 @@ import argparse
 import re
 
 
-parser = argparse.ArgumentParser(description='Generate the boilerplate for Tulip Indicators')
+parser = argparse.ArgumentParser(description='Generate the boilerplate for tindicators')
 parser.add_argument('--old', help='use old defaults', action='store_true')
 args = parser.parse_args()
 

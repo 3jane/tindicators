@@ -1,11 +1,17 @@
-#include "../indicators.h"
-#include "../utils/ringbuf.hh"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
 
 #include <vector>
 #include <deque>
 #include <set>
 #include <algorithm>
 #include <new>
+
+#include "../indicators.h"
+#include "../utils/ringbuf.hh"
 
 int ti_hfsma_start(TI_REAL const *options) {
     int sma_period = options[0];

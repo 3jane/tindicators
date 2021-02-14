@@ -1,11 +1,17 @@
-#include "../indicators.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
+
+#include <vector>
+#include <deque>
 #include <new>
+
+#include "../indicators.h"
 #include "../utils/localbuffer.h"
 #include "../utils/log.h"
 
-#include <new>
-#include <vector>
-#include <deque>
 
 int ti_edcf_start(TI_REAL const *options) {
     TI_REAL length = options[0];

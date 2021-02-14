@@ -1,30 +1,14 @@
 /*
- * Tulip Indicators
- * https://tulipindicators.org/
- * Copyright (c) 2010-2017 Tulip Charts LLC
- * Lewis Van Winkle (LV@tulipcharts.org)
- *
- * This file is part of Tulip Indicators.
- *
- * Tulip Indicators is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * Tulip Indicators is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Tulip Indicators.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ * Author: Lewis Van Winkle <lv@codeplea.com>, 2016-2019
  */
 
-#include "indicators.h"
-#include "utils/buffer.h"
-#include "utils/minmax.h"
-#include "utils/testing.h"
+
+#include "../indicators.h"
+#include "../utils/buffer.h"
+#include "../utils/minmax.h"
+#include "../utils/testing.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -346,9 +330,9 @@ int main(int argc, const char** argv) {
     }
 
 
-    run_tests("tests/untest.txt", target_name, 1);
-    run_tests("tests/atoz.txt", target_name, 0);
-    run_tests("tests/extra.txt", target_name, 0);
+    run_tests("tests/smoke-testcases/untest.txt", target_name, 1);
+    run_tests("tests/smoke-testcases/atoz.txt", target_name, 0);
+    run_tests("tests/smoke-testcases/extra.txt", target_name, 0);
 
     if (!target_name) {
         int i;

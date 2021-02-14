@@ -1,11 +1,17 @@
-#include "../indicators.h"
-#include "../utils/localbuffer.h"
-#include "../utils/log.h"
-#include "../utils/ringbuf.hh"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
+
 
 #include <deque>
 #include <algorithm>
 #include <new>
+
+#include "../indicators.h"
+#include "../utils/localbuffer.h"
+#include "../utils/log.h"
+#include "../utils/ringbuf.hh"
 
 int ti_mesastoch_start(TI_REAL const *options) {
     int period = options[0];

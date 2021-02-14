@@ -1,32 +1,14 @@
 /*
- * Tulip Indicators
- * https://tulipindicators.org/
- * Copyright (c) 2010-2018 Tulip Charts LLC
- * Lewis Van Winkle (LV@tulipcharts.org)
- *
- * This file is part of Tulip Indicators.
- *
- * Tulip Indicators is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * Tulip Indicators is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Tulip Indicators.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019, 2021
+ * Author: Lewis Van Winkle <lv@codeplea.com>, 2016-2017, 2019
  */
 
-#include "../indicators.h"
-#include <new>
-#include <new>
-#include <new>
-#include "dx.h"
 
+#include <new>
+
+#include "../indicators.h"
+#include "dx.h"
 
 int ti_adx_start(TI_REAL const *options) {
     return ((int)options[0]-1) * 2;

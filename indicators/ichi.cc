@@ -1,13 +1,17 @@
-#include "../indicators.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019, 2021
+ */
+
+
 #include <new>
+#include <algorithm>
+#include <limits>
+
+#include "../indicators.h"
 #include "../utils/log.h"
 #include "../utils/minmax.h"
 #include "../utils/ringbuf.hh"
-
-#include <new>
-#include <exception>
-#include <algorithm>
-#include <limits>
 
 int ti_ichi_start(TI_REAL const *options) {
     const int period9 = options[0];

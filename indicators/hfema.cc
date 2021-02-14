@@ -1,12 +1,17 @@
-#include "../indicators.h"
-#include <new>
-#include "../utils/ringbuf.hh"
-#include "../utils/log.h"
+/*
+ * This file is part of tindicators, licensed under GNU LGPL v3.
+ * Author: Ilya Pikulin <ilya.pikulin@gmail.com>, 2019-2021
+ */
 
+
+#include <new>
 #include <vector>
 #include <set>
 #include <algorithm>
-#include <new>
+
+#include "../indicators.h"
+#include "../utils/ringbuf.hh"
+#include "../utils/log.h"
 
 int ti_hfema_start(TI_REAL const *options) {
     int ema_period = options[0];
