@@ -23,7 +23,7 @@ There are currently **161 indicators** available in [tindicators](https://github
 
 #### Double Exponential Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [dema.cc](https://github.com/3jane/tindicators/indicators/tree/master/dema.cc) <br/>
+*Implementation:* [dema.cc](https://github.com/3jane/tindicators/blob/master/indicators/dema.cc) <br/>
 *Signature:*
 
 ```python
@@ -37,7 +37,7 @@ ti.dema(
 	
 #### Exponential Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [ema.cc](https://github.com/3jane/tindicators/indicators/tree/master/ema.cc) <br/>
+*Implementation:* [ema.cc](https://github.com/3jane/tindicators/blob/master/indicators/ema.cc) <br/>
 *Signature:*
 
 ```python
@@ -51,7 +51,7 @@ ti.ema(
 	
 #### Hampel Filter on Simple Moving Average
 *Source:* Pearson, Neuvo, Astola, Gabbouj, Generalized Hampel Filters <br/>
-*Implementation:* [hfsma.cc](https://github.com/3jane/tindicators/indicators/tree/master/hfsma.cc) <br/>
+*Implementation:* [hfsma.cc](https://github.com/3jane/tindicators/blob/master/indicators/hfsma.cc) <br/>
 *Signature:*
 
 ```python
@@ -67,7 +67,7 @@ ti.hfsma(
 	
 #### Hull Moving Average
 *Source:* - <br/>
-*Implementation:* [hma.cc](https://github.com/3jane/tindicators/indicators/tree/master/hma.cc) <br/>
+*Implementation:* [hma.cc](https://github.com/3jane/tindicators/blob/master/indicators/hma.cc) <br/>
 *Signature:*
 
 ```python
@@ -81,7 +81,7 @@ ti.hma(
 	
 #### Hampel Filter on Exponential Moving Average
 *Source:* Pearson, Neuvo, Astola, Gabbouj, Generalized Hampel Filters <br/>
-*Implementation:* [hfema.cc](https://github.com/3jane/tindicators/indicators/tree/master/hfema.cc) <br/>
+*Implementation:* [hfema.cc](https://github.com/3jane/tindicators/blob/master/indicators/hfema.cc) <br/>
 *Signature:*
 
 ```python
@@ -97,7 +97,7 @@ ti.hfema(
 	
 #### Simple Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [sma.cc](https://github.com/3jane/tindicators/indicators/tree/master/sma.cc) <br/>
+*Implementation:* [sma.cc](https://github.com/3jane/tindicators/blob/master/indicators/sma.cc) <br/>
 *Signature:*
 
 ```python
@@ -111,7 +111,7 @@ ti.sma(
 	
 #### Laguerre Filter
 *Source:* Ehlers, Time Warp - Without Space Travel <br/>
-*Implementation:* [lf.cc](https://github.com/3jane/tindicators/indicators/tree/master/lf.cc) <br/>
+*Implementation:* [lf.cc](https://github.com/3jane/tindicators/blob/master/indicators/lf.cc) <br/>
 *Signature:*
 
 ```python
@@ -125,7 +125,7 @@ ti.lf(
 	
 #### Recursive Median Filter
 *Source:* Stocks & Commodities V. 36:03 (8–11): Recursive Median Filters by John F. Ehlers <br/>
-*Implementation:* [rmf.cc](https://github.com/3jane/tindicators/indicators/tree/master/rmf.cc) <br/>
+*Implementation:* [rmf.cc](https://github.com/3jane/tindicators/blob/master/indicators/rmf.cc) <br/>
 *Signature:*
 
 ```python
@@ -140,7 +140,7 @@ ti.rmf(
 	
 #### MESA Adaptive Moving Average
 *Source:* Ehlers. Rocket Science for Traders, pp. 182-183 <br/>
-*Implementation:* [mama.cc](https://github.com/3jane/tindicators/indicators/tree/master/mama.cc) <br/>
+*Implementation:* [mama.cc](https://github.com/3jane/tindicators/blob/master/indicators/mama.cc) <br/>
 *Signature:*
 
 ```python
@@ -156,7 +156,7 @@ ti.mama(
 	
 #### Regularized Exponential Moving Average
 *Source:* Satchwell. Regularization. Stocks & Commodities V. 21:7 (38-41) <br/>
-*Implementation:* [rema.cc](https://github.com/3jane/tindicators/indicators/tree/master/rema.cc) <br/>
+*Implementation:* [rema.cc](https://github.com/3jane/tindicators/blob/master/indicators/rema.cc) <br/>
 *Signature:*
 
 ```python
@@ -171,7 +171,7 @@ ti.rema(
 	
 #### Triple Exponential Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [tema.cc](https://github.com/3jane/tindicators/indicators/tree/master/tema.cc) <br/>
+*Implementation:* [tema.cc](https://github.com/3jane/tindicators/blob/master/indicators/tema.cc) <br/>
 *Signature:*
 
 ```python
@@ -185,7 +185,7 @@ ti.tema(
 	
 #### Triangular Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [trima.cc](https://github.com/3jane/tindicators/indicators/tree/master/trima.cc) <br/>
+*Implementation:* [trima.cc](https://github.com/3jane/tindicators/blob/master/indicators/trima.cc) <br/>
 *Signature:*
 
 ```python
@@ -199,7 +199,7 @@ ti.trima(
 	
 #### Variable Index Dynamic Average
 *Source:* - <br/>
-*Implementation:* [vidya.cc](https://github.com/3jane/tindicators/indicators/tree/master/vidya.cc) <br/>
+*Implementation:* [vidya.cc](https://github.com/3jane/tindicators/blob/master/indicators/vidya.cc) <br/>
 *Signature:*
 
 ```python
@@ -215,7 +215,7 @@ ti.vidya(
 	
 #### Volume Weighted Moving Average
 *Source:* - <br/>
-*Implementation:* [vwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/vwma.cc) <br/>
+*Implementation:* [vwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/vwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -230,7 +230,7 @@ ti.vwma(
 	
 #### Volume Weighted Average Price
 *Source:* - <br/>
-*Implementation:* [vwap.cc](https://github.com/3jane/tindicators/indicators/tree/master/vwap.cc) <br/>
+*Implementation:* [vwap.cc](https://github.com/3jane/tindicators/blob/master/indicators/vwap.cc) <br/>
 *Signature:*
 
 ```python
@@ -247,7 +247,7 @@ ti.vwap(
 	
 #### Wilders Smoothing
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [wilders.cc](https://github.com/3jane/tindicators/indicators/tree/master/wilders.cc) <br/>
+*Implementation:* [wilders.cc](https://github.com/3jane/tindicators/blob/master/indicators/wilders.cc) <br/>
 *Signature:*
 
 ```python
@@ -261,7 +261,7 @@ ti.wilders(
 	
 #### Weighted Moving Average
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [wma.cc](https://github.com/3jane/tindicators/indicators/tree/master/wma.cc) <br/>
+*Implementation:* [wma.cc](https://github.com/3jane/tindicators/blob/master/indicators/wma.cc) <br/>
 *Signature:*
 
 ```python
@@ -275,7 +275,7 @@ ti.wma(
 	
 #### Zero-Lag Exponential Moving Average
 *Source:* - <br/>
-*Implementation:* [zlema.cc](https://github.com/3jane/tindicators/indicators/tree/master/zlema.cc) <br/>
+*Implementation:* [zlema.cc](https://github.com/3jane/tindicators/blob/master/indicators/zlema.cc) <br/>
 *Signature:*
 
 ```python
@@ -289,7 +289,7 @@ ti.zlema(
 	
 #### Recursive Moving Trend Average
 *Source:* Meyers. The Japanese Yen, Recursed <br/>
-*Implementation:* [rmta.cc](https://github.com/3jane/tindicators/indicators/tree/master/rmta.cc) <br/>
+*Implementation:* [rmta.cc](https://github.com/3jane/tindicators/blob/master/indicators/rmta.cc) <br/>
 *Signature:*
 
 ```python
@@ -304,7 +304,7 @@ ti.rmta(
 	
 #### Gaussian Filter - 1 Pole
 *Source:* Gaussian and Other Low Lag Filters - John Ehlers <br/>
-*Implementation:* [gf1.cc](https://github.com/3jane/tindicators/indicators/tree/master/gf1.cc) <br/>
+*Implementation:* [gf1.cc](https://github.com/3jane/tindicators/blob/master/indicators/gf1.cc) <br/>
 *Signature:*
 
 ```python
@@ -318,7 +318,7 @@ ti.gf1(
 	
 #### Gaussian Filter - 2 Poles
 *Source:* Gaussian and Other Low Lag Filters - John Ehlers <br/>
-*Implementation:* [gf2.cc](https://github.com/3jane/tindicators/indicators/tree/master/gf2.cc) <br/>
+*Implementation:* [gf2.cc](https://github.com/3jane/tindicators/blob/master/indicators/gf2.cc) <br/>
 *Signature:*
 
 ```python
@@ -332,7 +332,7 @@ ti.gf2(
 	
 #### Gaussian Filter - 3 Poles
 *Source:* Gaussian and Other Low Lag Filters - John Ehlers <br/>
-*Implementation:* [gf3.cc](https://github.com/3jane/tindicators/indicators/tree/master/gf3.cc) <br/>
+*Implementation:* [gf3.cc](https://github.com/3jane/tindicators/blob/master/indicators/gf3.cc) <br/>
 *Signature:*
 
 ```python
@@ -346,7 +346,7 @@ ti.gf3(
 	
 #### Gaussian Filter - 4 Poles
 *Source:* Gaussian and Other Low Lag Filters - John Ehlers <br/>
-*Implementation:* [gf4.cc](https://github.com/3jane/tindicators/indicators/tree/master/gf4.cc) <br/>
+*Implementation:* [gf4.cc](https://github.com/3jane/tindicators/blob/master/indicators/gf4.cc) <br/>
 *Signature:*
 
 ```python
@@ -360,7 +360,7 @@ ti.gf4(
 	
 #### Exponential Hull Moving Average
 *Source:* Raudys, A., Lenčiauskas, V., & Malčius, E. (2013). Moving Averages for Financial Data Smoothing. Information and Software Technologies, 34–45. doi:10.1007/978-3-642-41947-8_4  <br/>
-*Implementation:* [ehma.cc](https://github.com/3jane/tindicators/indicators/tree/master/ehma.cc) <br/>
+*Implementation:* [ehma.cc](https://github.com/3jane/tindicators/blob/master/indicators/ehma.cc) <br/>
 *Signature:*
 
 ```python
@@ -374,7 +374,7 @@ ti.ehma(
 	
 #### Elastic Volume Weighted Moving Average
 *Source:* The Distribution of Share Prices and Elastic Time and Volume Weighted Moving Averages, Christian P. Fries, preprint <br/>
-*Implementation:* [evwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/evwma.cc) <br/>
+*Implementation:* [evwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/evwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -390,7 +390,7 @@ ti.evwma(
 	
 #### Leo Moving Average
 *Source:* LEO MOVING AVERAGE + SUPPORT/RESISTANCE <br/>
-*Implementation:* [lma.cc](https://github.com/3jane/tindicators/indicators/tree/master/lma.cc) <br/>
+*Implementation:* [lma.cc](https://github.com/3jane/tindicators/blob/master/indicators/lma.cc) <br/>
 *Signature:*
 
 ```python
@@ -404,7 +404,7 @@ ti.lma(
 	
 #### Power Weighted Moving Average
 *Source:* - <br/>
-*Implementation:* [pwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/pwma.cc) <br/>
+*Implementation:* [pwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/pwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -419,7 +419,7 @@ ti.pwma(
 	
 #### Sine Weighted Moving Average
 *Source:* Raudys, A., Lenčiauskas, V., & Malčius, E. (2013). Moving Averages for Financial Data Smoothing. Information and Software Technologies, 34–45. doi:10.1007/978-3-642-41947-8_4  <br/>
-*Implementation:* [swma.cc](https://github.com/3jane/tindicators/indicators/tree/master/swma.cc) <br/>
+*Implementation:* [swma.cc](https://github.com/3jane/tindicators/blob/master/indicators/swma.cc) <br/>
 *Signature:*
 
 ```python
@@ -433,7 +433,7 @@ ti.swma(
 	
 #### Double Weighted Moving Average
 *Source:* Stocks & Commodities V. 12:1 (11-19): Smoothing Data With Faster Moving Averages by Patrick G. Mulloy <br/>
-*Implementation:* [dwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/dwma.cc) <br/>
+*Implementation:* [dwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/dwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -447,7 +447,7 @@ ti.dwma(
 	
 #### Sharp Modified Moving Average
 *Source:* V.18:1 (56-60): More Responsive Moving Averages by Joe Sharp,Ph.D. <br/>
-*Implementation:* [shmma.cc](https://github.com/3jane/tindicators/indicators/tree/master/shmma.cc) <br/>
+*Implementation:* [shmma.cc](https://github.com/3jane/tindicators/blob/master/indicators/shmma.cc) <br/>
 *Signature:*
 
 ```python
@@ -461,7 +461,7 @@ ti.shmma(
 	
 #### Ahrens Moving Average
 *Source:* Stocks & Commodities V. 31:10 (26-30): Build A Better Moving Average by Richard D. Ahrens <br/>
-*Implementation:* [ahma.cc](https://github.com/3jane/tindicators/indicators/tree/master/ahma.cc) <br/>
+*Implementation:* [ahma.cc](https://github.com/3jane/tindicators/blob/master/indicators/ahma.cc) <br/>
 *Signature:*
 
 ```python
@@ -475,7 +475,7 @@ ti.ahma(
 	
 #### T3 Moving Average
 *Source:* V.16:1 (33-37): Smoothing Techniques For More Accurate Signals by Tim Tillson <br/>
-*Implementation:* [t3.cc](https://github.com/3jane/tindicators/indicators/tree/master/t3.cc) <br/>
+*Implementation:* [t3.cc](https://github.com/3jane/tindicators/blob/master/indicators/t3.cc) <br/>
 *Signature:*
 
 ```python
@@ -490,7 +490,7 @@ ti.t3(
 	
 #### Middle-High-Low Moving Average
 *Source:* Stocks & Commodities V. 34:08 (26–29): The Middle-High-Low Moving Average by Vitali Apirine <br/>
-*Implementation:* [mhlma.cc](https://github.com/3jane/tindicators/indicators/tree/master/mhlma.cc) <br/>
+*Implementation:* [mhlma.cc](https://github.com/3jane/tindicators/blob/master/indicators/mhlma.cc) <br/>
 *Signature:*
 
 ```python
@@ -506,7 +506,7 @@ ti.mhlma(
 	
 #### Choppy Market Indicator
 *Source:* Trading Techniques. Measuring market choppiness with chaos <br/>
-*Implementation:* [cmi.cc](https://github.com/3jane/tindicators/indicators/tree/master/cmi.cc) <br/>
+*Implementation:* [cmi.cc](https://github.com/3jane/tindicators/blob/master/indicators/cmi.cc) <br/>
 *Signature:*
 
 ```python
@@ -522,7 +522,7 @@ ti.cmi(
 	
 #### Inverse Distance Weighted Moving Average
 *Source:* Shepard, D. (1968). A two-dimensional interpolation function for irregularly-spaced data. Proceedings of the 1968 23rd ACM National Conference on -. doi:10.1145/800186.810616  <br/>
-*Implementation:* [idwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/idwma.cc) <br/>
+*Implementation:* [idwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/idwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -537,7 +537,7 @@ ti.idwma(
 	
 #### Exponential Moving Standard Deviation
 *Source:* Mathworks. Moving Standard Deviation <br/>
-*Implementation:* [emsd.cc](https://github.com/3jane/tindicators/indicators/tree/master/emsd.cc) <br/>
+*Implementation:* [emsd.cc](https://github.com/3jane/tindicators/blob/master/indicators/emsd.cc) <br/>
 *Signature:*
 
 ```python
@@ -552,7 +552,7 @@ ti.emsd(
 	
 #### Henderson asymmetric filter
 *Source:* Australian Bureau of Statistics. Time Series Analysis: The Process of Seasonal Adjustment <br/>
-*Implementation:* [hwma.cc](https://github.com/3jane/tindicators/indicators/tree/master/hwma.cc) <br/>
+*Implementation:* [hwma.cc](https://github.com/3jane/tindicators/blob/master/indicators/hwma.cc) <br/>
 *Signature:*
 
 ```python
@@ -566,7 +566,7 @@ ti.hwma(
 	
 #### Homodyne Discriminator
 *Source:* Ehlers. Rocket Science for Traders, pp. 68-69 <br/>
-*Implementation:* [hd.cc](https://github.com/3jane/tindicators/indicators/tree/master/hd.cc) <br/>
+*Implementation:* [hd.cc](https://github.com/3jane/tindicators/blob/master/indicators/hd.cc) <br/>
 *Signature:*
 
 ```python
@@ -579,7 +579,7 @@ ti.hd(
 	
 #### McGinley Dynamic
 *Source:* Stocks & Commodities V. 28:3 (30-37): The McGinley Dynamic by Brian Twomey <br/>
-*Implementation:* [mgdyn.cc](https://github.com/3jane/tindicators/indicators/tree/master/mgdyn.cc) <br/>
+*Implementation:* [mgdyn.cc](https://github.com/3jane/tindicators/blob/master/indicators/mgdyn.cc) <br/>
 *Signature:*
 
 ```python
@@ -593,7 +593,7 @@ ti.mgdyn(
 	
 #### Linear Regression
 *Source:* - <br/>
-*Implementation:* [linreg.cc](https://github.com/3jane/tindicators/indicators/tree/master/linreg.cc) <br/>
+*Implementation:* [linreg.cc](https://github.com/3jane/tindicators/blob/master/indicators/linreg.cc) <br/>
 *Signature:*
 
 ```python
@@ -607,7 +607,7 @@ ti.linreg(
 	
 #### Linear Regression Intercept
 *Source:* - <br/>
-*Implementation:* [linregintercept.cc](https://github.com/3jane/tindicators/indicators/tree/master/linregintercept.cc) <br/>
+*Implementation:* [linregintercept.cc](https://github.com/3jane/tindicators/blob/master/indicators/linregintercept.cc) <br/>
 *Signature:*
 
 ```python
@@ -621,7 +621,7 @@ ti.linregintercept(
 	
 #### Linear Regression Slope
 *Source:* - <br/>
-*Implementation:* [linregslope.cc](https://github.com/3jane/tindicators/indicators/tree/master/linregslope.cc) <br/>
+*Implementation:* [linregslope.cc](https://github.com/3jane/tindicators/blob/master/indicators/linregslope.cc) <br/>
 *Signature:*
 
 ```python
@@ -635,7 +635,7 @@ ti.linregslope(
 	
 #### Time Series Forecast
 *Source:* - <br/>
-*Implementation:* [tsf.cc](https://github.com/3jane/tindicators/indicators/tree/master/tsf.cc) <br/>
+*Implementation:* [tsf.cc](https://github.com/3jane/tindicators/blob/master/indicators/tsf.cc) <br/>
 *Signature:*
 
 ```python
@@ -649,7 +649,7 @@ ti.tsf(
 	
 #### Forecast Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [fosc.cc](https://github.com/3jane/tindicators/indicators/tree/master/fosc.cc) <br/>
+*Implementation:* [fosc.cc](https://github.com/3jane/tindicators/blob/master/indicators/fosc.cc) <br/>
 *Signature:*
 
 ```python
@@ -663,7 +663,7 @@ ti.fosc(
 	
 #### Bollinger Bands
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [bbands.cc](https://github.com/3jane/tindicators/indicators/tree/master/bbands.cc) <br/>
+*Implementation:* [bbands.cc](https://github.com/3jane/tindicators/blob/master/indicators/bbands.cc) <br/>
 *Signature:*
 
 ```python
@@ -680,7 +680,7 @@ ti.bbands(
 	
 #### Butterworth Filter - 2 Poles
 *Source:* Ehlers. POLES, ZEROS, and HIGHER ORDER FILTERS <br/>
-*Implementation:* [bf2.cc](https://github.com/3jane/tindicators/indicators/tree/master/bf2.cc) <br/>
+*Implementation:* [bf2.cc](https://github.com/3jane/tindicators/blob/master/indicators/bf2.cc) <br/>
 *Signature:*
 
 ```python
@@ -694,7 +694,7 @@ ti.bf2(
 	
 #### Butterworth Filter - 3 Poles
 *Source:* Ehlers. POLES, ZEROS, and HIGHER ORDER FILTERS <br/>
-*Implementation:* [bf3.cc](https://github.com/3jane/tindicators/indicators/tree/master/bf3.cc) <br/>
+*Implementation:* [bf3.cc](https://github.com/3jane/tindicators/blob/master/indicators/bf3.cc) <br/>
 *Signature:*
 
 ```python
@@ -708,7 +708,7 @@ ti.bf3(
 	
 #### Keltner Channel
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 337 <br/>
-*Implementation:* [kc.cc](https://github.com/3jane/tindicators/indicators/tree/master/kc.cc) <br/>
+*Implementation:* [kc.cc](https://github.com/3jane/tindicators/blob/master/indicators/kc.cc) <br/>
 *Signature:*
 
 ```python
@@ -727,7 +727,7 @@ ti.kc(
 	
 #### Kaufman Adaptive Moving Average
 *Source:* - <br/>
-*Implementation:* [kama.cc](https://github.com/3jane/tindicators/indicators/tree/master/kama.cc) <br/>
+*Implementation:* [kama.cc](https://github.com/3jane/tindicators/blob/master/indicators/kama.cc) <br/>
 *Signature:*
 
 ```python
@@ -741,7 +741,7 @@ ti.kama(
 	
 #### Parabolic SAR
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [psar.cc](https://github.com/3jane/tindicators/indicators/tree/master/psar.cc) <br/>
+*Implementation:* [psar.cc](https://github.com/3jane/tindicators/blob/master/indicators/psar.cc) <br/>
 *Signature:*
 
 ```python
@@ -757,7 +757,7 @@ ti.psar(
 	
 #### Price Channel
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 534 <br/>
-*Implementation:* [pc.cc](https://github.com/3jane/tindicators/indicators/tree/master/pc.cc) <br/>
+*Implementation:* [pc.cc](https://github.com/3jane/tindicators/blob/master/indicators/pc.cc) <br/>
 *Signature:*
 
 ```python
@@ -773,7 +773,7 @@ ti.pc(
 	
 #### Projection Bands
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 545 <br/>
-*Implementation:* [pbands.cc](https://github.com/3jane/tindicators/indicators/tree/master/pbands.cc) <br/>
+*Implementation:* [pbands.cc](https://github.com/3jane/tindicators/blob/master/indicators/pbands.cc) <br/>
 *Signature:*
 
 ```python
@@ -790,7 +790,7 @@ ti.pbands(
 	
 #### Ehlers Distance Coefficient Filter
 *Source:* Ehlers. Rocket Science for Traders, p.193 <br/>
-*Implementation:* [edcf.cc](https://github.com/3jane/tindicators/indicators/tree/master/edcf.cc) <br/>
+*Implementation:* [edcf.cc](https://github.com/3jane/tindicators/blob/master/indicators/edcf.cc) <br/>
 *Signature:*
 
 ```python
@@ -804,7 +804,7 @@ ti.edcf(
 	
 #### Fractal Adaptive Moving Average
 *Source:* Ehlers, FRAMA – Fractal Adaptive Moving Average <br/>
-*Implementation:* [frama.cc](https://github.com/3jane/tindicators/indicators/tree/master/frama.cc) <br/>
+*Implementation:* [frama.cc](https://github.com/3jane/tindicators/blob/master/indicators/frama.cc) <br/>
 *Signature:*
 
 ```python
@@ -820,7 +820,7 @@ ti.frama(
 	
 #### The Roofing Filter
 *Source:* Stocks & Commodities V. 32:1 (16-25): Predictive And Successful Indicators by John F. Ehlers, PhD <br/>
-*Implementation:* [roof.cc](https://github.com/3jane/tindicators/indicators/tree/master/roof.cc) <br/>
+*Implementation:* [roof.cc](https://github.com/3jane/tindicators/blob/master/indicators/roof.cc) <br/>
 *Signature:*
 
 ```python
@@ -833,7 +833,7 @@ ti.roof(
 	
 #### SuperSmoother Filter
 *Source:* Stocks & Commodities V. 32:1 (16-25): Predictive And Successful Indicators by John F. Ehlers, PhD <br/>
-*Implementation:* [ssmooth.cc](https://github.com/3jane/tindicators/indicators/tree/master/ssmooth.cc) <br/>
+*Implementation:* [ssmooth.cc](https://github.com/3jane/tindicators/blob/master/indicators/ssmooth.cc) <br/>
 *Signature:*
 
 ```python
@@ -846,7 +846,7 @@ ti.ssmooth(
 	
 #### Hampel Filter
 *Source:* Pearson, Neuvo, Astola, Gabbouj, Generalized Hampel Filters <br/>
-*Implementation:* [hf.cc](https://github.com/3jane/tindicators/indicators/tree/master/hf.cc) <br/>
+*Implementation:* [hf.cc](https://github.com/3jane/tindicators/blob/master/indicators/hf.cc) <br/>
 *Signature:*
 
 ```python
@@ -861,7 +861,7 @@ ti.hf(
 	
 #### Accumulation/Distribution Line
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [ad.cc](https://github.com/3jane/tindicators/indicators/tree/master/ad.cc) <br/>
+*Implementation:* [ad.cc](https://github.com/3jane/tindicators/blob/master/indicators/ad.cc) <br/>
 *Signature:*
 
 ```python
@@ -877,7 +877,7 @@ ti.ad(
 	
 #### Accumulation/Distribution Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [adosc.cc](https://github.com/3jane/tindicators/indicators/tree/master/adosc.cc) <br/>
+*Implementation:* [adosc.cc](https://github.com/3jane/tindicators/blob/master/indicators/adosc.cc) <br/>
 *Signature:*
 
 ```python
@@ -895,7 +895,7 @@ ti.adosc(
 	
 #### Acceleration Bands
 *Source:* Headley. Big Trends In Trading, p. 92 <br/>
-*Implementation:* [abands.cc](https://github.com/3jane/tindicators/indicators/tree/master/abands.cc) <br/>
+*Implementation:* [abands.cc](https://github.com/3jane/tindicators/blob/master/indicators/abands.cc) <br/>
 *Signature:*
 
 ```python
@@ -913,7 +913,7 @@ ti.abands(
 	
 #### Absolute Price Oscillator
 *Source:* - <br/>
-*Implementation:* [apo.cc](https://github.com/3jane/tindicators/indicators/tree/master/apo.cc) <br/>
+*Implementation:* [apo.cc](https://github.com/3jane/tindicators/blob/master/indicators/apo.cc) <br/>
 *Signature:*
 
 ```python
@@ -928,7 +928,7 @@ ti.apo(
 	
 #### Aroon
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [aroon.cc](https://github.com/3jane/tindicators/indicators/tree/master/aroon.cc) <br/>
+*Implementation:* [aroon.cc](https://github.com/3jane/tindicators/blob/master/indicators/aroon.cc) <br/>
 *Signature:*
 
 ```python
@@ -944,7 +944,7 @@ ti.aroon(
 	
 #### Aroon Oscillator
 *Source:* - <br/>
-*Implementation:* [aroonosc.cc](https://github.com/3jane/tindicators/indicators/tree/master/aroonosc.cc) <br/>
+*Implementation:* [aroonosc.cc](https://github.com/3jane/tindicators/blob/master/indicators/aroonosc.cc) <br/>
 *Signature:*
 
 ```python
@@ -959,7 +959,7 @@ ti.aroonosc(
 	
 #### Awesome Oscillator
 *Source:* - <br/>
-*Implementation:* [ao.cc](https://github.com/3jane/tindicators/indicators/tree/master/ao.cc) <br/>
+*Implementation:* [ao.cc](https://github.com/3jane/tindicators/blob/master/indicators/ao.cc) <br/>
 *Signature:*
 
 ```python
@@ -973,7 +973,7 @@ ti.ao(
 	
 #### Balance of Power
 *Source:* - <br/>
-*Implementation:* [bop.cc](https://github.com/3jane/tindicators/indicators/tree/master/bop.cc) <br/>
+*Implementation:* [bop.cc](https://github.com/3jane/tindicators/blob/master/indicators/bop.cc) <br/>
 *Signature:*
 
 ```python
@@ -989,7 +989,7 @@ ti.bop(
 	
 #### Chaikin Money Flow
 *Source:* Kirkpatrick, Dahlquist. Technical Analysis: The Complete Resource for Financial Market Technicians, pp. 419, 421 <br/>
-*Implementation:* [cmf.cc](https://github.com/3jane/tindicators/indicators/tree/master/cmf.cc) <br/>
+*Implementation:* [cmf.cc](https://github.com/3jane/tindicators/blob/master/indicators/cmf.cc) <br/>
 *Signature:*
 
 ```python
@@ -1006,7 +1006,7 @@ ti.cmf(
 	
 #### MESA Stochastic (by John F. Ehlers)
 *Source:* Stocks & Commodities V. 32:1 (16-25): Predictive And Successful Indicators by John F. Ehlers, PhD <br/>
-*Implementation:* [mesastoch.cc](https://github.com/3jane/tindicators/indicators/tree/master/mesastoch.cc) <br/>
+*Implementation:* [mesastoch.cc](https://github.com/3jane/tindicators/blob/master/indicators/mesastoch.cc) <br/>
 *Signature:*
 
 ```python
@@ -1021,7 +1021,7 @@ ti.mesastoch(
 	
 #### Chande Momentum Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [cmo.cc](https://github.com/3jane/tindicators/indicators/tree/master/cmo.cc) <br/>
+*Implementation:* [cmo.cc](https://github.com/3jane/tindicators/blob/master/indicators/cmo.cc) <br/>
 *Signature:*
 
 ```python
@@ -1035,7 +1035,7 @@ ti.cmo(
 	
 #### Commodity Channel Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [cci.cc](https://github.com/3jane/tindicators/indicators/tree/master/cci.cc) <br/>
+*Implementation:* [cci.cc](https://github.com/3jane/tindicators/blob/master/indicators/cci.cc) <br/>
 *Signature:*
 
 ```python
@@ -1051,7 +1051,7 @@ ti.cci(
 	
 #### Coppock Curve
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 168 <br/>
-*Implementation:* [copp.cc](https://github.com/3jane/tindicators/indicators/tree/master/copp.cc) <br/>
+*Implementation:* [copp.cc](https://github.com/3jane/tindicators/blob/master/indicators/copp.cc) <br/>
 *Signature:*
 
 ```python
@@ -1067,7 +1067,7 @@ ti.copp(
 	
 #### Detrended Price Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [dpo.cc](https://github.com/3jane/tindicators/indicators/tree/master/dpo.cc) <br/>
+*Implementation:* [dpo.cc](https://github.com/3jane/tindicators/blob/master/indicators/dpo.cc) <br/>
 *Signature:*
 
 ```python
@@ -1081,7 +1081,7 @@ ti.dpo(
 	
 #### Ease of Movement
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [emv.cc](https://github.com/3jane/tindicators/indicators/tree/master/emv.cc) <br/>
+*Implementation:* [emv.cc](https://github.com/3jane/tindicators/blob/master/indicators/emv.cc) <br/>
 *Signature:*
 
 ```python
@@ -1096,7 +1096,7 @@ ti.emv(
 	
 #### Fisher Transform
 *Source:* - <br/>
-*Implementation:* [fisher.cc](https://github.com/3jane/tindicators/indicators/tree/master/fisher.cc) <br/>
+*Implementation:* [fisher.cc](https://github.com/3jane/tindicators/blob/master/indicators/fisher.cc) <br/>
 *Signature:*
 
 ```python
@@ -1112,7 +1112,7 @@ ti.fisher(
 	
 #### Force Index
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, pp. 275, 774 <br/>
-*Implementation:* [fi.cc](https://github.com/3jane/tindicators/indicators/tree/master/fi.cc) <br/>
+*Implementation:* [fi.cc](https://github.com/3jane/tindicators/blob/master/indicators/fi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1127,7 +1127,7 @@ ti.fi(
 	
 #### Klinger Volume Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [kvo.cc](https://github.com/3jane/tindicators/indicators/tree/master/kvo.cc) <br/>
+*Implementation:* [kvo.cc](https://github.com/3jane/tindicators/blob/master/indicators/kvo.cc) <br/>
 *Signature:*
 
 ```python
@@ -1145,7 +1145,7 @@ ti.kvo(
 	
 #### Know Sure Thing
 *Source:* Colby. The Encyclopedia Of Technical Market Indicators, pp. 346-347 <br/>
-*Implementation:* [kst.cc](https://github.com/3jane/tindicators/indicators/tree/master/kst.cc) <br/>
+*Implementation:* [kst.cc](https://github.com/3jane/tindicators/blob/master/indicators/kst.cc) <br/>
 *Signature:*
 
 ```python
@@ -1167,7 +1167,7 @@ ti.kst(
 	
 #### Market Facilitation Index
 *Source:* - <br/>
-*Implementation:* [marketfi.cc](https://github.com/3jane/tindicators/indicators/tree/master/marketfi.cc) <br/>
+*Implementation:* [marketfi.cc](https://github.com/3jane/tindicators/blob/master/indicators/marketfi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1182,7 +1182,7 @@ ti.marketfi(
 	
 #### Mass Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [mass.cc](https://github.com/3jane/tindicators/indicators/tree/master/mass.cc) <br/>
+*Implementation:* [mass.cc](https://github.com/3jane/tindicators/blob/master/indicators/mass.cc) <br/>
 *Signature:*
 
 ```python
@@ -1197,7 +1197,7 @@ ti.mass(
 	
 #### Money Flow Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [mfi.cc](https://github.com/3jane/tindicators/indicators/tree/master/mfi.cc) <br/>
+*Implementation:* [mfi.cc](https://github.com/3jane/tindicators/blob/master/indicators/mfi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1214,7 +1214,7 @@ ti.mfi(
 	
 #### Moving Average Convergence/Divergence
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [macd.cc](https://github.com/3jane/tindicators/indicators/tree/master/macd.cc) <br/>
+*Implementation:* [macd.cc](https://github.com/3jane/tindicators/blob/master/indicators/macd.cc) <br/>
 *Signature:*
 
 ```python
@@ -1232,7 +1232,7 @@ ti.macd(
 	
 #### Negative Volume Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [nvi.cc](https://github.com/3jane/tindicators/indicators/tree/master/nvi.cc) <br/>
+*Implementation:* [nvi.cc](https://github.com/3jane/tindicators/blob/master/indicators/nvi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1246,7 +1246,7 @@ ti.nvi(
 	
 #### On Balance Volume
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [obv.cc](https://github.com/3jane/tindicators/indicators/tree/master/obv.cc) <br/>
+*Implementation:* [obv.cc](https://github.com/3jane/tindicators/blob/master/indicators/obv.cc) <br/>
 *Signature:*
 
 ```python
@@ -1260,7 +1260,7 @@ ti.obv(
 	
 #### Percentage Price Oscillator
 *Source:* - <br/>
-*Implementation:* [ppo.cc](https://github.com/3jane/tindicators/indicators/tree/master/ppo.cc) <br/>
+*Implementation:* [ppo.cc](https://github.com/3jane/tindicators/blob/master/indicators/ppo.cc) <br/>
 *Signature:*
 
 ```python
@@ -1275,7 +1275,7 @@ ti.ppo(
 	
 #### Polarized Fractal Efficiency
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 520 <br/>
-*Implementation:* [pfe.cc](https://github.com/3jane/tindicators/indicators/tree/master/pfe.cc) <br/>
+*Implementation:* [pfe.cc](https://github.com/3jane/tindicators/blob/master/indicators/pfe.cc) <br/>
 *Signature:*
 
 ```python
@@ -1290,7 +1290,7 @@ ti.pfe(
 	
 #### Positive Volume Index
 *Source:* - <br/>
-*Implementation:* [pvi.cc](https://github.com/3jane/tindicators/indicators/tree/master/pvi.cc) <br/>
+*Implementation:* [pvi.cc](https://github.com/3jane/tindicators/blob/master/indicators/pvi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1304,7 +1304,7 @@ ti.pvi(
 	
 #### Projection Oscillator
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 545 <br/>
-*Implementation:* [posc.cc](https://github.com/3jane/tindicators/indicators/tree/master/posc.cc) <br/>
+*Implementation:* [posc.cc](https://github.com/3jane/tindicators/blob/master/indicators/posc.cc) <br/>
 *Signature:*
 
 ```python
@@ -1321,7 +1321,7 @@ ti.posc(
 	
 #### Qstick
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [qstick.cc](https://github.com/3jane/tindicators/indicators/tree/master/qstick.cc) <br/>
+*Implementation:* [qstick.cc](https://github.com/3jane/tindicators/blob/master/indicators/qstick.cc) <br/>
 *Signature:*
 
 ```python
@@ -1336,7 +1336,7 @@ ti.qstick(
 	
 #### Relative Strength Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [rsi.cc](https://github.com/3jane/tindicators/indicators/tree/master/rsi.cc) <br/>
+*Implementation:* [rsi.cc](https://github.com/3jane/tindicators/blob/master/indicators/rsi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1350,7 +1350,7 @@ ti.rsi(
 	
 #### True Strength Index
 *Source:* Blau. True Strength Index. Stocks & Commodities V. 9:11 (438-446).pdf <br/>
-*Implementation:* [tsi.cc](https://github.com/3jane/tindicators/indicators/tree/master/tsi.cc) <br/>
+*Implementation:* [tsi.cc](https://github.com/3jane/tindicators/blob/master/indicators/tsi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1365,7 +1365,7 @@ ti.tsi(
 	
 #### Relative Momentum Index
 *Source:* Relative Momentum Index: Modifying RSI by Roger Altman, Stocks and Commodities, Feb '93 <br/>
-*Implementation:* [rmi.cc](https://github.com/3jane/tindicators/indicators/tree/master/rmi.cc) <br/>
+*Implementation:* [rmi.cc](https://github.com/3jane/tindicators/blob/master/indicators/rmi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1380,7 +1380,7 @@ ti.rmi(
 	
 #### Relative Volatility Index
 *Source:* Colby. The Encyclopedia of Technical Market Indicators, p. 618 <br/>
-*Implementation:* [rvi.cc](https://github.com/3jane/tindicators/indicators/tree/master/rvi.cc) <br/>
+*Implementation:* [rvi.cc](https://github.com/3jane/tindicators/blob/master/indicators/rvi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1395,7 +1395,7 @@ ti.rvi(
 	
 #### Stochastic Momentum Index
 *Source:* Blau. Stochastic Momentum. Stocks & Commodities V. 11:1 (11-18).pdf <br/>
-*Implementation:* [smi.cc](https://github.com/3jane/tindicators/indicators/tree/master/smi.cc) <br/>
+*Implementation:* [smi.cc](https://github.com/3jane/tindicators/blob/master/indicators/smi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1413,7 +1413,7 @@ ti.smi(
 	
 #### Stochastic Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [stoch.cc](https://github.com/3jane/tindicators/indicators/tree/master/stoch.cc) <br/>
+*Implementation:* [stoch.cc](https://github.com/3jane/tindicators/blob/master/indicators/stoch.cc) <br/>
 *Signature:*
 
 ```python
@@ -1432,7 +1432,7 @@ ti.stoch(
 	
 #### Stochastic RSI
 *Source:* - <br/>
-*Implementation:* [stochrsi.cc](https://github.com/3jane/tindicators/indicators/tree/master/stochrsi.cc) <br/>
+*Implementation:* [stochrsi.cc](https://github.com/3jane/tindicators/blob/master/indicators/stochrsi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1446,7 +1446,7 @@ ti.stochrsi(
 	
 #### Trix
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [trix.cc](https://github.com/3jane/tindicators/indicators/tree/master/trix.cc) <br/>
+*Implementation:* [trix.cc](https://github.com/3jane/tindicators/blob/master/indicators/trix.cc) <br/>
 *Signature:*
 
 ```python
@@ -1460,7 +1460,7 @@ ti.trix(
 	
 #### Williams Accumulation/Distribution
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [wad.cc](https://github.com/3jane/tindicators/indicators/tree/master/wad.cc) <br/>
+*Implementation:* [wad.cc](https://github.com/3jane/tindicators/blob/master/indicators/wad.cc) <br/>
 *Signature:*
 
 ```python
@@ -1475,7 +1475,7 @@ ti.wad(
 	
 #### Williams %R
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [willr.cc](https://github.com/3jane/tindicators/indicators/tree/master/willr.cc) <br/>
+*Implementation:* [willr.cc](https://github.com/3jane/tindicators/blob/master/indicators/willr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1491,7 +1491,7 @@ ti.willr(
 	
 #### Ultimate Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [ultosc.cc](https://github.com/3jane/tindicators/indicators/tree/master/ultosc.cc) <br/>
+*Implementation:* [ultosc.cc](https://github.com/3jane/tindicators/blob/master/indicators/ultosc.cc) <br/>
 *Signature:*
 
 ```python
@@ -1509,7 +1509,7 @@ ti.ultosc(
 	
 #### Vertical Horizontal Filter
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [vhf.cc](https://github.com/3jane/tindicators/indicators/tree/master/vhf.cc) <br/>
+*Implementation:* [vhf.cc](https://github.com/3jane/tindicators/blob/master/indicators/vhf.cc) <br/>
 *Signature:*
 
 ```python
@@ -1523,7 +1523,7 @@ ti.vhf(
 	
 #### Volume Oscillator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [vosc.cc](https://github.com/3jane/tindicators/indicators/tree/master/vosc.cc) <br/>
+*Implementation:* [vosc.cc](https://github.com/3jane/tindicators/blob/master/indicators/vosc.cc) <br/>
 *Signature:*
 
 ```python
@@ -1538,7 +1538,7 @@ ti.vosc(
 	
 #### Efficiency Ratio
 *Source:* Kaufman. Trading Systems and Methods <br/>
-*Implementation:* [er.cc](https://github.com/3jane/tindicators/indicators/tree/master/er.cc) <br/>
+*Implementation:* [er.cc](https://github.com/3jane/tindicators/blob/master/indicators/er.cc) <br/>
 *Signature:*
 
 ```python
@@ -1552,7 +1552,7 @@ ti.er(
 	
 #### Price Volume Trend
 *Source:* Buff Pelz Dormeier - Investing with Volume Analysis_ Identify, Follow, and Profit from Trends-FT Press (2011) <br/>
-*Implementation:* [pvt.cc](https://github.com/3jane/tindicators/indicators/tree/master/pvt.cc) <br/>
+*Implementation:* [pvt.cc](https://github.com/3jane/tindicators/blob/master/indicators/pvt.cc) <br/>
 *Signature:*
 
 ```python
@@ -1566,7 +1566,7 @@ ti.pvt(
 	
 #### Hurst Exponent Indicator
 *Source:* Stocks & Commodities V. 25:3 (36-42): Trading Systems And Fractals by Radha Panini <br/>
-*Implementation:* [hurst.cc](https://github.com/3jane/tindicators/indicators/tree/master/hurst.cc) <br/>
+*Implementation:* [hurst.cc](https://github.com/3jane/tindicators/blob/master/indicators/hurst.cc) <br/>
 *Signature:*
 
 ```python
@@ -1581,7 +1581,7 @@ ti.hurst(
 	
 #### Adaptive Relative Strength Index
 *Source:* Ehlers. Rocket Science for Traders, pp. 229-231 <br/>
-*Implementation:* [arsi.cc](https://github.com/3jane/tindicators/indicators/tree/master/arsi.cc) <br/>
+*Implementation:* [arsi.cc](https://github.com/3jane/tindicators/blob/master/indicators/arsi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1595,7 +1595,7 @@ ti.arsi(
 	
 #### Directional Movement
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [dm.cc](https://github.com/3jane/tindicators/indicators/tree/master/dm.cc) <br/>
+*Implementation:* [dm.cc](https://github.com/3jane/tindicators/blob/master/indicators/dm.cc) <br/>
 *Signature:*
 
 ```python
@@ -1611,7 +1611,7 @@ ti.dm(
 	
 #### Directional Movement Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [dx.cc](https://github.com/3jane/tindicators/indicators/tree/master/dx.cc) <br/>
+*Implementation:* [dx.cc](https://github.com/3jane/tindicators/blob/master/indicators/dx.cc) <br/>
 *Signature:*
 
 ```python
@@ -1626,7 +1626,7 @@ ti.dx(
 	
 #### Directional Indicator
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [di.cc](https://github.com/3jane/tindicators/indicators/tree/master/di.cc) <br/>
+*Implementation:* [di.cc](https://github.com/3jane/tindicators/blob/master/indicators/di.cc) <br/>
 *Signature:*
 
 ```python
@@ -1643,7 +1643,7 @@ ti.di(
 	
 #### Average Directional Movement Index
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [adx.cc](https://github.com/3jane/tindicators/indicators/tree/master/adx.cc) <br/>
+*Implementation:* [adx.cc](https://github.com/3jane/tindicators/blob/master/indicators/adx.cc) <br/>
 *Signature:*
 
 ```python
@@ -1658,7 +1658,7 @@ ti.adx(
 	
 #### Average Directional Movement Rating
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [adxr.cc](https://github.com/3jane/tindicators/indicators/tree/master/adxr.cc) <br/>
+*Implementation:* [adxr.cc](https://github.com/3jane/tindicators/blob/master/indicators/adxr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1673,7 +1673,7 @@ ti.adxr(
 	
 #### Mesa Sine Wave
 *Source:* - <br/>
-*Implementation:* [msw.cc](https://github.com/3jane/tindicators/indicators/tree/master/msw.cc) <br/>
+*Implementation:* [msw.cc](https://github.com/3jane/tindicators/blob/master/indicators/msw.cc) <br/>
 *Signature:*
 
 ```python
@@ -1688,7 +1688,7 @@ ti.msw(
 	
 #### Momentum
 *Source:* - <br/>
-*Implementation:* [mom.cc](https://github.com/3jane/tindicators/indicators/tree/master/mom.cc) <br/>
+*Implementation:* [mom.cc](https://github.com/3jane/tindicators/blob/master/indicators/mom.cc) <br/>
 *Signature:*
 
 ```python
@@ -1702,7 +1702,7 @@ ti.mom(
 	
 #### Rate of Change
 *Source:* - <br/>
-*Implementation:* [roc.cc](https://github.com/3jane/tindicators/indicators/tree/master/roc.cc) <br/>
+*Implementation:* [roc.cc](https://github.com/3jane/tindicators/blob/master/indicators/roc.cc) <br/>
 *Signature:*
 
 ```python
@@ -1716,7 +1716,7 @@ ti.roc(
 	
 #### Rate of Change Ratio
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [rocr.cc](https://github.com/3jane/tindicators/indicators/tree/master/rocr.cc) <br/>
+*Implementation:* [rocr.cc](https://github.com/3jane/tindicators/blob/master/indicators/rocr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1730,7 +1730,7 @@ ti.rocr(
 	
 #### Lag
 *Source:* - <br/>
-*Implementation:* [lag.cc](https://github.com/3jane/tindicators/indicators/tree/master/lag.cc) <br/>
+*Implementation:* [lag.cc](https://github.com/3jane/tindicators/blob/master/indicators/lag.cc) <br/>
 *Signature:*
 
 ```python
@@ -1744,7 +1744,7 @@ ti.lag(
 	
 #### Maximum In Period
 *Source:* - <br/>
-*Implementation:* [max.cc](https://github.com/3jane/tindicators/indicators/tree/master/max.cc) <br/>
+*Implementation:* [max.cc](https://github.com/3jane/tindicators/blob/master/indicators/max.cc) <br/>
 *Signature:*
 
 ```python
@@ -1758,7 +1758,7 @@ ti.max(
 	
 #### Minimum In Period
 *Source:* - <br/>
-*Implementation:* [min.cc](https://github.com/3jane/tindicators/indicators/tree/master/min.cc) <br/>
+*Implementation:* [min.cc](https://github.com/3jane/tindicators/blob/master/indicators/min.cc) <br/>
 *Signature:*
 
 ```python
@@ -1772,7 +1772,7 @@ ti.min(
 	
 #### Sum Over Period
 *Source:* - <br/>
-*Implementation:* [sum.cc](https://github.com/3jane/tindicators/indicators/tree/master/sum.cc) <br/>
+*Implementation:* [sum.cc](https://github.com/3jane/tindicators/blob/master/indicators/sum.cc) <br/>
 *Signature:*
 
 ```python
@@ -1786,7 +1786,7 @@ ti.sum(
 	
 #### Standard Deviation Over Period
 *Source:* - <br/>
-*Implementation:* [stddev.cc](https://github.com/3jane/tindicators/indicators/tree/master/stddev.cc) <br/>
+*Implementation:* [stddev.cc](https://github.com/3jane/tindicators/blob/master/indicators/stddev.cc) <br/>
 *Signature:*
 
 ```python
@@ -1800,7 +1800,7 @@ ti.stddev(
 	
 #### Standard Error Over Period
 *Source:* - <br/>
-*Implementation:* [stderr.cc](https://github.com/3jane/tindicators/indicators/tree/master/stderr.cc) <br/>
+*Implementation:* [stderr.cc](https://github.com/3jane/tindicators/blob/master/indicators/stderr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1814,7 +1814,7 @@ ti.stderr(
 	
 #### Mean Deviation Over Period
 *Source:* - <br/>
-*Implementation:* [md.cc](https://github.com/3jane/tindicators/indicators/tree/master/md.cc) <br/>
+*Implementation:* [md.cc](https://github.com/3jane/tindicators/blob/master/indicators/md.cc) <br/>
 *Signature:*
 
 ```python
@@ -1828,7 +1828,7 @@ ti.md(
 	
 #### Variance Over Period
 *Source:* - <br/>
-*Implementation:* [var.cc](https://github.com/3jane/tindicators/indicators/tree/master/var.cc) <br/>
+*Implementation:* [var.cc](https://github.com/3jane/tindicators/blob/master/indicators/var.cc) <br/>
 *Signature:*
 
 ```python
@@ -1842,7 +1842,7 @@ ti.var(
 	
 #### Average Price
 *Source:* - <br/>
-*Implementation:* [avgprice.cc](https://github.com/3jane/tindicators/indicators/tree/master/avgprice.cc) <br/>
+*Implementation:* [avgprice.cc](https://github.com/3jane/tindicators/blob/master/indicators/avgprice.cc) <br/>
 *Signature:*
 
 ```python
@@ -1858,7 +1858,7 @@ ti.avgprice(
 	
 #### Median Price
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [medprice.cc](https://github.com/3jane/tindicators/indicators/tree/master/medprice.cc) <br/>
+*Implementation:* [medprice.cc](https://github.com/3jane/tindicators/blob/master/indicators/medprice.cc) <br/>
 *Signature:*
 
 ```python
@@ -1872,7 +1872,7 @@ ti.medprice(
 	
 #### Typical Price
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [typprice.cc](https://github.com/3jane/tindicators/indicators/tree/master/typprice.cc) <br/>
+*Implementation:* [typprice.cc](https://github.com/3jane/tindicators/blob/master/indicators/typprice.cc) <br/>
 *Signature:*
 
 ```python
@@ -1887,7 +1887,7 @@ ti.typprice(
 	
 #### Weighted Close Price
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [wcprice.cc](https://github.com/3jane/tindicators/indicators/tree/master/wcprice.cc) <br/>
+*Implementation:* [wcprice.cc](https://github.com/3jane/tindicators/blob/master/indicators/wcprice.cc) <br/>
 *Signature:*
 
 ```python
@@ -1902,7 +1902,7 @@ ti.wcprice(
 	
 #### Average True Range
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [atr.cc](https://github.com/3jane/tindicators/indicators/tree/master/atr.cc) <br/>
+*Implementation:* [atr.cc](https://github.com/3jane/tindicators/blob/master/indicators/atr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1918,7 +1918,7 @@ ti.atr(
 	
 #### Chandelier Exit
 *Source:* J. Welles Wilder. New Concepts in Technical Trading Systems, 1978, pp. 21-23 <br/>
-*Implementation:* [ce.cc](https://github.com/3jane/tindicators/indicators/tree/master/ce.cc) <br/>
+*Implementation:* [ce.cc](https://github.com/3jane/tindicators/blob/master/indicators/ce.cc) <br/>
 *Signature:*
 
 ```python
@@ -1936,7 +1936,7 @@ ti.ce(
 	
 #### Normalized Average True Range
 *Source:* - <br/>
-*Implementation:* [natr.cc](https://github.com/3jane/tindicators/indicators/tree/master/natr.cc) <br/>
+*Implementation:* [natr.cc](https://github.com/3jane/tindicators/blob/master/indicators/natr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1952,7 +1952,7 @@ ti.natr(
 	
 #### True Range
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [tr.cc](https://github.com/3jane/tindicators/indicators/tree/master/tr.cc) <br/>
+*Implementation:* [tr.cc](https://github.com/3jane/tindicators/blob/master/indicators/tr.cc) <br/>
 *Signature:*
 
 ```python
@@ -1967,7 +1967,7 @@ ti.tr(
 	
 #### Ichimoku
 *Source:* Trading with Ichimoku Clouds <br/>
-*Implementation:* [ichi.cc](https://github.com/3jane/tindicators/indicators/tree/master/ichi.cc) <br/>
+*Implementation:* [ichi.cc](https://github.com/3jane/tindicators/blob/master/indicators/ichi.cc) <br/>
 *Signature:*
 
 ```python
@@ -1987,7 +1987,7 @@ ti.ichi(
 	
 #### Annualized Historical Volatility
 *Source:* - <br/>
-*Implementation:* [volatility.cc](https://github.com/3jane/tindicators/indicators/tree/master/volatility.cc) <br/>
+*Implementation:* [volatility.cc](https://github.com/3jane/tindicators/blob/master/indicators/volatility.cc) <br/>
 *Signature:*
 
 ```python
@@ -2001,7 +2001,7 @@ ti.volatility(
 	
 #### Chaikins Volatility
 *Source:* Technical Analysis from A to Z <br/>
-*Implementation:* [cvi.cc](https://github.com/3jane/tindicators/indicators/tree/master/cvi.cc) <br/>
+*Implementation:* [cvi.cc](https://github.com/3jane/tindicators/blob/master/indicators/cvi.cc) <br/>
 *Signature:*
 
 ```python
@@ -2016,7 +2016,7 @@ ti.cvi(
 	
 #### Crossany
 *Source:* - <br/>
-*Implementation:* [crossany.cc](https://github.com/3jane/tindicators/indicators/tree/master/crossany.cc) <br/>
+*Implementation:* [crossany.cc](https://github.com/3jane/tindicators/blob/master/indicators/crossany.cc) <br/>
 *Signature:*
 
 ```python
@@ -2030,7 +2030,7 @@ ti.crossany(
 	
 #### Crossover
 *Source:* - <br/>
-*Implementation:* [crossover.cc](https://github.com/3jane/tindicators/indicators/tree/master/crossover.cc) <br/>
+*Implementation:* [crossover.cc](https://github.com/3jane/tindicators/blob/master/indicators/crossover.cc) <br/>
 *Signature:*
 
 ```python
@@ -2044,7 +2044,7 @@ ti.crossover(
 	
 #### Linear Decay
 *Source:* - <br/>
-*Implementation:* [decay.cc](https://github.com/3jane/tindicators/indicators/tree/master/decay.cc) <br/>
+*Implementation:* [decay.cc](https://github.com/3jane/tindicators/blob/master/indicators/decay.cc) <br/>
 *Signature:*
 
 ```python
@@ -2058,7 +2058,7 @@ ti.decay(
 	
 #### Exponential Decay
 *Source:* - <br/>
-*Implementation:* [edecay.cc](https://github.com/3jane/tindicators/indicators/tree/master/edecay.cc) <br/>
+*Implementation:* [edecay.cc](https://github.com/3jane/tindicators/blob/master/indicators/edecay.cc) <br/>
 *Signature:*
 
 ```python
@@ -2072,7 +2072,7 @@ ti.edecay(
 	
 #### Vector Addition
 *Source:* - <br/>
-*Implementation:* [add.cc](https://github.com/3jane/tindicators/indicators/tree/master/add.cc) <br/>
+*Implementation:* [add.cc](https://github.com/3jane/tindicators/blob/master/indicators/add.cc) <br/>
 *Signature:*
 
 ```python
@@ -2086,7 +2086,7 @@ ti.add(
 	
 #### Vector Subtraction
 *Source:* - <br/>
-*Implementation:* [sub.cc](https://github.com/3jane/tindicators/indicators/tree/master/sub.cc) <br/>
+*Implementation:* [sub.cc](https://github.com/3jane/tindicators/blob/master/indicators/sub.cc) <br/>
 *Signature:*
 
 ```python
@@ -2100,7 +2100,7 @@ ti.sub(
 	
 #### Vector Multiplication
 *Source:* - <br/>
-*Implementation:* [mul.cc](https://github.com/3jane/tindicators/indicators/tree/master/mul.cc) <br/>
+*Implementation:* [mul.cc](https://github.com/3jane/tindicators/blob/master/indicators/mul.cc) <br/>
 *Signature:*
 
 ```python
@@ -2114,7 +2114,7 @@ ti.mul(
 	
 #### Vector Division
 *Source:* - <br/>
-*Implementation:* [div.cc](https://github.com/3jane/tindicators/indicators/tree/master/div.cc) <br/>
+*Implementation:* [div.cc](https://github.com/3jane/tindicators/blob/master/indicators/div.cc) <br/>
 *Signature:*
 
 ```python
@@ -2128,7 +2128,7 @@ ti.div(
 	
 #### Vector Absolute Value
 *Source:* - <br/>
-*Implementation:* [abs.cc](https://github.com/3jane/tindicators/indicators/tree/master/abs.cc) <br/>
+*Implementation:* [abs.cc](https://github.com/3jane/tindicators/blob/master/indicators/abs.cc) <br/>
 *Signature:*
 
 ```python
@@ -2141,7 +2141,7 @@ ti.abs(
 	
 #### Vector Arccosine
 *Source:* - <br/>
-*Implementation:* [acos.cc](https://github.com/3jane/tindicators/indicators/tree/master/acos.cc) <br/>
+*Implementation:* [acos.cc](https://github.com/3jane/tindicators/blob/master/indicators/acos.cc) <br/>
 *Signature:*
 
 ```python
@@ -2154,7 +2154,7 @@ ti.acos(
 	
 #### Vector Arcsine
 *Source:* - <br/>
-*Implementation:* [asin.cc](https://github.com/3jane/tindicators/indicators/tree/master/asin.cc) <br/>
+*Implementation:* [asin.cc](https://github.com/3jane/tindicators/blob/master/indicators/asin.cc) <br/>
 *Signature:*
 
 ```python
@@ -2167,7 +2167,7 @@ ti.asin(
 	
 #### Vector Arctangent
 *Source:* - <br/>
-*Implementation:* [atan.cc](https://github.com/3jane/tindicators/indicators/tree/master/atan.cc) <br/>
+*Implementation:* [atan.cc](https://github.com/3jane/tindicators/blob/master/indicators/atan.cc) <br/>
 *Signature:*
 
 ```python
@@ -2180,7 +2180,7 @@ ti.atan(
 	
 #### Vector Ceiling
 *Source:* - <br/>
-*Implementation:* [ceil.cc](https://github.com/3jane/tindicators/indicators/tree/master/ceil.cc) <br/>
+*Implementation:* [ceil.cc](https://github.com/3jane/tindicators/blob/master/indicators/ceil.cc) <br/>
 *Signature:*
 
 ```python
@@ -2193,7 +2193,7 @@ ti.ceil(
 	
 #### Vector Cosine
 *Source:* - <br/>
-*Implementation:* [cos.cc](https://github.com/3jane/tindicators/indicators/tree/master/cos.cc) <br/>
+*Implementation:* [cos.cc](https://github.com/3jane/tindicators/blob/master/indicators/cos.cc) <br/>
 *Signature:*
 
 ```python
@@ -2206,7 +2206,7 @@ ti.cos(
 	
 #### Vector Hyperbolic Cosine
 *Source:* - <br/>
-*Implementation:* [cosh.cc](https://github.com/3jane/tindicators/indicators/tree/master/cosh.cc) <br/>
+*Implementation:* [cosh.cc](https://github.com/3jane/tindicators/blob/master/indicators/cosh.cc) <br/>
 *Signature:*
 
 ```python
@@ -2219,7 +2219,7 @@ ti.cosh(
 	
 #### Vector Exponential
 *Source:* - <br/>
-*Implementation:* [exp.cc](https://github.com/3jane/tindicators/indicators/tree/master/exp.cc) <br/>
+*Implementation:* [exp.cc](https://github.com/3jane/tindicators/blob/master/indicators/exp.cc) <br/>
 *Signature:*
 
 ```python
@@ -2232,7 +2232,7 @@ ti.exp(
 	
 #### Vector Floor
 *Source:* - <br/>
-*Implementation:* [floor.cc](https://github.com/3jane/tindicators/indicators/tree/master/floor.cc) <br/>
+*Implementation:* [floor.cc](https://github.com/3jane/tindicators/blob/master/indicators/floor.cc) <br/>
 *Signature:*
 
 ```python
@@ -2245,7 +2245,7 @@ ti.floor(
 	
 #### Vector Natural Log
 *Source:* - <br/>
-*Implementation:* [ln.cc](https://github.com/3jane/tindicators/indicators/tree/master/ln.cc) <br/>
+*Implementation:* [ln.cc](https://github.com/3jane/tindicators/blob/master/indicators/ln.cc) <br/>
 *Signature:*
 
 ```python
@@ -2258,7 +2258,7 @@ ti.ln(
 	
 #### Vector Base-10 Log
 *Source:* - <br/>
-*Implementation:* [log10.cc](https://github.com/3jane/tindicators/indicators/tree/master/log10.cc) <br/>
+*Implementation:* [log10.cc](https://github.com/3jane/tindicators/blob/master/indicators/log10.cc) <br/>
 *Signature:*
 
 ```python
@@ -2271,7 +2271,7 @@ ti.log10(
 	
 #### Vector Round
 *Source:* - <br/>
-*Implementation:* [round.cc](https://github.com/3jane/tindicators/indicators/tree/master/round.cc) <br/>
+*Implementation:* [round.cc](https://github.com/3jane/tindicators/blob/master/indicators/round.cc) <br/>
 *Signature:*
 
 ```python
@@ -2284,7 +2284,7 @@ ti.round(
 	
 #### Vector Sine
 *Source:* - <br/>
-*Implementation:* [sin.cc](https://github.com/3jane/tindicators/indicators/tree/master/sin.cc) <br/>
+*Implementation:* [sin.cc](https://github.com/3jane/tindicators/blob/master/indicators/sin.cc) <br/>
 *Signature:*
 
 ```python
@@ -2297,7 +2297,7 @@ ti.sin(
 	
 #### Vector Hyperbolic Sine
 *Source:* - <br/>
-*Implementation:* [sinh.cc](https://github.com/3jane/tindicators/indicators/tree/master/sinh.cc) <br/>
+*Implementation:* [sinh.cc](https://github.com/3jane/tindicators/blob/master/indicators/sinh.cc) <br/>
 *Signature:*
 
 ```python
@@ -2310,7 +2310,7 @@ ti.sinh(
 	
 #### Vector Square Root
 *Source:* - <br/>
-*Implementation:* [sqrt.cc](https://github.com/3jane/tindicators/indicators/tree/master/sqrt.cc) <br/>
+*Implementation:* [sqrt.cc](https://github.com/3jane/tindicators/blob/master/indicators/sqrt.cc) <br/>
 *Signature:*
 
 ```python
@@ -2323,7 +2323,7 @@ ti.sqrt(
 	
 #### Vector Tangent
 *Source:* - <br/>
-*Implementation:* [tan.cc](https://github.com/3jane/tindicators/indicators/tree/master/tan.cc) <br/>
+*Implementation:* [tan.cc](https://github.com/3jane/tindicators/blob/master/indicators/tan.cc) <br/>
 *Signature:*
 
 ```python
@@ -2336,7 +2336,7 @@ ti.tan(
 	
 #### Vector Hyperbolic Tangent
 *Source:* - <br/>
-*Implementation:* [tanh.cc](https://github.com/3jane/tindicators/indicators/tree/master/tanh.cc) <br/>
+*Implementation:* [tanh.cc](https://github.com/3jane/tindicators/blob/master/indicators/tanh.cc) <br/>
 *Signature:*
 
 ```python
@@ -2349,7 +2349,7 @@ ti.tanh(
 	
 #### Vector Degree Conversion
 *Source:* - <br/>
-*Implementation:* [todeg.cc](https://github.com/3jane/tindicators/indicators/tree/master/todeg.cc) <br/>
+*Implementation:* [todeg.cc](https://github.com/3jane/tindicators/blob/master/indicators/todeg.cc) <br/>
 *Signature:*
 
 ```python
@@ -2362,7 +2362,7 @@ ti.todeg(
 	
 #### Vector Radian Conversion
 *Source:* - <br/>
-*Implementation:* [torad.cc](https://github.com/3jane/tindicators/indicators/tree/master/torad.cc) <br/>
+*Implementation:* [torad.cc](https://github.com/3jane/tindicators/blob/master/indicators/torad.cc) <br/>
 *Signature:*
 
 ```python
@@ -2375,7 +2375,7 @@ ti.torad(
 	
 #### Vector Truncate
 *Source:* - <br/>
-*Implementation:* [trunc.cc](https://github.com/3jane/tindicators/indicators/tree/master/trunc.cc) <br/>
+*Implementation:* [trunc.cc](https://github.com/3jane/tindicators/blob/master/indicators/trunc.cc) <br/>
 *Signature:*
 
 ```python
@@ -2388,7 +2388,7 @@ ti.trunc(
 	
 #### Vortex Indicator
 *Source:* The Vortex Indicator <br/>
-*Implementation:* [vi.cc](https://github.com/3jane/tindicators/indicators/tree/master/vi.cc) <br/>
+*Implementation:* [vi.cc](https://github.com/3jane/tindicators/blob/master/indicators/vi.cc) <br/>
 *Signature:*
 
 ```python
