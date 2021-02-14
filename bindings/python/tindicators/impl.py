@@ -122,9 +122,8 @@ class _Indicator:
         if errcode != 0:
             if ret2exc[errcode] is InvalidOption:
                 raise InvalidOption(
-                    f'{elaborated_name}: You have provided an invalid option. Refer to the source code '
-                    f'of the options validation of this indicator. You can find it at: '
-                    f'https://3jane.github.io/tindicators')
+                    f'{elaborated_name}: You have provided an invalid option. Refer to the options validation source '
+                    f'code of this indicator. You can find it at: https://3jane.github.io/tindicators')
             elif ret2exc[errcode] is OutOfMemory:
                 raise OutOfMemory(
                     f'{elaborated_name}: memory allocation failed')
