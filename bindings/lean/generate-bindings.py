@@ -40,6 +40,7 @@ dllimport = '\n'.join([
     'static extern {ret} {fun}({args});'
 ])
 
+
 def streaming(indicator):
     inputs = indicator.inputs
     outputs = indicator.outputs

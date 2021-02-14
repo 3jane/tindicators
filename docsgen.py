@@ -11,7 +11,6 @@ import glob
 from version import version
 
 parser = argparse.ArgumentParser(description='Generate the docs for tindicators')
-# parser.add_argument('--old', help='use old defaults', action='store_true')
 parser.add_argument('outfile', default='index.markdown')
 args = parser.parse_args()
 
@@ -52,23 +51,6 @@ There are currently **{num} indicators** available in [tindicators](https://gith
 for indicator in indicators.items():
 	name, (elab_name, type, inputs, options, outputs, features, source) = indicator
 
-	# inputs_str = ', '.join([x+': np.ndarray' for x in inputs])
-	# options_str = ', '.join([x+': float' for x in options])
-	# params_str = ', '.join([inputs_str, options_str])
-
-	# outputs_str = ', '.join([x+'=np.ndarray' for x in outputs])
-
-# 	outfile.write(f'''
-# ### {elab_name}
-# Source: {source}
-
-# Signature:
-# ```python
-# ti.{name}({params_str}) ->
-#     NamedTuple(_, {outputs_str})
-# ```
-# 	''')
-
 	tab = ' '*4
 	nl = '\n'
 
@@ -96,20 +78,3 @@ ti.{name}(
 )
 ```
 	''')
-
-
-# 	outputs_str = f',{nl}{tab}'.join([f"'{x}': np.ndarray" for x in outputs])
-
-# 	outfile.write(f'''
-# ### {elab_name}
-# Source: {source}
-
-# Signature:
-# ```python
-# ti.{name}(
-#     {params_str}
-# ) -> NamedTuple(_, **{{
-#     {outputs_str}
-# }})
-# ```
-# 	''')

@@ -63,7 +63,7 @@ class _IndicatorInfo:
     def __init__(self, lib, indicator_name):
         try:
             info = lib.ti_find_indicator(c_char_p(bytes(indicator_name, 'ascii'))).contents
-        except:
+        except ValueError:
             raise NoSuchIndicator(indicator_name)
 
         self.name = indicator_name
